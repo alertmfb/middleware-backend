@@ -20,12 +20,31 @@ model User {
   lastname  String?
   password  String
   role      ROLE     @default(MEMBER)
+  invites   Invite[]
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+}
+
+model Invite {
+  id         String       @id @default(uuid())
+  email      String       @unique
+  invitedBy  User         @relation(fields: [userEmail], references: [email])
+  userEmail  String
+  status     InviteStatus @default(PENDING)
+  role       ROLE
+  invitedAt  DateTime     @default(now())
+  acceptedAt DateTime?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
 }
 
 enum ROLE {
   SUPER_ADMIN
   ADMIN
   MEMBER
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
 }

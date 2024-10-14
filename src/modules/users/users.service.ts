@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma.service';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 export type UserEntity = Pick<User, 'id' | 'email' | 'password' | 'role'>;
 
@@ -9,7 +10,10 @@ const saltOrRounds = 10;
 
 @Injectable({})
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
   async findOne(
     email: string,
@@ -33,8 +37,14 @@ export class UsersService {
     }
   }
 
-  async createUser(email: string, password: string) {
+  async createUser(email: string, password: string, token: string) {
     try {
+      const tok = this.jwtService.verify(token);
+
+      if (!tok) {
+        throw new HttpException('unauthorized', HttpStatus.UNAUTHORIZED);
+      }
+
       const hash = await bcrypt.hash(password, saltOrRounds);
 
       const user = await this.prisma.user.create({
@@ -49,7 +59,7 @@ export class UsersService {
 
       return user;
     } catch (error) {
-      throw error;
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 }
