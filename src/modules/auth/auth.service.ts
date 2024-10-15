@@ -1,14 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { AuthenticatedUser } from './schema';
+import { ConfigService } from '@nestjs/config';
+import qrcode from 'qrcode';
+import { authenticator, totp } from '@otplib/preset-v11';
+import { PrismaService } from 'src/config/prisma.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private config: ConfigService,
+    private prisma: PrismaService,
   ) {}
+
+  private MFA_SERVICE_NAME: string = 'AlertMFB';
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(email);
@@ -33,4 +42,29 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
+
+  async setupMfa(user: AuthenticatedUser) {
+    try {
+      await this.prisma.user.update({
+        where: {
+          email: user.email,
+        },
+        data: {
+          hasMFAEnabled: true,
+        },
+      });
+
+      const otpauth = authenticator.keyuri(
+        user.email,
+        this.MFA_SERVICE_NAME,
+        this.config.get('TOTP_SECRET'),
+      );
+
+      return otpauth;
+    } catch (error) {
+      throw new HttpException('could not complete', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async verifyTOTP(token: string) {}
 }

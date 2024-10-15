@@ -6,3 +6,9 @@ export const signInSchema = z.object({
 });
 
 export type SignInPayload = Required<z.infer<typeof signInSchema>>;
+
+export type AuthenticatedUser = {
+  id: string;
+  email: string;
+  role: string;
+};

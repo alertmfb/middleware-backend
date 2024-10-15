@@ -14,15 +14,17 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  firstname String?
-  lastname  String?
-  password  String
-  role      ROLE     @default(MEMBER)
-  invites   Invite[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  firstname     String?
+  lastname      String?
+  password      String
+  role          ROLE      @default(MEMBER)
+  invites       Invite[]
+  hasMFAEnabled Boolean   @default(false)
+  mfaMethod     MFAMethod @default(AUTHENTICATOR_APP)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now())
 }
 
 model Invite {
@@ -47,4 +49,8 @@ enum ROLE {
 enum InviteStatus {
   PENDING
   ACCEPTED
+}
+
+enum MFAMethod {
+  AUTHENTICATOR_APP
 }

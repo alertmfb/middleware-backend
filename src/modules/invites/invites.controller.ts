@@ -4,7 +4,6 @@ import { Public } from '../auth/metadata';
 import { ZodValidationPipe } from 'src/pipes/validation.pipe';
 import { acceptInvitationSchema, Iniviter, inviteUserSchema } from './schema';
 import { InvitesService } from './invites.servce';
-import { ROLE } from '@prisma/client';
 
 @Controller('invites')
 export class InvitesController {

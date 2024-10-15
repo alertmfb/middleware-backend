@@ -10,6 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt.auth.guard';
+import { PrismaService } from 'src/config/prisma.service';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { JwtAuthGuard } from './jwt.auth.guard';
     AuthService,
     LocalStrategy,
     JwtStrategy,
+    PrismaService,
     { provide: APP_GUARD, useClass: JwtAuthGuard },
   ],
   exports: [AuthService],

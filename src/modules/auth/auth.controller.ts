@@ -5,6 +5,7 @@ import { LocalAuthGuard } from './local-auth.guard';
 import { Request, Response } from 'express';
 import { JwtAuthGuard } from './jwt.auth.guard';
 import { Public } from './metadata';
+import { AuthenticatedUser } from './schema';
 
 @Controller('auth')
 export class AuthController {
@@ -25,5 +26,17 @@ export class AuthController {
   @Get('profile')
   async getProfile(@Req() req: Request, @Res() res: Response) {
     res.json(req.user);
+  }
+
+  @Post('setupMfa')
+  async setupMFA(@Req() req: Request, @Res() res: Response) {
+    const user = req.user as AuthenticatedUser;
+    const otp = await this.authService.setupMfa(user);
+    res.json({ otp });
+  }
+
+  @Post('verifyTOTP')
+  async verifyTOTP(@Req() req: Request, @Res() res: Response) {
+    const otp = req.body && ((req.body['otp'] ?? '') as string);
   }
 }
