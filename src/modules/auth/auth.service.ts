@@ -4,8 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { AuthenticatedUser } from './schema';
 import { ConfigService } from '@nestjs/config';
-import qrcode from 'qrcode';
-import { authenticator, totp } from '@otplib/preset-v11';
+import { authenticator } from '@otplib/preset-default';
 import { PrismaService } from 'src/config/prisma.service';
 
 @Injectable()
@@ -45,19 +44,20 @@ export class AuthService {
 
   async setupMfa(user: AuthenticatedUser) {
     try {
-      await this.prisma.user.update({
-        where: {
-          email: user.email,
-        },
-        data: {
-          hasMFAEnabled: true,
-        },
-      });
+      // await this.prisma.user.update({
+      //   where: {
+      //     email: user.email,
+      //   },
+      //   data: {
+      //     hasMFAEnabled: true,
+      //   },
+      // });
+      const secret = this.config.get('TOTP_SECRET');
 
       const otpauth = authenticator.keyuri(
         user.email,
         this.MFA_SERVICE_NAME,
-        this.config.get('TOTP_SECRET'),
+        secret,
       );
 
       return otpauth;
@@ -66,5 +66,17 @@ export class AuthService {
     }
   }
 
-  async verifyTOTP(token: string) {}
+  async verifyTOTP(otp: string, accessToken: string) {
+    const secret = this.config.get('TOTP_SECRET');
+
+    authenticator.options = { window: 1, step: 30 };
+
+    const isValid = authenticator.check(otp, secret);
+
+    if (!isValid) {
+      return { isAuthenticated: false, access_token: null };
+    }
+
+    return { isAuthenticated: isValid, access_token: accessToken };
+  }
 }

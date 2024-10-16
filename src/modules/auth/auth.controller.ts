@@ -37,6 +37,9 @@ export class AuthController {
 
   @Post('verifyTOTP')
   async verifyTOTP(@Req() req: Request, @Res() res: Response) {
+    const token = req.headers.authorization.slice(7);
     const otp = req.body && ((req.body['otp'] ?? '') as string);
+    const data = await this.authService.verifyTOTP(otp, token);
+    res.json(data);
   }
 }
