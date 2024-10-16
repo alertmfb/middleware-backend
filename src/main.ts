@@ -11,6 +11,7 @@ async function bootstrap() {
   const docsConfig = new DocumentBuilder()
     .setTitle('MIDDLEWARE API REFERENCE')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, docsConfig);
   SwaggerModule.setup('reference', app, document, {

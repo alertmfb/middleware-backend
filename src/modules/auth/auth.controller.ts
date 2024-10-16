@@ -7,6 +7,7 @@ import { JwtAuthGuard } from './jwt.auth.guard';
 import { Public } from './metadata';
 import { AuthenticatedUser } from './schema';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiExcludeEndpoint,
   ApiResponse,
@@ -15,6 +16,7 @@ import {
 import { SignIn, verifyTOTP, VerifyTOTP } from './auth.dto';
 
 @Controller('auth')
+@ApiBearerAuth()
 @ApiTags('auth')
 export class AuthController {
   constructor(
