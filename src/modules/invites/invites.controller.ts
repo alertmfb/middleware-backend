@@ -4,8 +4,10 @@ import { Public } from '../auth/metadata';
 import { ZodValidationPipe } from 'src/pipes/validation.pipe';
 import { acceptInvitationSchema, Iniviter, inviteUserSchema } from './schema';
 import { InvitesService } from './invites.servce';
+import { ApiExcludeController } from '@nestjs/swagger';
 
 @Controller('invites')
+@ApiExcludeController()
 export class InvitesController {
   constructor(private invitesService: InvitesService) {}
 
