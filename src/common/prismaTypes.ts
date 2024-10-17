@@ -1,3 +1,7 @@
+/**
+ * Defining The Prisma Schema types here for compatibility with deployment
+ */
+
 export type ROLE = 'SUPER_ADMIN' | 'ADMIN' | 'MEMBER';
 
 type MFAMethod = 'AUTHENTICATOR_APP';
