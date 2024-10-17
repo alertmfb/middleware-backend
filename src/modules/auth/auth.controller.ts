@@ -24,7 +24,7 @@ export class AuthController {
   ) {}
 
   @Public()
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard) // Local auth guard authenticates the user and passes it to the req.user object
   @Post('/signin')
   @ApiBody({ description: '', type: SignIn })
   @ApiResponse({ example: signInExample })
@@ -33,7 +33,7 @@ export class AuthController {
     res.json(accessToken);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get('profile')
   @ApiExcludeEndpoint()
   async getProfile(@Req() req: Request, @Res() res: Response) {

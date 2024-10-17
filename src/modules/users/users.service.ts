@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma.service';
-import { User } from '../../common/prismaTypes';
+import { ROLE, User } from '../../common/prismaTypes';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -51,6 +51,27 @@ export class UsersService {
         data: {
           email: email,
           password: hash,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async createUserFromBackend(email: string, password: string, role?: ROLE) {
+    try {
+      const hash = await bcrypt.hash(password, saltOrRounds);
+
+      const user = await this.prisma.user.create({
+        data: {
+          email: email,
+          password: hash,
+          role: !role || role.length < 1 ? 'MEMBER' : 'MEMBER',
         },
         select: {
           id: true,

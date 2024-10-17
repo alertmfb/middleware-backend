@@ -8,6 +8,8 @@ async function bootstrap() {
   const config = new ConfigService();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.enableCors()
+
   app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
 
   const docsConfig = new DocumentBuilder()

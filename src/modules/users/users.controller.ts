@@ -21,4 +21,15 @@ export class UsersController {
     );
     res.json(user);
   }
+
+  @Post('backend/create')
+  @Public()
+  async createUserFromBackend(@Req() req: Request, @Res() res: Response) {
+    const user = await this.userService.createUserFromBackend(
+      req.body['email'],
+      'password',
+      req.body['role'],
+    );
+    res.json(user);
+  }
 }
