@@ -1,4 +1,4 @@
-import { ROLE } from '@prisma/client';
+import { ROLE } from '../../common/prismaTypes';
 import { z } from 'zod';
 
 export const inviteUserSchema = z.object({

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ROLE } from '@prisma/client';
+import { ROLE } from '../../common/prismaTypes';
 import { PrismaService } from 'src/config/prisma.service';
 import { Iniviter } from './schema';
 
