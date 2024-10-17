@@ -13,10 +13,9 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { SignIn, verifyTOTP, VerifyTOTP } from './auth.dto';
+import { SignIn, signInExample, verifyTOTP, VerifyTOTP } from './auth.dto';
 
 @Controller('auth')
-@ApiBearerAuth()
 @ApiTags('auth')
 export class AuthController {
   constructor(
@@ -28,6 +27,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('/signin')
   @ApiBody({ description: '', type: SignIn })
+  @ApiResponse({ example: signInExample })
   async signIn(@Req() req: Request, @Res() res: Response) {
     const accessToken = await this.authService.signIn(req.user);
     res.json(accessToken);
@@ -51,6 +51,7 @@ export class AuthController {
   @Post('verifyTOTP')
   @ApiResponse({ example: verifyTOTP })
   @ApiBody({ type: VerifyTOTP })
+  @ApiBearerAuth()
   async verifyTOTP(@Req() req: Request, @Res() res: Response) {
     const token = req.headers.authorization.slice(7);
     const otp = req.body && ((req.body['otp'] ?? '') as string);
