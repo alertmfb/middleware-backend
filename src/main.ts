@@ -10,8 +10,8 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: '*'
-  })
+    origin: 'http://localhost:5173',
+  });
 
   app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
 
