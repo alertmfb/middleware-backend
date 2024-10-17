@@ -71,7 +71,7 @@ export class UsersService {
         data: {
           email: email,
           password: hash,
-          role: !role || role.length < 1 ? 'MEMBER' : 'MEMBER',
+          role: !role || role.length < 1 ? 'MEMBER' : role,
         },
         select: {
           id: true,
