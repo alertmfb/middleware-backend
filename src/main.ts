@@ -8,7 +8,10 @@ async function bootstrap() {
   const config = new ConfigService();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
-  app.enableCors()
+  app.enableCors({
+    credentials: true,
+    origin: '*'
+  })
 
   app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
 

@@ -16,7 +16,7 @@ WORKDIR /usr/src/app
 # Copy schema.prisma to the working directory
 COPY prisma/schema.prisma .
 
-COPY prisma/migrations .
+COPY prisma .
 
 ################################################################################
 # Create a stage for installing production dependecies.
