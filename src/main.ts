@@ -8,17 +8,21 @@ async function bootstrap() {
   const config = new ConfigService();
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
+
   const docsConfig = new DocumentBuilder()
     .setTitle('MIDDLEWARE API REFERENCE')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, docsConfig);
+
+  const document = SwaggerModule.createDocument(app, docsConfig, {
+    operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
+  });
+
   SwaggerModule.setup('reference', app, document, {
     jsonDocumentUrl: 'reference/json',
   });
-
-  app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
 
   await app.listen(config.get('PORT'), '0.0.0.0');
 }
