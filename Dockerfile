@@ -13,6 +13,8 @@ FROM node:${NODE_VERSION}-alpine as base
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
 
+# Copy schema.prisma to the working directory
+COPY prisma/schema.prisma .
 
 ################################################################################
 # Create a stage for installing production dependecies.
