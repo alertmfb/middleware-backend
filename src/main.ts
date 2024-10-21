@@ -10,7 +10,10 @@ async function bootstrap() {
 
   app.enableCors({
     credentials: true,
-    origin: 'http://localhost:5173',
+    origin: [
+      'http://localhost:5173',
+      'https://middleware.staging.alertmfb.com.ng',
+    ],
   });
 
   app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
