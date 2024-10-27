@@ -88,7 +88,7 @@ export class AuthService {
     authenticator.options = { window: 1, step: 30 };
 
     if (allowedEmails.includes(email)) {
-      const isValid = authenticator.check(otp, secret.key);
+      const isValid = authenticator.check(otp, this.config.get('TOTP_SECRET'));
 
       if (!isValid) {
         return { isAuthenticated: false, access_token: null };
