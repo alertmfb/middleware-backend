@@ -67,11 +67,37 @@ export class AuthService {
   }
 
   async verifyTOTP(otp: string, accessToken: string) {
-    const secret = this.config.get('TOTP_SECRET');
+    const allowedEmails = ['bar@gmail.com', 'oluwatobi.oseni@gmail.com'];
+
+    const { email } = this.jwtService.verify(accessToken);
+    // const secret = this.config.get('TOTP_SECRET');
+
+    const { secret } = await this.prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+      select: {
+        secret: {
+          select: {
+            key: true,
+          },
+        },
+      },
+    });
 
     authenticator.options = { window: 1, step: 30 };
 
-    const isValid = authenticator.check(otp, secret);
+    if (allowedEmails.includes(email)) {
+      const isValid = authenticator.check(otp, secret.key);
+
+      if (!isValid) {
+        return { isAuthenticated: false, access_token: null };
+      }
+
+      return { isAuthenticated: isValid, access_token: accessToken };
+    }
+
+    const isValid = authenticator.check(otp, secret.key);
 
     if (!isValid) {
       return { isAuthenticated: false, access_token: null };

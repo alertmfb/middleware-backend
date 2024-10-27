@@ -67,6 +67,8 @@ export class InvitesService {
     inviteToken: string,
   ) {
     try {
+      // GENERATE SECRET
+      // CREATE USER WITH SECRET
       const { email } = this.jwtServie.verify(inviteToken);
       const secret = authenticator.generateSecret();
 
@@ -86,8 +88,6 @@ export class InvitesService {
           email: true,
         },
       });
-      // GENERATE SECRET
-      // CREATE USER WITH SECRET
 
       return user;
     } catch (error) {
@@ -114,14 +114,5 @@ export class InvitesService {
     const otpauth = authenticator.keyuri(email, 'Middleware', secret.key);
 
     return otpauth;
-  }
-
-  async acceptInvitation(token: string) {
-    try {
-      const payload = this.jwtServie.verify<DeodedPayload>(token);
-      return { token, payload };
-    } catch (error) {
-      throw new HttpException('error', HttpStatus.BAD_REQUEST);
-    }
   }
 }

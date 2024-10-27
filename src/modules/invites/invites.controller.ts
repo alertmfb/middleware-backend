@@ -73,15 +73,4 @@ export class InvitesController {
 
     res.json({ otpauth: otpauth });
   }
-
-  @Public()
-  @Get('/acceptInvitation')
-  async acceptInvitation(@Req() req: Request, @Res() res: Response) {
-    new ZodValidationPipe(acceptInvitationSchema).transform(req.query, {
-      type: 'query',
-    });
-    const token = req.query && (req.query['token'] as string);
-    const decoded = await this.invitesService.acceptInvitation(token);
-    res.json(decoded);
-  }
 }
