@@ -2,31 +2,37 @@ import {
   Controller,
   ForbiddenException,
   Get,
-  HttpException,
   Post,
   Req,
   Res,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Public } from '../auth/metadata';
 import { ZodValidationPipe } from 'src/pipes/validation.pipe';
 import {
-  acceptInvitationSchema,
   createPasswordSchema,
   Iniviter,
   inviteUserSchema,
   tokenQuerySchema,
 } from './schema';
 import { InvitesService } from './invites.servce';
-import { ApiExcludeController } from '@nestjs/swagger';
+import { ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  CreatePassword,
+  createPasswordExample,
+  InviteUser,
+  inviteUserExample,
+  otpauthExample,
+} from './dto/invites.dto';
 
 @Controller('invites')
-@ApiExcludeController()
+@ApiTags('Invites')
 export class InvitesController {
   constructor(private invitesService: InvitesService) {}
 
   @Post('/inviteUser')
+  @ApiBody({ type: InviteUser })
+  @ApiResponse({ example: inviteUserExample })
   async inviteUser(@Req() req: Request, @Res() res: Response) {
     new ZodValidationPipe(inviteUserSchema).transform(req.body, {
       type: 'body',
@@ -43,6 +49,9 @@ export class InvitesController {
 
   @Post('/createPassword')
   @Public()
+  @ApiBody({ type: CreatePassword })
+  @ApiParam({ name: 'token' })
+  @ApiResponse({ example: createPasswordExample })
   async createPassword(@Req() req: Request, @Res() res: Response) {
     new ZodValidationPipe(createPasswordSchema).transform(req.body, {
       type: 'body',
@@ -62,6 +71,8 @@ export class InvitesController {
 
   @Get('/otpauth')
   @Public()
+  @ApiParam({ name: 'token' })
+  @ApiResponse({ example: otpauthExample })
   async getOTPString(@Req() req: Request, @Res() res: Response) {
     new ZodValidationPipe(tokenQuerySchema).transform(req.query, {
       type: 'query',

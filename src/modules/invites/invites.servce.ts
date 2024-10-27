@@ -67,8 +67,6 @@ export class InvitesService {
     inviteToken: string,
   ) {
     try {
-      // GENERATE SECRET
-      // CREATE USER WITH SECRET
       const { email } = this.jwtServie.verify(inviteToken);
       const secret = authenticator.generateSecret();
 

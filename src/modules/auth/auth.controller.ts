@@ -15,8 +15,7 @@ import {
 } from '@nestjs/swagger';
 import { SignIn, signInExample, verifyTOTP, VerifyTOTP } from './auth.dto';
 
-@Controller('auth')
-@ApiTags('auth')
+@Controller('auth') @ApiTags('Auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
