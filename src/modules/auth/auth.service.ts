@@ -16,7 +16,7 @@ export class AuthService {
     private prisma: PrismaService,
   ) {}
 
-  private MFA_SERVICE_NAME: string = 'AlertMFB';
+  private MFA_SERVICE_NAME: string = 'Middleware';
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(email);

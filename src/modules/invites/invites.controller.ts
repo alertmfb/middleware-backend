@@ -1,8 +1,23 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  ForbiddenException,
+  Get,
+  HttpException,
+  Post,
+  Req,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Public } from '../auth/metadata';
 import { ZodValidationPipe } from 'src/pipes/validation.pipe';
-import { acceptInvitationSchema, Iniviter, inviteUserSchema } from './schema';
+import {
+  acceptInvitationSchema,
+  createPasswordSchema,
+  Iniviter,
+  inviteUserSchema,
+  tokenQuerySchema,
+} from './schema';
 import { InvitesService } from './invites.servce';
 import { ApiExcludeController } from '@nestjs/swagger';
 
@@ -19,13 +34,44 @@ export class InvitesController {
 
     const inviter = req.user as Iniviter;
 
-    const token = await this.invitesService.inviteUser(req.body, inviter);
-
-    if (!token) {
-      res.json({ message: 'invalid' }).status(400);
+    if (inviter.role !== 'SUPER_ADMIN') {
+      throw new ForbiddenException('You cannot perform this action');
     }
+    const data = await this.invitesService.inviteUser(req.body, inviter);
+    res.json(data);
+  }
 
-    res.json({ inviteToken: token });
+  @Post('/createPassword')
+  @Public()
+  async createPassword(@Req() req: Request, @Res() res: Response) {
+    new ZodValidationPipe(createPasswordSchema).transform(req.body, {
+      type: 'body',
+    });
+
+    new ZodValidationPipe(tokenQuerySchema).transform(req.query, {
+      type: 'query',
+    });
+
+    const user = await this.invitesService.createPassword(
+      req.body,
+      req.query['token'] as string,
+    );
+
+    res.json(user);
+  }
+
+  @Get('/otpauth')
+  @Public()
+  async getOTPString(@Req() req: Request, @Res() res: Response) {
+    new ZodValidationPipe(tokenQuerySchema).transform(req.query, {
+      type: 'query',
+    });
+
+    const otpauth = await this.invitesService.generateQRCodeString(
+      req.query['token'] as string,
+    );
+
+    res.json({ otpauth: otpauth });
   }
 
   @Public()
