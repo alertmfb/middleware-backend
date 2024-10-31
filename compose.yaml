@@ -21,6 +21,8 @@ services:
       TOTP_SECRET: ${TOTP_SECRET}
     ports:
       - 5230:3000
+    depends_on:
+      - redis
 
   database:
     image: postgres
