@@ -44,6 +44,7 @@ services:
   redis:
     image: redis
     restart: always
+    container_name: middleware-redis
     ports:
       - '6979:6379'
     volumes:
