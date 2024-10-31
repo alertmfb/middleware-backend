@@ -24,4 +24,5 @@ export const createPasswordExample = {
 export const otpauthExample = {
   otpauth:
     'otpauth://totp/Middleware:vic%40gmail.com?secret=ZXWXPQZ4JAQWS3QW&period=30&digits=6&algorithm=SHA1&issuer=Middleware',
+  setupKey: 'ksowlamooasup',
 };
