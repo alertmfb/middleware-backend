@@ -125,6 +125,6 @@ export class InvitesService {
 
     const otpauth = authenticator.keyuri(email, 'Middleware', secret.key);
 
-    return otpauth;
+    return {otpauth: otpauth, setupKey: secret.key};
   }
 }

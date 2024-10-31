@@ -83,6 +83,6 @@ export class InvitesController {
       req.query['token'] as string,
     );
 
-    res.json({ otpauth: otpauth });
+    res.json(otpauth);
   }
 }
