@@ -1,7 +1,9 @@
 import 'dotenv/config';
 import { Resend } from 'resend';
 
-export const resend = new Resend(process.env.RESEND_API_KEY);
+const API_KEY = process.env.RESEND_API_KEY;
+
+export const resend = new Resend(API_KEY);
 // import { ConfigService } from '@nestjs/config';
 
 // const config = new ConfigService();
