@@ -9,8 +9,10 @@ import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
 import { Public } from '../auth/metadata';
 import { EmailServce } from './email.service';
 import { EMAIL_SERVICE } from './constant';
+import { ApiExcludeController } from '@nestjs/swagger';
 
 @Public()
+@ApiExcludeController()
 @Controller('email')
 export class EmailController implements OnApplicationBootstrap {
   constructor(
