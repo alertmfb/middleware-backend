@@ -19,7 +19,7 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       INVITE_SECRET: ${INVITE_SECRET}
       TOTP_SECRET: ${TOTP_SECRET}
-      REDIS_HOST: redis
+      REDIS_HOST: middleware-redis
       REDIS_PORT: 6379
     ports:
       - 5230:3000

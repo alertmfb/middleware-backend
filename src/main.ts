@@ -39,7 +39,7 @@ async function bootstrap() {
     await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
       transport: Transport.REDIS,
       options: {
-        host: config.get('REDIS_HOST') || 'redis',
+        host: config.get('REDIS_HOST') || 'middleware-redis',
         port: config.get('REDIS_PORT'),
       },
     });
