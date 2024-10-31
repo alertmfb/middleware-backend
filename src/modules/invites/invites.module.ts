@@ -22,6 +22,10 @@ import { EMAIL_SERVICE } from '../email/constant';
         name: EMAIL_SERVICE,
         useFactory: async (config: ConfigService) => ({
           transport: Transport.REDIS,
+          options: {
+            host: config.get('REDIS_HOST') || 'middleware-redis',
+            port: config.get('REDIS_PORT'),
+          },
         }),
         inject: [ConfigService],
       },
