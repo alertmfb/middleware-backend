@@ -37,13 +37,14 @@ services:
     ports:
       - 9812:5432
 
-    redis:
-      image: redis
-      restart: always
-      ports:
-        - '6979:6379'
-      volumes:
-        - redis-data:/data
+  redis:
+    image: redis
+    restart: always
+    ports:
+      - '6979:6379'
+    volumes:
+      - redis-data:/data
+
 volumes:
   middleware-db:
   redis-data:
