@@ -48,11 +48,17 @@ export class InvitesService {
         { expiresIn: '7d' },
       );
 
-      await this.prisma.invite.create({
-        data: {
+      await this.prisma.invite.upsert({
+        where: {
+          email: payload.email,
+        },
+        create: {
           email: payload.email,
           role: payload.role,
           inviterEmail: inviter.email,
+          inviteToken: token,
+        },
+        update: {
           inviteToken: token,
         },
       });

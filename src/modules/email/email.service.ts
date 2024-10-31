@@ -1,42 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { zeptoClient } from 'src/config/zepto';
 import { resend } from 'src/config/resend';
-import { PrismaService } from 'src/config/prisma.service';
 
 @Injectable()
 export class EmailServce {
   url: string = 'https://middleware.staging.alertmfb.com.ng/register-account';
 
-  constructor(private prisma: PrismaService) {}
+  constructor() {}
 
   async inviteUser({ email, token }: { email: string; token: string }) {
-    Logger.log(email);
-
-    // zeptoClient
-    //   .sendMail({
-    //     from: {
-    //       address: 'victor@alertmfb.com.ng',
-    //       name: 'noreply middleware',
-    //     },
-    //     to: [
-    //       {
-    //         email_address: {
-    //           address: email,
-    //           name: '',
-    //         },
-    //       },
-    //     ],
-    //     subject: 'Test Email',
-    //     htmlbody: '<div><b> Test email sent successfully.</b></div>',
-    //   })
-    //   .then((resp) => Logger.log('success'))
-    //   .catch((error) => Logger.log(error));
-
     const completeOnboardingUrl = this.url + '?token=' + token;
-
     const { data, error } = await resend.emails.send({
       from: 'Digital Hub <noreply@ecam.alertmfb.com.ng>',
-      to: ['balogunv50@gmail.com'],
+      to: [email],
       subject: 'Welcome to Alert MFB Middleware - Complete Your Onboarding',
       html: `
       <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
@@ -79,19 +55,39 @@ export class EmailServce {
     Logger.log(data);
   }
 
-  async makeAdmin() {
-    const adminId = await this.prisma.user.update({
-      where: {
-        email: 'bar@gmail.com',
-      },
-      data: {
-        role: 'SUPER_ADMIN',
-      },
-      select: {
-        id: true,
-      },
-    });
+  // zeptoClient
+  //   .sendMail({
+  //     from: {
+  //       address: 'victor@alertmfb.com.ng',
+  //       name: 'noreply middleware',
+  //     },
+  //     to: [
+  //       {
+  //         email_address: {
+  //           address: email,
+  //           name: '',
+  //         },
+  //       },
+  //     ],
+  //     subject: 'Test Email',
+  //     htmlbody: '<div><b> Test email sent successfully.</b></div>',
+  //   })
+  //   .then((resp) => Logger.log('success'))
+  //   .catch((error) => Logger.log(error));
 
-    return adminId;
-  }
+  // async makeAdmin() {
+  //   const adminId = await this.prisma.user.update({
+  //     where: {
+  //       email: 'bar@gmail.com',
+  //     },
+  //     data: {
+  //       role: 'SUPER_ADMIN',
+  //     },
+  //     select: {
+  //       id: true,
+  //     },
+  //   });
+
+  //   return adminId;
+  // }
 }

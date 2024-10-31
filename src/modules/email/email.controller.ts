@@ -25,26 +25,20 @@ export class EmailController implements OnApplicationBootstrap {
     Logger.log('Redis Microservice running', 'NestMicroservice');
   }
 
-  @Get('invite')
-  sendInvite() {
-    this.client
-      .send('email.inviteUser', {
-        email: 'balogunv50@gmail.com',
-        token: 'apkojrinuqb89jdw0i39qj8hv5nuicom0q9nridsoP',
-      })
-      .subscribe();
+  // @Get('invite')
+  // sendInvite() {
+  //   this.client
+  //     .send('email.inviteUser', {
+  //       email: 'balogunv50@gmail.com',
+  //       token: 'apkojrinuqb89jdw0i39qj8hv5nuicom0q9nridsoP',
+  //     })
+  //     .subscribe();
 
-    return { message: 'sent' };
-  }
+  //   return { message: 'sent' };
+  // }
 
   @MessagePattern('email.inviteUser')
   async InviteUser(@Payload() payload: { email: string; token: string }) {
     await this.emailServie.inviteUser(payload);
-  }
-
-  @Get('admin')
-  async makeAdmin() {
-    const id = await this.emailServie.makeAdmin();
-    return { id: id };
   }
 }
