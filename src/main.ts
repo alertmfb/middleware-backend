@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './modules/app/app.module';
 import { ConfigService } from '@nestjs/config';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
@@ -33,6 +34,16 @@ async function bootstrap() {
     jsonDocumentUrl: 'reference/json',
   });
 
+  const redisMicroservice =
+    await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+      transport: Transport.REDIS,
+      options: {
+        host: '0.0.0.0',
+        port: config.get('REDIS_PORT'),
+      },
+    });
+
+  await redisMicroservice.listen();
   await app.listen(config.get('PORT'), '0.0.0.0');
 }
 bootstrap();

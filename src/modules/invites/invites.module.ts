@@ -5,6 +5,9 @@ import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from '../auth/constants';
 import { PrismaService } from 'src/config/prisma.service';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EMAIL_SERVICE } from '../email/constant';
 
 @Module({
   imports: [
@@ -13,6 +16,16 @@ import { PrismaService } from 'src/config/prisma.service';
       secret: jwtConstants.inviteSecret,
       signOptions: { expiresIn: '2d' },
     }),
+    ClientsModule.registerAsync([
+      {
+        imports: [ConfigModule],
+        name: EMAIL_SERVICE,
+        useFactory: async (config: ConfigService) => ({
+          transport: Transport.REDIS,
+        }),
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [InvitesController],
   providers: [InvitesService, PrismaService],

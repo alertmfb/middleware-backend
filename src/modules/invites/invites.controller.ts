@@ -40,6 +40,7 @@ export class InvitesController {
 
     const inviter = req.user as Iniviter;
 
+    // TODO: Create Guard
     if (inviter.role !== 'SUPER_ADMIN') {
       throw new ForbiddenException('You cannot perform this action');
     }

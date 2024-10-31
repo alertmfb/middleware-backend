@@ -1,6 +1,7 @@
 import {
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -11,6 +12,8 @@ import { Iniviter } from './schema';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from '../auth/auth.service';
 import { authenticator } from 'otplib';
+import { ClientProxy } from '@nestjs/microservices';
+import { EMAIL_SERVICE } from '../email/constant';
 
 type DeodedPayload = {
   email: string;
@@ -30,6 +33,7 @@ export class InvitesService {
     private jwtServie: JwtService,
     private prisma: PrismaService,
     private authService: AuthService,
+    @Inject(EMAIL_SERVICE) private client: ClientProxy,
   ) {}
 
   protected saltOrRounds = 10;
@@ -52,6 +56,10 @@ export class InvitesService {
           inviteToken: token,
         },
       });
+
+      this.client
+        .send('email.inviteUser', { email: payload.email, token: token })
+        .subscribe();
 
       return { token: token };
     } catch (error) {

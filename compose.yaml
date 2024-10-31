@@ -22,21 +22,9 @@ services:
     ports:
       - 5230:3000
 
-  # The commented out section below is an example of how to define a PostgreSQL
-  # database that your application can use. `depends_on` tells Docker Compose to
-  # start the database before your application. The `db-data` volume persists the
-  # database data between container restarts. The `db-password` secret is used
-  # to set the database password. You must create `db/password.txt` and add
-  # a password of your choosing to it before running `docker-compose up`.
-  #     depends_on:
-  #       db:
-  #         condition: service_healthy
   database:
     image: postgres
     restart: always
-    # user: postgres
-    # secrets:
-    #   - db-password
     container_name: middleware-db
     volumes:
       - middleware-db:/var/lib/postgresql/data
@@ -46,15 +34,19 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     expose:
       - 5432
-    # healthcheck:
-    #   test: ['CMD', 'pg_isready']
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
     ports:
       - 9812:5432
+
+    redis:
+      image: redis
+      restart: always
+      ports:
+        - '6979:6379'
+      volumes:
+        - redis-data:/data
 volumes:
   middleware-db:
+  redis-data:
 # secrets:
 #   db-password:
 #     file: db/password.txt
