@@ -15,7 +15,7 @@ import {
   inviteUserSchema,
   tokenQuerySchema,
 } from './schema';
-import { InvitesService } from './invites.servce';
+import { InvitesService } from './invites.service';
 import { ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   CreatePassword,

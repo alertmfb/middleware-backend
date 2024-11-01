@@ -1,11 +1,17 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { LocalAuthGuard } from './local-auth.guard';
 import { Request, Response } from 'express';
-import { JwtAuthGuard } from './jwt.auth.guard';
 import { Public } from './metadata';
-import { AuthenticatedUser } from './schema';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -13,7 +19,14 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { SignIn, signInExample, verifyTOTP, VerifyTOTP } from './auth.dto';
+import {
+  ResetPassword,
+  resetPasswordApiResponse,
+  SignIn,
+  signInExample,
+  verifyTOTP,
+  VerifyTOTP,
+} from './auth.dto';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -40,14 +53,6 @@ export class AuthController {
     res.json(req.user);
   }
 
-  @Post('setupMfa')
-  @ApiExcludeEndpoint()
-  async setupMFA(@Req() req: Request, @Res() res: Response) {
-    const user = req.user as AuthenticatedUser;
-    const otp = await this.authService.setupMfa(user);
-    res.json({ otp });
-  }
-
   @Post('verifyTOTP')
   @ApiResponse({ example: verifyTOTP })
   @ApiBody({ type: VerifyTOTP })
@@ -57,5 +62,13 @@ export class AuthController {
     const otp = req.body && ((req.body['otp'] ?? '') as string);
     const data = await this.authService.verifyTOTP(otp, token, req.ip);
     res.json(data);
+  }
+
+  @Public()
+  @Post('resetPassword')
+  @ApiBody({ type: ResetPassword })
+  @ApiResponse({ example: resetPasswordApiResponse })
+  async resetPassword(@Body() { email }: ResetPassword) {
+    return await this.authService.resetPassword(email);
   }
 }

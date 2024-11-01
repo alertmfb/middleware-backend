@@ -1,4 +1,11 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
@@ -18,8 +25,6 @@ export class AuthService {
     private prisma: PrismaService,
     @Inject(EMAIL_SERVICE) private client: ClientProxy,
   ) {}
-
-  private MFA_SERVICE_NAME: string = 'Middleware';
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(email);
@@ -44,30 +49,6 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
-  }
-
-  async setupMfa(user: AuthenticatedUser) {
-    try {
-      // await this.prisma.user.update({
-      //   where: {
-      //     email: user.email,
-      //   },
-      //   data: {
-      //     hasMFAEnabled: true,
-      //   },
-      // });
-      const secret = this.config.get('TOTP_SECRET');
-
-      const otpauth = authenticator.keyuri(
-        user.email,
-        this.MFA_SERVICE_NAME,
-        secret,
-      );
-
-      return otpauth;
-    } catch (error) {
-      throw new HttpException('could not complete', HttpStatus.BAD_REQUEST);
-    }
   }
 
   async verifyTOTP(otp: string, accessToken: string, ip: string) {
@@ -112,5 +93,48 @@ export class AuthService {
       .subscribe();
 
     return { isAuthenticated: isValid, access_token: accessToken };
+  }
+
+  async resetPassword(email: string) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          email: email,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (!user) {
+        throw new NotFoundException('This user does not exist');
+      }
+
+      const secret = authenticator.generateSecret();
+      const otp = authenticator.generate(secret);
+      const expiryToken = this.jwtService.sign(
+        { id: user.id, otp: otp },
+        { expiresIn: '10m' },
+      );
+
+      const newEntry = await this.prisma.passwordReset.create({
+        data: {
+          expiryToken: expiryToken,
+          opt: otp,
+          userId: user.id,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      this.client
+        .send('email.resetPassword', { email: email, otp: otp })
+        .subscribe();
+
+      return { id: newEntry.id };
+    } catch (error) {
+      throw new InternalServerErrorException();
+    }
   }
 }

@@ -14,18 +14,19 @@ datasource db {
 }
 
 model User {
-  id            Int          @id @default(autoincrement())
-  email         String       @unique
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
   firstname     String?
   lastname      String?
   password      String
-  role          ROLE         @default(MEMBER)
+  role          ROLE           @default(MEMBER)
   invites       Invite[]
-  has2FAEnabled Boolean      @default(false)
-  mfaMethod     MFAMethod    @default(AUTHENTICATOR_APP)
+  has2FAEnabled Boolean        @default(false)
+  mfaMethod     MFAMethod      @default(AUTHENTICATOR_APP)
   secret        TwoFASecret?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @default(now())
+  passwordReset PasswordReset?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
 }
 
 model Invite {
@@ -49,6 +50,16 @@ model TwoFASecret {
   key       String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+}
+
+model PasswordReset {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      Int      @unique
+  opt         String
+  expiryToken String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
 }
 
 enum ROLE {

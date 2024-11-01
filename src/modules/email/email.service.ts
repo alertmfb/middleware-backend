@@ -1,12 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { zeptoClient } from 'src/config/zepto';
 import { resend } from 'src/config/resend';
-import { NotifySignIn } from './dto/email.dto';
+import { PasswordReset, NotifySignIn } from './dto/email.dto';
 import { TZDate } from '@date-fns/tz';
 
 @Injectable()
 export class EmailServce {
   inviteUrl: string = 'https://middleware.alertmfb.com.ng/register-account';
+  resetURL: string = 'https://middleware.alertmfb.com.ng/forgot-password';
 
   async inviteUser({ email, token }: { email: string; token: string }) {
     const completeOnboardingUrl = this.inviteUrl + '?token=' + token;
@@ -93,12 +94,57 @@ export class EmailServce {
           </tr>
           <tr>
             <td style="background-color: #f1f1f1; padding: 10px; text-align: center; font-size: 12px; color: #aaa;">
-              <p style="margin: 0;">Thank you,<br/>The [Application Name] Security Team</p>
+              <p style="margin: 0;">Thank you,<br/>The Digital Hub.</p>
               <p style="margin: 0; font-size: 11px;">This is an automated notification; please do not reply directly to this email.</p>
             </td>
           </tr>
         </table>
       </div>
+    `,
+    });
+
+    if (error) {
+      Logger.error(error);
+    }
+
+    Logger.log(data);
+  }
+
+  async resetPassword({ email, otp }: PasswordReset) {
+    const { data, error } = await resend.emails.send({
+      from: 'Middleware - Alert MFB <noreply@ecam.alertmfb.com.ng>',
+      to: email,
+      subject: 'Password Reset OTP for Your Middleware Account',
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto;">
+        <tr>
+          <td style="background-color: #f39c12; padding: 20px; text-align: center;">
+            <h1 style="color: #ffffff; font-size: 24px; margin: 0;">Password Reset OTP</h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color: #f9f9f9; padding: 20px;">
+            <p style="font-size: 16px; color: #555;">
+              Hello,<br/><br/>
+              We received a request to reset the password for your [Application Name] account. Please use the OTP below to complete the process:
+            </p>
+            <div style="text-align: center; margin: 20px 0;">
+              <p style="font-size: 24px; color: #f39c12; font-weight: bold;">${otp}</p>
+            </div>
+            <p style="font-size: 14px; color: #777;">
+              If you didn’t request this password reset, please ignore this email. The OTP will expire in 10 minutes.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color: #f1f1f1; padding: 10px; text-align: center; font-size: 12px; color: #aaa;">
+            <p style="margin: 0;">Thank you,<br/>The Digital Hub</p>
+            <p style="margin: 0; font-size: 11px;">This is an automated message; please do not reply.</p>
+          </td>
+        </tr>
+      </table>
+    </div>
     `,
     });
 
