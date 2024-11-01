@@ -1,15 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { zeptoClient } from 'src/config/zepto';
 import { resend } from 'src/config/resend';
+import { NotifySignIn } from './dto/email.dto';
+import { TZDate } from '@date-fns/tz';
 
 @Injectable()
 export class EmailServce {
-  url: string = 'https://middleware.alertmfb.com.ng/register-account';
-
-  constructor() {}
+  inviteUrl: string = 'https://middleware.alertmfb.com.ng/register-account';
 
   async inviteUser({ email, token }: { email: string; token: string }) {
-    const completeOnboardingUrl = this.url + '?token=' + token;
+    const completeOnboardingUrl = this.inviteUrl + '?token=' + token;
     const { data, error } = await resend.emails.send({
       from: 'Digital Hub <noreply@ecam.alertmfb.com.ng>',
       to: [email],
@@ -55,39 +55,57 @@ export class EmailServce {
     Logger.log(data);
   }
 
-  // zeptoClient
-  //   .sendMail({
-  //     from: {
-  //       address: 'victor@alertmfb.com.ng',
-  //       name: 'noreply middleware',
-  //     },
-  //     to: [
-  //       {
-  //         email_address: {
-  //           address: email,
-  //           name: '',
-  //         },
-  //       },
-  //     ],
-  //     subject: 'Test Email',
-  //     htmlbody: '<div><b> Test email sent successfully.</b></div>',
-  //   })
-  //   .then((resp) => Logger.log('success'))
-  //   .catch((error) => Logger.log(error));
+  async notifySignIn({ email, ipAddress }: NotifySignIn) {
+    const { data, error } = await resend.emails.send({
+      from: 'Alert MFB Middleware <noreply@ecam.alertmfb.com.ng>',
+      to: email,
+      subject: 'New Sign-In to Your Middleware Account',
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto;">
+          <tr>
+            <td style="background-color: #d9534f; padding: 20px; text-align: center;">
+              <h1 style="color: #ffffff; font-size: 24px; margin: 0;">New Sign-In Detected</h1>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f9f9f9; padding: 20px;">
+              <p style="font-size: 16px; color: #555;">
+                Hello,<br/><br/>
+                We noticed a new sign-in to your Middleware account. Here are the details of this activity:
+              </p>
+              <table style="font-size: 14px; color: #555; width: 100%; margin: 20px 0;">
+                <tr>
+                  <td><strong>Date and Time:</strong></td>
+                  <td>${new TZDate()}</td>
+                </tr>
+                <tr>
+                  <td><strong>IP Address:</strong></td>
+                  <td>${ipAddress}</td>
+                </tr>
 
-  // async makeAdmin() {
-  //   const adminId = await this.prisma.user.update({
-  //     where: {
-  //       email: 'bar@gmail.com',
-  //     },
-  //     data: {
-  //       role: 'SUPER_ADMIN',
-  //     },
-  //     select: {
-  //       id: true,
-  //     },
-  //   });
+              </table>
+              <p style="font-size: 14px; color: #777;">
+                If this was you, no further action is needed.<br/><br/>
+                If you don’t recognize this activity, we recommend resetting your password immediately and reviewing your account's activity.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color: #f1f1f1; padding: 10px; text-align: center; font-size: 12px; color: #aaa;">
+              <p style="margin: 0;">Thank you,<br/>The [Application Name] Security Team</p>
+              <p style="margin: 0; font-size: 11px;">This is an automated notification; please do not reply directly to this email.</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+    `,
+    });
 
-  //   return adminId;
-  // }
+    if (error) {
+      Logger.error(error);
+    }
+
+    Logger.log(data);
+  }
 }

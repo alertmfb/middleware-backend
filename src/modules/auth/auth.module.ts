@@ -11,6 +11,9 @@ import { LocalStrategy } from './local.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './jwt.auth.guard';
 import { PrismaService } from 'src/config/prisma.service';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { EMAIL_SERVICE } from '../email/constant';
 
 @Module({
   imports: [
@@ -20,6 +23,20 @@ import { PrismaService } from 'src/config/prisma.service';
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '1d' },
     }),
+    ClientsModule.registerAsync([
+      {
+        imports: [ConfigModule],
+        name: EMAIL_SERVICE,
+        useFactory: async (config: ConfigService) => ({
+          transport: Transport.REDIS,
+          options: {
+            host: config.get('REDIS_HOST') || 'middleware-redis',
+            port: config.get('REDIS_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [AuthController],
   providers: [

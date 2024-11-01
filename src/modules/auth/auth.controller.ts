@@ -15,7 +15,8 @@ import {
 } from '@nestjs/swagger';
 import { SignIn, signInExample, verifyTOTP, VerifyTOTP } from './auth.dto';
 
-@Controller('auth') @ApiTags('Auth')
+@Controller('auth')
+@ApiTags('Auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
@@ -54,7 +55,7 @@ export class AuthController {
   async verifyTOTP(@Req() req: Request, @Res() res: Response) {
     const token = req.headers.authorization.slice(7);
     const otp = req.body && ((req.body['otp'] ?? '') as string);
-    const data = await this.authService.verifyTOTP(otp, token);
+    const data = await this.authService.verifyTOTP(otp, token, req.ip);
     res.json(data);
   }
 }

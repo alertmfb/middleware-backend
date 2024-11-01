@@ -10,6 +10,7 @@ import { Public } from '../auth/metadata';
 import { EmailServce } from './email.service';
 import { EMAIL_SERVICE } from './constant';
 import { ApiExcludeController } from '@nestjs/swagger';
+import { NotifySignIn } from './dto/email.dto';
 
 @Public()
 @ApiExcludeController()
@@ -25,20 +26,13 @@ export class EmailController implements OnApplicationBootstrap {
     Logger.log('Redis Microservice running', 'NestMicroservice');
   }
 
-  // @Get('invite')
-  // sendInvite() {
-  //   this.client
-  //     .send('email.inviteUser', {
-  //       email: 'balogunv50@gmail.com',
-  //       token: 'apkojrinuqb89jdw0i39qj8hv5nuicom0q9nridsoP',
-  //     })
-  //     .subscribe();
-
-  //   return { message: 'sent' };
-  // }
-
   @MessagePattern('email.inviteUser')
   async InviteUser(@Payload() payload: { email: string; token: string }) {
     await this.emailServie.inviteUser(payload);
+  }
+
+  @MessagePattern('email.notifySignIn')
+  async NotifySignIn(@Payload() payload: NotifySignIn) {
+    await this.emailServie.notifySignIn(payload);
   }
 }
