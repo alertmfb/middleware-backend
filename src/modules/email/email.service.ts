@@ -127,7 +127,7 @@ export class EmailServce {
           <td style="background-color: #f9f9f9; padding: 20px;">
             <p style="font-size: 16px; color: #555;">
               Hello,<br/><br/>
-              We received a request to reset the password for your [Application Name] account. Please use the OTP below to complete the process:
+              We received a request to reset the password for your Middleware account. Please use the OTP below to complete the process:
             </p>
             <div style="text-align: center; margin: 20px 0;">
               <p style="font-size: 24px; color: #f39c12; font-weight: bold;">${otp}</p>

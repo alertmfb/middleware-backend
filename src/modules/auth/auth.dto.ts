@@ -26,3 +26,8 @@ export class ResetPassword {
 export const resetPasswordApiResponse = {
   id: 'b49da74f-3a77-4793-bdc7-77d3418f4793',
 };
+
+export class VerifyResetPassword {
+  email: string;
+  otp: string;
+}

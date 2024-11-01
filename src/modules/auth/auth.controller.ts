@@ -24,6 +24,7 @@ import {
   resetPasswordApiResponse,
   SignIn,
   signInExample,
+  VerifyResetPassword,
   verifyTOTP,
   VerifyTOTP,
 } from './auth.dto';
@@ -70,5 +71,12 @@ export class AuthController {
   @ApiResponse({ example: resetPasswordApiResponse })
   async resetPassword(@Body() { email }: ResetPassword) {
     return await this.authService.resetPassword(email);
+  }
+
+  @Public()
+  @Post('verifyPasswordResetOTP')
+  @ApiBody({ type: VerifyResetPassword })
+  async verifyPasswordReset(@Body() { email, otp }: VerifyResetPassword) {
+    return await this.authService.verifyPasswordReset(email, otp);
   }
 }

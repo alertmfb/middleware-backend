@@ -15,6 +15,7 @@ import { authenticator } from '@otplib/preset-default';
 import { PrismaService } from 'src/config/prisma.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { EMAIL_SERVICE } from '../email/constant';
+import { differenceInMinutes } from 'date-fns';
 
 @Injectable()
 export class AuthService {
@@ -120,8 +121,8 @@ export class AuthService {
       const newEntry = await this.prisma.passwordReset.create({
         data: {
           expiryToken: expiryToken,
-          opt: otp,
-          userId: user.id,
+          otp: otp,
+          userEmail: email,
         },
         select: {
           id: true,
@@ -136,5 +137,29 @@ export class AuthService {
     } catch (error) {
       throw new InternalServerErrorException();
     }
+  }
+
+  async verifyPasswordReset(email: string, otp: string) {
+    const resetEntry = await this.prisma.passwordReset.findUnique({
+      where: {
+        userEmail: email,
+        otp: otp,
+      },
+      select: {
+        expiryToken: true,
+        otp: true,
+        updatedAt: true,
+      },
+    });
+
+    if (!resetEntry.expiryToken) {
+      throw new NotFoundException('OTP has expired');
+    }
+
+    const minutesElapsed = differenceInMinutes(
+      resetEntry.updatedAt,
+      new Date(),
+    );
+    return minutesElapsed;
   }
 }
