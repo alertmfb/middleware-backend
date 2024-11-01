@@ -8,6 +8,10 @@
   - Added the required column `userEmail` to the `PasswordReset` table without a default value. This is not possible if the table is not empty.
 
 */
+
+-- Truncate Table
+TRUNCATE TABLE "PasswordReset";
+
 -- DropForeignKey
 ALTER TABLE "PasswordReset" DROP CONSTRAINT "PasswordReset_userId_fkey";
 
