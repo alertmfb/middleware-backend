@@ -11,7 +11,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "echo 'TRUNCATE TABLE PasswordReset;' | prisma db execute --stdin --url='$DATABASE_URL' && npx prisma migrate deploy && npx prisma generate && node dist/main",
+    "start:prod": "echo 'TRUNCATE TABLE PasswordReset;' | prisma db execute --stdin --url='postgresql://postgres:victor@middleware-db:5432/middlewareBackend?schema=public' && npx prisma migrate deploy && npx prisma generate && node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
