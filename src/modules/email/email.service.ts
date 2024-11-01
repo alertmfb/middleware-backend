@@ -4,7 +4,7 @@ import { resend } from 'src/config/resend';
 
 @Injectable()
 export class EmailServce {
-  url: string = 'https://middleware.staging.alertmfb.com.ng/register-account';
+  url: string = 'https://middleware.alertmfb.com.ng/register-account';
 
   constructor() {}
 
