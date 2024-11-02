@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma.service';
 import { ROLE, User } from '../../common/prismaTypes';
 import * as bcrypt from 'bcrypt';
@@ -34,6 +34,24 @@ export class UsersService {
       return user;
     } catch (error) {
       throw error;
+    }
+  }
+
+  async getUsers() {
+    try {
+      const users = await this.prisma.user.findMany({
+        select: {
+          id: true,
+          email: true,
+          firstname: true,
+          lastname: true,
+          role: true
+        }
+      })
+
+      return users
+    } catch(error) {
+      throw new NotFoundException(error)
     }
   }
 
