@@ -20,11 +20,14 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
+  RequestPasswordReset,
+  requestPasswordResetApiResponse,
   ResetPassword,
   resetPasswordApiResponse,
   SignIn,
   signInExample,
-  VerifyResetPassword,
+  VerifyPasswordResetOTP,
+  verifyPasswordResetOTPApiResponse,
   verifyTOTP,
   VerifyTOTP,
 } from './auth.dto';
@@ -66,17 +69,26 @@ export class AuthController {
   }
 
   @Public()
-  @Post('resetPassword')
-  @ApiBody({ type: ResetPassword })
-  @ApiResponse({ example: resetPasswordApiResponse })
-  async resetPassword(@Body() { email }: ResetPassword) {
-    return await this.authService.resetPassword(email);
+  @Post('requestPasswordReset')
+  @ApiBody({ type: RequestPasswordReset })
+  @ApiResponse({ example: requestPasswordResetApiResponse })
+  async requestPasswordReset(@Body() { email }: { email: string }) {
+    return await this.authService.requestPasswordReset(email);
   }
 
   @Public()
   @Post('verifyPasswordResetOTP')
-  @ApiBody({ type: VerifyResetPassword })
-  async verifyPasswordReset(@Body() { email, otp }: VerifyResetPassword) {
-    return await this.authService.verifyPasswordReset(email, otp);
+  @ApiBody({ type: VerifyPasswordResetOTP })
+  @ApiResponse({ example: verifyPasswordResetOTPApiResponse })
+  async verifyPasswordReset(@Body() payload: VerifyPasswordResetOTP) {
+    return await this.authService.verifyPasswordResetOTP(payload);
+  }
+
+  @Public()
+  @Post('resetPassword')
+  @ApiBody({ type: ResetPassword })
+  @ApiResponse({ example: resetPasswordApiResponse })
+  async resetPassword(@Body() payload: ResetPassword) {
+    return await this.authService.resetPassword(payload);
   }
 }

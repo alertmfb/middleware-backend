@@ -19,15 +19,30 @@ export const verifyTOTP = {
   access_token: 'eyJhbGciOiJIUzI1NiIsI...QJyqIEvI',
 };
 
+export class RequestPasswordReset {
+  email: string = 'victor.balogun@alertgroup.com.ng';
+}
+
+export const requestPasswordResetApiResponse = {
+  success: true,
+  email: 'victor.balogun@alertgroup.com.ng',
+};
+
+export class VerifyPasswordResetOTP {
+  email: string = 'victor.balogun@alertgroup.com.ng';
+  otp: string = '123456';
+}
+
+export const verifyPasswordResetOTPApiResponse = {
+  id: 'dac61cdb-76c2-44c2-ad50-d1fq19c634z5',
+};
+
 export class ResetPassword {
-  email: string;
+  resetId: string = 'dac61cdb-76c2-44c2-ad50-d1fq19c634z5';
+  password: string = 'NewPassword@1';
 }
 
 export const resetPasswordApiResponse = {
-  id: 'b49da74f-3a77-4793-bdc7-77d3418f4793',
+  succes: true,
+  message: 'password successfully changed',
 };
-
-export class VerifyResetPassword {
-  email: string;
-  otp: string;
-}

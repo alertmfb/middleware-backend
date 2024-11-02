@@ -1,24 +1,26 @@
 import {
-  HttpException,
-  HttpStatus,
+  BadRequestException,
   Inject,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { AuthenticatedUser } from './schema';
 import { ConfigService } from '@nestjs/config';
 import { authenticator } from '@otplib/preset-default';
 import { PrismaService } from 'src/config/prisma.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { EMAIL_SERVICE } from '../email/constant';
 import { differenceInMinutes } from 'date-fns';
+import { ResetPassword, VerifyPasswordResetOTP } from './auth.dto';
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+  private salt = 10;
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -96,7 +98,7 @@ export class AuthService {
     return { isAuthenticated: isValid, access_token: accessToken };
   }
 
-  async resetPassword(email: string) {
+  async requestPasswordReset(email: string) {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
@@ -114,8 +116,15 @@ export class AuthService {
       const secret = authenticator.generateSecret();
       const otp = authenticator.generate(secret);
 
-      const newEntry = await this.prisma.passwordReset.create({
-        data: {
+      await this.prisma.passwordReset.upsert({
+        where: {
+          userEmail: email,
+        },
+        update: {
+          otp: otp,
+          updatedAt: new Date(),
+        },
+        create: {
           otp: otp,
           userEmail: email,
         },
@@ -126,30 +135,97 @@ export class AuthService {
 
       this.client
         .send('email.resetPassword', { email: email, otp: otp })
-        .subscribe();
+        .subscribe({
+          error: (error) => {
+            this.logger.error(
+              `Failed to send reset password email: ${error.message}`,
+            );
+          },
+        });
 
-      return { id: newEntry.id };
+      return { success: true, email: email };
     } catch (error) {
-      throw new InternalServerErrorException();
+      if (error instanceof NotFoundException) {
+        this.logger.error(error.message);
+        throw error;
+      }
+      throw new InternalServerErrorException(error);
     }
   }
 
-  async verifyPasswordReset(email: string, otp: string) {
-    const resetEntry = await this.prisma.passwordReset.findUnique({
-      where: {
-        userEmail: email,
-        otp: otp,
-      },
-      select: {
-        otp: true,
-        updatedAt: true,
-      },
-    });
+  async verifyPasswordResetOTP({ email, otp }: VerifyPasswordResetOTP) {
+    try {
+      const resetEntry = await this.prisma.passwordReset.findUnique({
+        where: {
+          userEmail: email,
+          otp: otp,
+        },
+        select: {
+          id: true,
+          updatedAt: true,
+        },
+      });
 
-    const minutesElapsed = differenceInMinutes(
-      resetEntry.updatedAt,
-      new Date(),
-    );
-    return minutesElapsed;
+      if (!resetEntry) {
+        throw new BadRequestException('password reset entry not found');
+      }
+
+      const minutesElapsed = differenceInMinutes(
+        new Date(),
+        new Date(resetEntry.updatedAt),
+      );
+
+      if (minutesElapsed > 10) {
+        throw new BadRequestException('OTP expired');
+      }
+
+      return { id: resetEntry.id };
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(error);
+    }
   }
+
+  async resetPassword({ resetId, password }: ResetPassword) {
+    try {
+      const { user } = await this.prisma.passwordReset.findUnique({
+        where: { id: resetId },
+        select: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      });
+
+      if (!user) {
+        throw new NotFoundException('No user found');
+      }
+
+      const newPasswordHash = await bcrypt.hash(password, this.salt);
+
+      await this.prisma.user.update({
+        where: {
+          email: user.email,
+        },
+        data: {
+          password: newPasswordHash,
+        },
+      });
+
+      return { success: true, message: 'password successfully changed' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        this.logger.error(error.message);
+        throw error;
+      }
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async changePassword() {}
 }
