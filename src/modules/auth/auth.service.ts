@@ -113,14 +113,9 @@ export class AuthService {
 
       const secret = authenticator.generateSecret();
       const otp = authenticator.generate(secret);
-      const expiryToken = this.jwtService.sign(
-        { id: user.id, otp: otp },
-        { expiresIn: '10m' },
-      );
 
       const newEntry = await this.prisma.passwordReset.create({
         data: {
-          expiryToken: expiryToken,
           otp: otp,
           userEmail: email,
         },
@@ -146,15 +141,10 @@ export class AuthService {
         otp: otp,
       },
       select: {
-        expiryToken: true,
         otp: true,
         updatedAt: true,
       },
     });
-
-    if (!resetEntry.expiryToken) {
-      throw new NotFoundException('OTP has expired');
-    }
 
     const minutesElapsed = differenceInMinutes(
       resetEntry.updatedAt,
