@@ -3,6 +3,10 @@ export class PasswordReset {
   otp: string;
 }
 
+export class NotifyPasswordChanged {
+  email: string;
+}
+
 export class NotifySignIn {
   ipAddress: string;
   email: string;

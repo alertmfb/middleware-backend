@@ -217,6 +217,16 @@ export class AuthService {
         },
       });
 
+      this.client
+        .send('email.notifyPasswordChanged', { email: user.email })
+        .subscribe({
+          error: (error) => {
+            this.logger.error(
+              `Failed to send password changed email: ${error.message}`,
+            );
+          },
+        });
+
       return { success: true, message: 'password successfully changed' };
     } catch (error) {
       if (error instanceof NotFoundException) {

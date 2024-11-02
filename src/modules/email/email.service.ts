@@ -1,7 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { zeptoClient } from 'src/config/zepto';
 import { resend } from 'src/config/resend';
-import { PasswordReset, NotifySignIn } from './dto/email.dto';
+import {
+  PasswordReset,
+  NotifySignIn,
+  NotifyPasswordChanged,
+} from './dto/email.dto';
 import { TZDate } from '@date-fns/tz';
 
 @Injectable()
@@ -134,6 +138,51 @@ export class EmailServce {
             </div>
             <p style="font-size: 14px; color: #777;">
               If you didn’t request this password reset, please ignore this email. The OTP will expire in 10 minutes.
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color: #f1f1f1; padding: 10px; text-align: center; font-size: 12px; color: #aaa;">
+            <p style="margin: 0;">Thank you,<br/>The Digital Hub</p>
+            <p style="margin: 0; font-size: 11px;">This is an automated message; please do not reply.</p>
+          </td>
+        </tr>
+      </table>
+    </div>
+    `,
+    });
+
+    if (error) {
+      Logger.error(error);
+    }
+
+    Logger.log(data);
+  }
+
+  async notifyPasswordChanged({ email }: NotifyPasswordChanged) {
+    const { data, error } = await resend.emails.send({
+      from: 'Middleware - Alert MFB <noreply@ecam.alertmfb.com.ng>',
+      to: email,
+      subject: 'Your Password Has Been Changed',
+      html: `
+      <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto;">
+        <tr>
+          <td style="background-color: #28a745; padding: 20px; text-align: center;">
+            <h1 style="color: #ffffff; font-size: 24px; margin: 0;">Password Changed Successfully</h1>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color: #f9f9f9; padding: 20px;">
+            <p style="font-size: 16px; color: #555;">
+              Hello,<br/><br/>
+              This email is to confirm that your password for the Middleware was successfully changed. If you made this change, you can disregard this message.
+            </p>
+            <p style="font-size: 16px; color: #555;">
+              If you did not change your password, please contact our support team immediately to secure your account.
+            </p>
+            <p style="font-size: 14px; color: #777;">
+              For further assistance, reach out to us at digitalhub@alertgroup.com.ng.
             </p>
           </td>
         </tr>

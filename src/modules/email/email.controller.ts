@@ -10,7 +10,11 @@ import { Public } from '../auth/metadata';
 import { EmailServce } from './email.service';
 import { EMAIL_SERVICE } from './constant';
 import { ApiExcludeController } from '@nestjs/swagger';
-import { NotifySignIn, PasswordReset } from './dto/email.dto';
+import {
+  NotifySignIn,
+  NotifyPasswordChanged,
+  PasswordReset,
+} from './dto/email.dto';
 
 @Public()
 @ApiExcludeController()
@@ -39,5 +43,10 @@ export class EmailController implements OnApplicationBootstrap {
   @MessagePattern('email.resetPassword')
   async ResetPassword(@Payload() payload: PasswordReset) {
     await this.emailServie.resetPassword(payload);
+  }
+
+  @MessagePattern('email.notifyPasswordChanged')
+  async PasswordChanged(@Payload() payload: NotifyPasswordChanged) {
+    await this.emailServie.notifyPasswordChanged(payload);
   }
 }
