@@ -118,9 +118,11 @@ export class InvitesService {
         },
       });
 
+      this.client.send('email.notify2faEnabled', { email: user.email });
+
       return user;
     } catch (error) {
-      throw new HttpException('error', HttpStatus.BAD_REQUEST);
+      throw new BadRequestException(error);
     }
   }
 

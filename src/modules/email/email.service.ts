@@ -5,6 +5,7 @@ import {
   PasswordReset,
   NotifySignIn,
   NotifyPasswordChanged,
+  Notify2faEnabled,
 } from './dto/email.dto';
 import { TZDate } from '@date-fns/tz';
 
@@ -60,9 +61,50 @@ export class EmailServce {
     Logger.log(data);
   }
 
+  async notiy2faEnabled({ email }: Notify2faEnabled) {
+    const { data, error } = await resend.emails.send({
+      from: 'Middleware - Alert MFB <noreply@ecam.alertmfb.com.ng>',
+      to: email,
+      subject: 'Two-Factor Authentication Enabled on Your Account',
+      html: `
+        <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto;">
+            <tr>
+              <td style="background-color: #3498db; padding: 20px; text-align: center;">
+                <h1 style="color: #ffffff; font-size: 24px; margin: 0;">Two-Factor Authentication Enabled</h1>
+              </td>
+            </tr>
+            <tr>
+              <td style="background-color: #f9f9f9; padding: 20px;">
+                <p style="font-size: 16px; color: #555;">
+                  Hello,<br/><br/>
+                  For added security, two-factor authentication (2FA) has been successfully enabled on your Middleware account. This extra layer of security helps to protect your account from unauthorized access.
+                </p>
+                <p style="font-size: 16px; color: #555;">
+                  Going forward, you’ll be asked to enter a unique code generated on your authentication app each time you log in.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td style="background-color: #f1f1f1; padding: 10px; text-align: center; font-size: 12px; color: #aaa;">
+                <p style="margin: 0;">Thank you,<br/>The Digital Hub</p>
+                <p style="margin: 0; font-size: 11px;">This is an automated message; please do not reply.</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+      `,
+    });
+    if (error) {
+      Logger.error(error);
+    }
+
+    Logger.log(data);
+  }
+
   async notifySignIn({ email, ipAddress }: NotifySignIn) {
     const { data, error } = await resend.emails.send({
-      from: 'Alert MFB Middleware <noreply@ecam.alertmfb.com.ng>',
+      from: 'Middleware - Alert MFB <noreply@ecam.alertmfb.com.ng>',
       to: email,
       subject: 'New Sign-In to Your Middleware Account',
       html: `

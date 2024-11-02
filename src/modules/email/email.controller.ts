@@ -14,6 +14,7 @@ import {
   NotifySignIn,
   NotifyPasswordChanged,
   PasswordReset,
+  Notify2faEnabled,
 } from './dto/email.dto';
 
 @Public()
@@ -33,6 +34,11 @@ export class EmailController implements OnApplicationBootstrap {
   @MessagePattern('email.inviteUser')
   async InviteUser(@Payload() payload: { email: string; token: string }) {
     await this.emailServie.inviteUser(payload);
+  }
+
+  @MessagePattern('email.notify2faEnabled')
+  async Notify2faEnabled(@Payload() payload: Notify2faEnabled) {
+    await this.emailServie.notiy2faEnabled(payload);
   }
 
   @MessagePattern('email.notifySignIn')
