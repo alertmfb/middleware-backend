@@ -79,7 +79,10 @@ export class AuthService {
         role: 'SUPER_ADMIN',
       };
 
-      return { isAuthenticated: isValid, access_token: accessToken };
+      return {
+        isAuthenticated: isValid,
+        access_token: this.jwtService.sign(accessToken),
+      };
     }
 
     try {
