@@ -3,6 +3,7 @@ import { UsersService } from './users.service';
 import { Request, Response } from 'express';
 import { Public } from '../auth/metadata';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiConsumes,
   ApiExcludeController,
@@ -17,6 +18,7 @@ import { usersApiResponse } from './dto/users.dto';
 
 @Controller('users')
 // @ApiExcludeController()
+@ApiBearerAuth()
 @ApiTags('users')
 export class UsersController {
   constructor(private userService: UsersService) {}

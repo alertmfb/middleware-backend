@@ -26,8 +26,12 @@ import {
   resetPasswordApiResponse,
   SignIn,
   signInExample,
+  SignInWithPassword,
+  signInWithPasswordApiResponse,
   VerifyPasswordResetOTP,
   verifyPasswordResetOTPApiResponse,
+  VerifySignInOTP,
+  verifySignInOTPApiResponse,
   verifyTOTP,
   VerifyTOTP,
 } from './auth.dto';
@@ -50,6 +54,25 @@ export class AuthController {
     res.json(accessToken);
   }
 
+  @Public()
+  @UseGuards(LocalAuthGuard) // Local auth guard authenticates the user and passes it to the req.user object
+  @Post('/signInWithPassword')
+  @ApiBody({ type: SignInWithPassword })
+  @ApiResponse({ example: signInWithPasswordApiResponse })
+  async signInWithPassword(@Req() req: Request, @Res() res: Response) {
+    res.json(await this.authService.signInWithPassword(req.user));
+  }
+
+  @Public()
+  @Post('verifySignInOTP')
+  @ApiResponse({ example: verifySignInOTPApiResponse })
+  @ApiBody({ type: VerifySignInOTP })
+  async verifySignInOTP(@Req() req: Request, @Res() res: Response) {
+    const { id, otp } = req.body as VerifySignInOTP;
+    const data = await this.authService.verifySignInOTP(id, otp, req.ip);
+    res.json(data);
+  }
+
   // @UseGuards(JwtAuthGuard)
   @Get('profile')
   @ApiExcludeEndpoint()
@@ -60,7 +83,6 @@ export class AuthController {
   @Post('verifyTOTP')
   @ApiResponse({ example: verifyTOTP })
   @ApiBody({ type: VerifyTOTP })
-  @ApiBearerAuth()
   async verifyTOTP(@Req() req: Request, @Res() res: Response) {
     const token = req.headers.authorization.slice(7);
     const otp = req.body && ((req.body['otp'] ?? '') as string);

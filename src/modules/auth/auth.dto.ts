@@ -1,5 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+export class SignInWithPassword {
+  email: string = 'victor.balogun@alertgroup.com.ng';
+  password: string = 'NotApassword@1';
+}
+
+export const signInWithPasswordApiResponse = {
+  success: true,
+  id: 1,
+  message: 'complete signup with otp verification',
+};
+
+export class VerifySignInOTP {
+  id: number = 1;
+  otp: string;
+}
+
+export const verifySignInOTPApiResponse = {
+  isAuthenticated: true,
+  access_token: 'eyJhbGciOiJIUzI1NiIsIQJyqIEvI',
+};
+
 export class SignIn {
   email: string;
   password: string;

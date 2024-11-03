@@ -16,7 +16,13 @@ import {
   tokenQuerySchema,
 } from './schema';
 import { InvitesService } from './invites.service';
-import { ApiBody, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   CreatePassword,
   createPasswordExample,
@@ -31,6 +37,7 @@ export class InvitesController {
   constructor(private invitesService: InvitesService) {}
 
   @Post('/inviteUser')
+  @ApiBearerAuth()
   @ApiBody({ type: InviteUser })
   @ApiResponse({ example: inviteUserExample })
   async inviteUser(@Req() req: Request, @Res() res: Response) {
