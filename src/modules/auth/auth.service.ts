@@ -74,7 +74,7 @@ export class AuthService {
       }
 
       const accessToken = {
-        email: 'bob@gmail.com',
+        email: 'bar@gmail.com',
         sub: 123459876,
         role: 'SUPER_ADMIN',
       };
