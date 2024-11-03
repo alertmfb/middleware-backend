@@ -21,6 +21,9 @@ services:
       TOTP_SECRET: ${TOTP_SECRET}
       REDIS_HOST: middleware-redis
       REDIS_PORT: 6379
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      ZEPTO_TOKEN: ${ZEPTO_TOKEN}
+      ZEPTO_API: ${ZEPTO_API}
     ports:
       - 5230:3000
     depends_on:
