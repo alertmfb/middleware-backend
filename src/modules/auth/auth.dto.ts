@@ -13,7 +13,7 @@ export const signInWithPasswordApiResponse = {
 
 export class VerifySignInOTP {
   id: number = 1;
-  otp: string;
+  otp: string = '123456';
 }
 
 export const verifySignInOTPApiResponse = {
@@ -67,3 +67,7 @@ export const resetPasswordApiResponse = {
   succes: true,
   message: 'password successfully changed',
 };
+
+export class UpdatePassword {
+  newPassword: string = 'NewPassword2#';
+}

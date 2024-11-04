@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Post,
   Req,
   Res,
@@ -28,6 +29,7 @@ import {
   signInExample,
   SignInWithPassword,
   signInWithPasswordApiResponse,
+  UpdatePassword,
   VerifyPasswordResetOTP,
   verifyPasswordResetOTPApiResponse,
   VerifySignInOTP,
@@ -52,6 +54,16 @@ export class AuthController {
   async signIn(@Req() req: Request, @Res() res: Response) {
     const accessToken = await this.authService.signIn(req.user);
     res.json(accessToken);
+  }
+
+  @Post('verifyTOTP')
+  @ApiResponse({ example: verifyTOTP })
+  @ApiBody({ type: VerifyTOTP })
+  async verifyTOTP(@Req() req: Request, @Res() res: Response) {
+    const token = req.headers.authorization.slice(7);
+    const otp = req.body && ((req.body['otp'] ?? '') as string);
+    const data = await this.authService.verifyTOTP(otp, token, req.ip);
+    res.json(data);
   }
 
   @Public()
@@ -80,16 +92,6 @@ export class AuthController {
     res.json(req.user);
   }
 
-  @Post('verifyTOTP')
-  @ApiResponse({ example: verifyTOTP })
-  @ApiBody({ type: VerifyTOTP })
-  async verifyTOTP(@Req() req: Request, @Res() res: Response) {
-    const token = req.headers.authorization.slice(7);
-    const otp = req.body && ((req.body['otp'] ?? '') as string);
-    const data = await this.authService.verifyTOTP(otp, token, req.ip);
-    res.json(data);
-  }
-
   @Public()
   @Post('requestPasswordReset')
   @ApiBody({ type: RequestPasswordReset })
@@ -112,5 +114,16 @@ export class AuthController {
   @ApiResponse({ example: resetPasswordApiResponse })
   async resetPassword(@Body() payload: ResetPassword) {
     return await this.authService.resetPassword(payload);
+  }
+
+  @Post('updatePassword')
+  @ApiBearerAuth()
+  @ApiBody({ type: UpdatePassword })
+  async updatePassword(@Req() req: Request) {
+    return await this.authService.updatePassword(
+      req.user['id'],
+      req.user['email'],
+      req.body,
+    );
   }
 }

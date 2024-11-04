@@ -16,7 +16,11 @@ import { PrismaService } from 'src/config/prisma.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { EMAIL_SERVICE } from '../email/constant';
 import { differenceInMinutes } from 'date-fns';
-import { ResetPassword, VerifyPasswordResetOTP } from './auth.dto';
+import {
+  ResetPassword,
+  UpdatePassword,
+  VerifyPasswordResetOTP,
+} from './auth.dto';
 
 @Injectable()
 export class AuthService {
@@ -310,5 +314,40 @@ export class AuthService {
     }
   }
 
-  async changePassword() {}
+  async updatePassword(
+    userId: number,
+    email: string,
+    { newPassword }: UpdatePassword,
+  ) {
+    try {
+      const newPasswordHash = await bcrypt.hash(newPassword, this.salt);
+
+      await this.prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          password: newPasswordHash,
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      this.client
+        .send('email.notifyPasswordChanged', { email: email })
+        .subscribe({
+          error: (error) => {
+            this.logger.error(
+              `Failed to send password changed email: ${error.message}`,
+            );
+          },
+        });
+
+      return { sucess: true };
+    } catch (error) {
+      this.logger.error(error);
+      throw new BadRequestException('unable to change password');
+    }
+  }
 }
