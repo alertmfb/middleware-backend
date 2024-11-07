@@ -69,5 +69,6 @@ export const resetPasswordApiResponse = {
 };
 
 export class UpdatePassword {
+  oldPassword: string = 'OldPassword1#';
   newPassword: string = 'NewPassword2#';
 }

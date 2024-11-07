@@ -41,12 +41,10 @@ import {
 @Controller('auth')
 @ApiTags('Auth')
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    private config: ConfigService,
-  ) {}
+  constructor(private authService: AuthService) {}
 
   @Public()
+  @ApiExcludeEndpoint()
   @UseGuards(LocalAuthGuard) // Local auth guard authenticates the user and passes it to the req.user object
   @Post('/signin')
   @ApiBody({ description: '', type: SignIn })
@@ -57,6 +55,7 @@ export class AuthController {
   }
 
   @Post('verifyTOTP')
+  @ApiExcludeEndpoint()
   @ApiResponse({ example: verifyTOTP })
   @ApiBody({ type: VerifyTOTP })
   async verifyTOTP(@Req() req: Request, @Res() res: Response) {

@@ -317,9 +317,13 @@ export class AuthService {
   async updatePassword(
     userId: number,
     email: string,
-    { newPassword }: UpdatePassword,
+    { oldPassword, newPassword }: UpdatePassword,
   ) {
     try {
+      if (newPassword !== oldPassword) {
+        throw new BadRequestException('Passwords do not match');
+      }
+
       const newPasswordHash = await bcrypt.hash(newPassword, this.salt);
 
       await this.prisma.user.update({
@@ -346,8 +350,11 @@ export class AuthService {
 
       return { sucess: true };
     } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
       this.logger.error(error);
-      throw new BadRequestException('unable to change password');
+      throw new InternalServerErrorException('unable to change password');
     }
   }
 }

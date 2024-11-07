@@ -5,6 +5,7 @@ export const usersApiResponse = [
     firstname: null,
     lastname: null,
     role: 'SUPER_ADMIN',
+    createdAt: '2024-11-02T08:08:02.879Z',
   },
   {
     id: 2,
@@ -12,5 +13,6 @@ export const usersApiResponse = [
     firstname: null,
     lastname: null,
     role: 'MEMBER',
+    createdAt: '2024-11-02T08:08:09.704Z',
   },
 ];
