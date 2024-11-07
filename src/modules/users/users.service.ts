@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma.service';
 import { ROLE, User } from '../../common/prismaTypes';
 import * as bcrypt from 'bcrypt';
@@ -45,13 +51,14 @@ export class UsersService {
           email: true,
           firstname: true,
           lastname: true,
-          role: true
-        }
-      })
+          role: true,
+          createdAt: true,
+        },
+      });
 
-      return users
-    } catch(error) {
-      throw new NotFoundException(error)
+      return users;
+    } catch (error) {
+      throw new NotFoundException(error);
     }
   }
 
