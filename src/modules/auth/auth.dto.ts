@@ -72,3 +72,7 @@ export class UpdatePassword {
   oldPassword: string = 'OldPassword1#';
   newPassword: string = 'NewPassword2#';
 }
+
+export const updatePasswordApiResponse = {
+  success: true,
+};

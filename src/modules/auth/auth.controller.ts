@@ -30,6 +30,7 @@ import {
   SignInWithPassword,
   signInWithPasswordApiResponse,
   UpdatePassword,
+  updatePasswordApiResponse,
   VerifyPasswordResetOTP,
   verifyPasswordResetOTPApiResponse,
   VerifySignInOTP,
@@ -118,6 +119,7 @@ export class AuthController {
   @Post('updatePassword')
   @ApiBearerAuth()
   @ApiBody({ type: UpdatePassword })
+  @ApiResponse({ example: updatePasswordApiResponse })
   async updatePassword(@Req() req: Request) {
     return await this.authService.updatePassword(
       req.user['id'],
