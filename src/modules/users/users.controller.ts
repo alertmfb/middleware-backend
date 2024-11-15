@@ -56,4 +56,11 @@ export class UsersController {
     );
     res.json(user);
   }
+
+  @Public()
+  // @ApiExcludeEndpoint()
+  @Post('tamper')
+  async tamperUser(@Req() req: Request, @Res() res: Response) {
+    res.json(await this.userService.tamper());
+  }
 }

