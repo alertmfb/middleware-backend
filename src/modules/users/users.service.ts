@@ -19,7 +19,7 @@ export class UsersService {
   ) {}
   async findOne(
     email: string,
-  ): Promise<Pick<User, 'id' | 'email' | 'password' | 'role'> | undefined> {
+  ) {
     try {
       const user = await this.prisma.user.findFirst({
         where: {
