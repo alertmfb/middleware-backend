@@ -1,5 +1,6 @@
 services:
   server:
+    container_name: middleware-api-prod
     build:
       context: .
     environment:
@@ -38,7 +39,7 @@ services:
   redis:
     image: redis
     restart: always
-    container_name: middleware-redis
+    container_name: middleware-redis-prod
     ports:
       - '6565:6379'
     volumes:
