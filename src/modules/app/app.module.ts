@@ -5,12 +5,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from '../auth/auth.module';
 import { InvitesModule } from '../invites/invites.module';
 import { EmailModule } from '../email/email.module';
+import { MessagesModule } from '../messages/messages.module';
 
 @Module({
   imports: [
     AuthModule,
     InvitesModule,
     EmailModule,
+    MessagesModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

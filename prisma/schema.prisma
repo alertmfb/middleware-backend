@@ -61,6 +61,16 @@ model PasswordReset {
   updatedAt DateTime @default(now())
 }
 
+model Message {
+  id        String   @id @default(uuid())
+  category  String
+  channel   String
+  title     String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
 enum ROLE {
   SUPER_ADMIN
   ADMIN
