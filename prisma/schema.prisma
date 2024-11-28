@@ -71,6 +71,17 @@ model Message {
   updatedAt DateTime @default(now())
 }
 
+model PromoCode {
+  id     String  @id @default(uuid())
+  title  String
+  key    String
+  amount Decimal @db.Decimal(12, 2)
+  usage Int
+  expirationDate DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
 enum ROLE {
   SUPER_ADMIN
   ADMIN

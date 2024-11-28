@@ -6,6 +6,7 @@ import { AuthModule } from '../auth/auth.module';
 import { InvitesModule } from '../invites/invites.module';
 import { EmailModule } from '../email/email.module';
 import { MessagesModule } from '../messages/messages.module';
+import { CodesModule } from '../codes/codes.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { MessagesModule } from '../messages/messages.module';
     InvitesModule,
     EmailModule,
     MessagesModule,
+    CodesModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
