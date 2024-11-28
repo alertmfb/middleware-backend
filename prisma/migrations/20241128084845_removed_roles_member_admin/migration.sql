@@ -23,3 +23,5 @@
 
 -- -- AlterTable
 -- ALTER TABLE "User" ALTER COLUMN "role" SET DEFAULT 'JUNIOR';
+
+SELECT 1;
