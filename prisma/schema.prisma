@@ -25,10 +25,20 @@ model User {
   mfaMethod     MFAMethod        @default(AUTHENTICATOR_APP)
   secret        TwoFASecret?
   passwordReset PasswordReset?
+  Designation   Designation?     @relation(fields: [designationId], references: [id])
+  designationId Int?
   permissions   UserPermission[]
   isSuspended   Boolean?
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @default(now())
+}
+
+model Designation {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  Users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model UserPermission {

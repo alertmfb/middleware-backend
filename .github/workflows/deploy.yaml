@@ -36,4 +36,4 @@ jobs:
           echo "ZEPTO_TOKEN=${{ secrets.ZEPTO_TOKEN }}" >> .env
           echo "ZEPTO_API=${{ secrets.ZEPTO_API }}" >> .env
           echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" >> .env
-          docker compose up --build
+          docker compose up --build -d
