@@ -86,8 +86,8 @@ enum ROLE {
   SUPER_ADMIN
   SENIOR
   JUNIOR
-  // ADMIN
-  // MEMBER
+  ADMIN
+  MEMBER
 }
 
 enum InviteStatus {
