@@ -18,6 +18,7 @@ import { AuthService } from '../auth/auth.service';
 import { authenticator } from 'otplib';
 import { ClientProxy } from '@nestjs/microservices';
 import { EMAIL_SERVICE } from '../email/constant';
+import { CreateProfile } from './dto/invites.dto';
 
 type Payload = {
   email: string;
@@ -93,8 +94,8 @@ export class InvitesService {
     }
   }
 
-  async createPassword(
-    { password }: { password: string },
+  async createProfile(
+    { password, firstname, lastname, dob, phoneNumber }: CreateProfile,
     inviteToken: string,
   ) {
     try {
@@ -105,6 +106,10 @@ export class InvitesService {
 
       const user = await this.prisma.user.create({
         data: {
+          firstname: firstname,
+          lastname: lastname,
+          dob: dob,
+          phoneNumber: phoneNumber,
           email: email,
           password: hash,
           secret: {

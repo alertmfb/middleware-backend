@@ -7,9 +7,11 @@ import { InvitesModule } from '../invites/invites.module';
 import { EmailModule } from '../email/email.module';
 import { MessagesModule } from '../messages/messages.module';
 import { CodesModule } from '../codes/codes.module';
+import { AdminModule } from '../admin/admin.module';
 
 @Module({
   imports: [
+    AdminModule,
     AuthModule,
     InvitesModule,
     EmailModule,

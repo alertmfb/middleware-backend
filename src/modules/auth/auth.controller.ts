@@ -40,7 +40,7 @@ import {
 } from './auth.dto';
 
 @Controller('auth')
-@ApiTags('Auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
