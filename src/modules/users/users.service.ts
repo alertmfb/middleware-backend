@@ -80,7 +80,7 @@ export class UsersService {
         data: {
           email: email,
           password: hash,
-          role: !role || role.length < 1 ? 'MEMBER' : role,
+          role: !role || role.length < 1 ? 'JUNIOR' : role,
         },
         select: {
           id: true,
@@ -91,28 +91,30 @@ export class UsersService {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
+
   async tamper() {
     try {
-      const [resultOne, resultTwo] = await this.prisma.$transaction([
-        this.prisma.user.updateMany({
-          where: {
-            role: 'MEMBER',
-          },
-          data: {
-            role: { set: 'JUNIOR' },
-          },
-        }),
-        this.prisma.user.updateMany({
-          where: {
-            role: 'ADMIN',
-          },
-          data: {
-            role: { set: 'SENIOR' },
-          },
-        }),
-      ]);
+      // const [resultOne, resultTwo] = await this.prisma.$transaction([
+      //   this.prisma.user.updateMany({
+      //     where: {
+      //       role: 'MEMBER',
+      //     },
+      //     data: {
+      //       role: { set: 'JUNIOR' },
+      //     },
+      //   }),
+      //   this.prisma.user.updateMany({
+      //     where: {
+      //       role: 'ADMIN',
+      //     },
+      //     data: {
+      //       role: { set: 'SENIOR' },
+      //     },
+      //   }),
+      // ]);
 
-      return [resultOne, resultTwo];
+      // return [resultOne, resultTwo];
+      return [1, 2];
     } catch (error) {
       throw error;
     }
