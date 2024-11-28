@@ -1,0 +1,62 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT}
+      GLOBAL_PREFIX: ${GLOBAL_PREFIX}
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      INVITE_SECRET: ${INVITE_SECRET}
+      TOTP_SECRET: ${TOTP_SECRET}
+      REDIS_HOST: middleware-redis
+      REDIS_PORT: 6379
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      ZEPTO_TOKEN: ${ZEPTO_TOKEN}
+      ZEPTO_API: ${ZEPTO_API}
+    ports:
+      - 5230:3000
+    depends_on:
+      - redis
+
+  database:
+    image: postgres
+    restart: always
+    container_name: middleware-db
+    volumes:
+      - middleware-db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    expose:
+      - 5432
+    ports:
+      - 9812:5432
+
+  redis:
+    image: redis
+    restart: always
+    container_name: middleware-redis
+    ports:
+      - '6979:6379'
+    volumes:
+      - redis-data:/data
+
+volumes:
+  middleware-db:
+  redis-data:
+# secrets:
+#   db-password:
+#     file: db/password.txt
+

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Invite" ALTER COLUMN "role" SET DEFAULT 'MEMBER';

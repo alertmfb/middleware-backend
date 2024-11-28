@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  email         String         @unique
+  firstname     String?
+  lastname      String?
+  password      String
+  role          ROLE           @default(MEMBER)
+  invites       Invite[]
+  has2FAEnabled Boolean        @default(false)
+  mfaMethod     MFAMethod      @default(AUTHENTICATOR_APP)
+  secret        TwoFASecret?
+  passwordReset PasswordReset?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+}
+
+model Invite {
+  id           String       @id @default(uuid())
+  email        String       @unique
+  invitedBy    User         @relation(fields: [inviterEmail], references: [email])
+  inviterEmail String
+  status       InviteStatus @default(PENDING)
+  role         ROLE         @default(MEMBER)
+  inviteToken  String
+  invitedAt    DateTime     @default(now())
+  acceptedAt   DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @default(now())
+}
+
+model TwoFASecret {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int      @unique
+  key       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model PasswordReset {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userEmail], references: [email])
+  userEmail String   @unique
+  otp       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+enum ROLE {
+  SUPER_ADMIN
+  ADMIN
+  MEMBER
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+}
+
+enum MFAMethod {
+  AUTHENTICATOR_APP
+}
