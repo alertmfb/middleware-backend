@@ -17,9 +17,7 @@ export class UsersService {
     private prisma: PrismaService,
     private jwtService: JwtService,
   ) {}
-  async findOne(
-    email: string,
-  ) {
+  async findOne(email: string) {
     try {
       const user = await this.prisma.user.findFirst({
         where: {
@@ -95,24 +93,26 @@ export class UsersService {
   }
   async tamper() {
     try {
-      const update = await this.prisma.user.update({
-        where: {
-          email: 'victor.balogun@alertgroup.com.ng',
-        },
-        data: {
-          role: { set: 'SUPER_ADMIN' },
-        },
-        select: {
-          id: true,
-          email: true,
-          secret: {
-            select: {
-              key: true,
-            },
+      const [resultOne, resultTwo] = await this.prisma.$transaction([
+        this.prisma.user.updateMany({
+          where: {
+            role: 'MEMBER',
           },
-        },
-      });
-      return update;
+          data: {
+            role: { set: 'JUNIOR' },
+          },
+        }),
+        this.prisma.user.updateMany({
+          where: {
+            role: 'ADMIN',
+          },
+          data: {
+            role: { set: 'SENIOR' },
+          },
+        }),
+      ]);
+
+      return [resultOne, resultTwo];
     } catch (error) {
       throw error;
     }

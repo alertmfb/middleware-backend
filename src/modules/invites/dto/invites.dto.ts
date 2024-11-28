@@ -4,7 +4,10 @@ export class InviteUser {
   @ApiProperty({ example: 'victor.balogun@alertgroup.com.ng' })
   email: string;
 
-  @ApiProperty({ example: 'MEMBER' })
+  @ApiProperty({
+    enum: ['SUPER_ADMIN', 'SENIOR', 'JUNIOR'],
+    example: 'JUNIOR',
+  })
   role: string;
 }
 

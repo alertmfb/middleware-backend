@@ -21,6 +21,7 @@ import { usersApiResponse } from './dto/users.dto';
 @ApiTags('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
+
   @Get('/')
   @UseGuards(RolesGuard)
   @Roles([ROLES.SUPER_ADMIN, ROLES.ADMIN])
@@ -28,6 +29,7 @@ export class UsersController {
   async usersList() {
     return this.userService.getUsers();
   }
+
   @Post('create')
   @Public()
   @ApiExcludeEndpoint()
@@ -40,6 +42,7 @@ export class UsersController {
     );
     res.json(user);
   }
+
   @Post('backend/create')
   @Public()
   @ApiExcludeEndpoint()
@@ -51,8 +54,9 @@ export class UsersController {
     );
     res.json(user);
   }
+
   @Public()
-  @ApiExcludeEndpoint()
+  // @ApiExcludeEndpoint()
   @Post('tamper')
   async tamperUser(@Req() req: Request, @Res() res: Response) {
     res.json(await this.userService.tamper());
