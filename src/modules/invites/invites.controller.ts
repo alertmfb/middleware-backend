@@ -36,7 +36,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { ROLES } from 'src/common/roles.enum';
 
 @Controller('invites')
-@ApiTags('Invites')
+@ApiTags('invites')
 export class InvitesController {
   constructor(private invitesService: InvitesService) {}
 
