@@ -1,12 +1,17 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { Request, Response } from 'express';
 import { Public } from '../auth/metadata';
 import {
   ApiBearerAuth,
-  ApiBody,
-  ApiConsumes,
-  ApiExcludeController,
   ApiExcludeEndpoint,
   ApiResponse,
   ApiTags,
@@ -14,7 +19,7 @@ import {
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { ROLES } from 'src/common/roles.enum';
-import { usersApiResponse } from './dto/users.dto';
+import { userByIdResponse, usersApiResponse } from './dto/users.dto';
 @Controller('users')
 // @ApiExcludeController()
 @ApiBearerAuth()
@@ -28,6 +33,16 @@ export class UsersController {
   @ApiResponse({ example: usersApiResponse })
   async usersList() {
     return this.userService.getUsers();
+  }
+
+  @Public()
+  @Get(':id')
+  @UseGuards(RolesGuard)
+  @Roles([ROLES.SUPER_ADMIN, ROLES.SENIOR, ROLES.JUNIOR])
+  @ApiResponse({ example: userByIdResponse })
+  async userById(@Param() params: { id: string }) {
+    return await this.userService.getUserById(params.id);
+    // return params;
   }
 
   @Post('create')

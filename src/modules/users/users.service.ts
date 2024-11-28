@@ -52,6 +52,35 @@ export class UsersService {
       throw new NotFoundException(error);
     }
   }
+
+  async getUserById(id: string) {
+    try {
+      const user = await this.prisma.user.findUnique({
+        where: {
+          id: Number(id),
+        },
+        select: {
+          dob: true,
+          email: true,
+          firstname: true,
+          lastname: true,
+          phoneNumber: true,
+          role: true,
+          Designation: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      });
+
+      return user;
+    } catch (error) {
+      // throw error;
+      throw new NotFoundException(error);
+    }
+  }
+
   async createUser(email: string, password: string, token: string) {
     try {
       const tok = this.jwtService.verify(token);

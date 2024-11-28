@@ -108,6 +108,8 @@ export class InvitesService {
         data: {
           firstname: firstname,
           lastname: lastname,
+          dob: dob,
+          phoneNumber: phoneNumber,
           email: email,
           password: hash,
           secret: {
