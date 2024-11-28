@@ -1,3 +1,7 @@
+export class SuspendUser {
+  id: number = 9181;
+}
+
 export const usersApiResponse = [
   {
     id: 1,
@@ -27,4 +31,9 @@ export const userByIdResponse = {
   Designation: {
     name: 'HR',
   },
+};
+
+export const suspendUserResponse = {
+  success: true,
+  message: 'This user has been suspended',
 };

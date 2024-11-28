@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -76,7 +77,6 @@ export class UsersService {
 
       return user;
     } catch (error) {
-      // throw error;
       throw new NotFoundException(error);
     }
   }
@@ -102,6 +102,27 @@ export class UsersService {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
+
+  async suspendUserById(id: number) {
+    try {
+      await this.prisma.user.update({
+        where: {
+          id: id,
+        },
+        data: {
+          isSuspended: true,
+        },
+        select: {
+          isSuspended: true,
+        },
+      });
+
+      return { success: true, message: 'This user has been suspended' };
+    } catch (error) {
+      throw new BadRequestException('Unable to suspend user');
+    }
+  }
+
   async createUserFromBackend(email: string, password: string, role?: ROLE) {
     try {
       const hash = await bcrypt.hash(password, saltOrRounds);
