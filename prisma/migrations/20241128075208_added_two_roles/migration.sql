@@ -8,5 +8,3 @@
 
 ALTER TYPE "ROLE" ADD VALUE 'SENIOR';
 ALTER TYPE "ROLE" ADD VALUE 'JUNIOR';
-
-DELETE FROM _prisma_migrations WHERE migration_name = '20241128084845_removed_roles_member_admin';
