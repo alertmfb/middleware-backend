@@ -25,7 +25,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import {
-  CreatePassword,
+  CreateProfile,
   createPasswordExample,
   InviteUser,
   inviteUserExample,
@@ -53,29 +53,21 @@ export class InvitesController {
 
     const inviter = req.user as Iniviter;
 
-    // TODO: Create Guard
-    // if (inviter.role !== 'SUPER_ADMIN') {
-    //   throw new ForbiddenException('You cannot perform this action');
-    // }
     const data = await this.invitesService.inviteUser(req.body, inviter);
     res.json(data);
   }
 
   @Post('/createPassword')
   @Public()
-  @ApiBody({ type: CreatePassword })
+  @ApiBody({ type: CreateProfile })
   @ApiParam({ name: 'token' })
   @ApiResponse({ example: createPasswordExample })
-  async createPassword(@Req() req: Request, @Res() res: Response) {
-    new ZodValidationPipe(createPasswordSchema).transform(req.body, {
-      type: 'body',
-    });
-
+  async createProfile(@Req() req: Request, @Res() res: Response) {
     new ZodValidationPipe(tokenQuerySchema).transform(req.query, {
       type: 'query',
     });
 
-    const user = await this.invitesService.createPassword(
+    const user = await this.invitesService.createProfile(
       req.body,
       req.query['token'] as string,
     );
