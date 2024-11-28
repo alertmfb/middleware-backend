@@ -14,19 +14,34 @@ datasource db {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  email         String         @unique
+  id            Int              @id @default(autoincrement())
+  email         String           @unique
   firstname     String?
   lastname      String?
   password      String
-  role          ROLE           @default(JUNIOR)
+  role          ROLE             @default(JUNIOR)
   invites       Invite[]
-  has2FAEnabled Boolean        @default(true)
-  mfaMethod     MFAMethod      @default(AUTHENTICATOR_APP)
+  has2FAEnabled Boolean          @default(true)
+  mfaMethod     MFAMethod        @default(AUTHENTICATOR_APP)
   secret        TwoFASecret?
   passwordReset PasswordReset?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now())
+  permissions   UserPermission[]
+  isSuspended   Boolean?
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @default(now())
+}
+
+model UserPermission {
+  id        Int              @id @default(autoincrement())
+  user      User             @relation(fields: [userId], references: [id])
+  userId    Int
+  action    ACTION // Assuming you have an `Action` enum
+  status    PermissionStatus @default(ACTIVE)
+  reason    String?
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @default(now())
+
+  @@unique([userId, action])
 }
 
 model Invite {
@@ -88,6 +103,18 @@ enum ROLE {
   JUNIOR
   ADMIN
   MEMBER
+}
+
+enum ACTION {
+  CREATE
+  EDIT
+  VIEW
+  DELETE
+}
+
+enum PermissionStatus {
+  ACTIVE
+  REVOKED
 }
 
 enum InviteStatus {

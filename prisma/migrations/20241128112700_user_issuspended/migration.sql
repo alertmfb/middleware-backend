@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Invite" ALTER COLUMN "role" SET DEFAULT 'JUNIOR';
+
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "isSuspended" BOOLEAN,
+ALTER COLUMN "role" SET DEFAULT 'JUNIOR';
