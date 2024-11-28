@@ -24,7 +24,7 @@ export class UsersController {
 
   @Get('/')
   @UseGuards(RolesGuard)
-  @Roles([ROLES.SUPER_ADMIN, ROLES.ADMIN])
+  @Roles([ROLES.SUPER_ADMIN, ROLES.SENIOR])
   @ApiResponse({ example: usersApiResponse })
   async usersList() {
     return this.userService.getUsers();
@@ -56,7 +56,7 @@ export class UsersController {
   }
 
   @Public()
-  // @ApiExcludeEndpoint()
+  @ApiExcludeEndpoint()
   @Post('tamper')
   async tamperUser(@Req() req: Request, @Res() res: Response) {
     res.json(await this.userService.tamper());

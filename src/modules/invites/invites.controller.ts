@@ -5,6 +5,7 @@ import {
   Post,
   Req,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Public } from '../auth/metadata';
@@ -30,12 +31,17 @@ import {
   inviteUserExample,
   otpauthExample,
 } from './dto/invites.dto';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { ROLES } from 'src/common/roles.enum';
 
 @Controller('invites')
 @ApiTags('Invites')
 export class InvitesController {
   constructor(private invitesService: InvitesService) {}
 
+  @UseGuards(RolesGuard)
+  @Roles([ROLES.SUPER_ADMIN])
   @Post('/inviteUser')
   @ApiBearerAuth()
   @ApiBody({ type: InviteUser })
@@ -48,9 +54,9 @@ export class InvitesController {
     const inviter = req.user as Iniviter;
 
     // TODO: Create Guard
-    if (inviter.role !== 'SUPER_ADMIN') {
-      throw new ForbiddenException('You cannot perform this action');
-    }
+    // if (inviter.role !== 'SUPER_ADMIN') {
+    //   throw new ForbiddenException('You cannot perform this action');
+    // }
     const data = await this.invitesService.inviteUser(req.body, inviter);
     res.json(data);
   }

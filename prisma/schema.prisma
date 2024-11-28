@@ -19,7 +19,7 @@ model User {
   firstname     String?
   lastname      String?
   password      String
-  role          ROLE           @default(MEMBER)
+  role          ROLE           @default(JUNIOR)
   invites       Invite[]
   has2FAEnabled Boolean        @default(true)
   mfaMethod     MFAMethod      @default(AUTHENTICATOR_APP)
@@ -35,7 +35,7 @@ model Invite {
   invitedBy    User         @relation(fields: [inviterEmail], references: [email])
   inviterEmail String
   status       InviteStatus @default(PENDING)
-  role         ROLE         @default(MEMBER)
+  role         ROLE         @default(JUNIOR)
   inviteToken  String
   invitedAt    DateTime     @default(now())
   acceptedAt   DateTime?
@@ -84,10 +84,10 @@ model PromoCode {
 
 enum ROLE {
   SUPER_ADMIN
-  ADMIN
-  MEMBER
   SENIOR
   JUNIOR
+  // ADMIN
+  // MEMBER
 }
 
 enum InviteStatus {
