@@ -1,25 +1,25 @@
-name: Deploy Staging
+name: Deploy Production
 
 on:
   push:
     branches:
-      - staging # Adjust branch name if necessary Fix
+      - main # Adjust branch name if necessary Fix
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: production
 
     steps:
-      - name: Deploy to VPS via SSH using .pem file
+      - name: Deploy to production on VPS via SSH using .pem file
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > /tmp/vps-key.pem
           chmod 600 /tmp/vps-key.pem
           ssh -i /tmp/vps-key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_ed25519_middleware-backend
-          cd /var/www/hosts/alert-middleware-api/stage
-          git pull origin staging
+          cd /var/www/hosts/alert-middleware-api/prod
+          git pull origin main
           touch .env
           echo "NODE_ENV=production" >> .env
           echo "PORT=${{ secrets.PORT }}" >> .env
@@ -36,4 +36,4 @@ jobs:
           echo "ZEPTO_TOKEN=${{ secrets.ZEPTO_TOKEN }}" >> .env
           echo "ZEPTO_API=${{ secrets.ZEPTO_API }}" >> .env
           echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" >> .env
-          docker compose up --build -d
+          docker compose -f compose.prod.yaml up --build -d
