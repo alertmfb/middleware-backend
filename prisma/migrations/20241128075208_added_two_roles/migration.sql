@@ -8,3 +8,7 @@
 
 ALTER TYPE "ROLE" ADD VALUE 'SENIOR';
 ALTER TYPE "ROLE" ADD VALUE 'JUNIOR';
+
+UPDATE _prisma_migrations
+SET rolled_back_at = NOW()
+WHERE migration_name = '20241128084845_removed_roles_member_admin';
