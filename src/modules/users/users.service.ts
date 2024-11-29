@@ -144,27 +144,17 @@ export class UsersService {
 
   async tamper() {
     try {
-      // const [resultOne, resultTwo] = await this.prisma.$transaction([
-      //   this.prisma.user.updateMany({
-      //     where: {
-      //       role: 'MEMBER',
-      //     },
-      //     data: {
-      //       role: { set: 'JUNIOR' },
-      //     },
-      //   }),
-      //   this.prisma.user.updateMany({
-      //     where: {
-      //       role: 'ADMIN',
-      //     },
-      //     data: {
-      //       role: { set: 'SENIOR' },
-      //     },
-      //   }),
-      // ]);
+      const user = await this.prisma.user.delete({
+        where: {
+          id: 2,
+        },
+        select: {
+          id: true,
+          email: true,
+        },
+      });
 
-      // return [resultOne, resultTwo];
-      return [1, 2];
+      return user.email;
     } catch (error) {
       throw error;
     }
