@@ -4,6 +4,7 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma.service';
@@ -156,7 +157,8 @@ export class UsersService {
 
       return user.id;
     } catch (error) {
-      throw error;
+      Logger.error(error);
+      throw new BadRequestException(error?.message);
     }
   }
 }
