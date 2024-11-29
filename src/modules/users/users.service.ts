@@ -146,7 +146,7 @@ export class UsersService {
     try {
       const user = await this.prisma.user.delete({
         where: {
-          id: 2,
+          email: 'oluwatobi.oseni@alertgroup.com.ng',
         },
         select: {
           id: true,
@@ -154,7 +154,7 @@ export class UsersService {
         },
       });
 
-      return user.email;
+      return user.id;
     } catch (error) {
       throw error;
     }
