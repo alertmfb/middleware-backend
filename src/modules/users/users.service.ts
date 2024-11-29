@@ -145,7 +145,7 @@ export class UsersService {
 
   async tamper() {
     try {
-      await this.prisma.passwordReset.delete({
+      const one = this.prisma.passwordReset.delete({
         where: {
           userEmail: 'oluwatobi.oseni@alertgroup.com',
         },
@@ -160,7 +160,7 @@ export class UsersService {
       //   },
       // });
 
-      const user = await this.prisma.user.delete({
+      const two = this.prisma.user.delete({
         where: {
           email: 'oluwatobi.oseni@alertgroup.com.ng',
         },
@@ -170,7 +170,9 @@ export class UsersService {
         },
       });
 
-      return user.id;
+      const [o, t] = await this.prisma.$transaction([one, two]);
+
+      return [o, t];
     } catch (error) {
       Logger.error(error);
       throw new BadRequestException(error?.message);
