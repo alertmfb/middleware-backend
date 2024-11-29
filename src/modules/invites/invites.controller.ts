@@ -47,12 +47,7 @@ export class InvitesController {
   @ApiBody({ type: InviteUser })
   @ApiResponse({ example: inviteUserExample })
   async inviteUser(@Req() req: Request, @Res() res: Response) {
-    new ZodValidationPipe(inviteUserSchema).transform(req.body, {
-      type: 'body',
-    });
-
     const inviter = req.user as Iniviter;
-
     const data = await this.invitesService.inviteUser(req.body, inviter);
     res.json(data);
   }
