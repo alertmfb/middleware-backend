@@ -93,7 +93,7 @@ model TwoFASecret {
 
 model PasswordReset {
   id        String   @id @default(uuid())
-  user      User     @relation(fields: [userEmail], references: [email])
+  user      User     @relation(fields: [userEmail], references: [email], onDelete: Cascade)
   userEmail String   @unique
   otp       String
   createdAt DateTime @default(now())
