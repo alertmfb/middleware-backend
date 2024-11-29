@@ -145,6 +145,25 @@ export class UsersService {
 
   async tamper() {
     try {
+      await this.prisma.user.update({
+        where: {
+          id: 2,
+        },
+        data: {
+          passwordReset: {
+            disconnect: {
+              userEmail: 'oluwatobi.oseni@alertgroup.com',
+            },
+          },
+        },
+      });
+
+      await this.prisma.passwordReset.delete({
+        where: {
+          userEmail: 'oluwatobi.oseni@alertgroup.com',
+        },
+      });
+
       const user = await this.prisma.user.delete({
         where: {
           email: 'oluwatobi.oseni@alertgroup.com.ng',
