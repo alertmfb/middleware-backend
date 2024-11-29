@@ -2,14 +2,12 @@ import {
   Body,
   Controller,
   Get,
-  Headers,
   Post,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ConfigService } from '@nestjs/config';
 import { LocalAuthGuard } from './local-auth.guard';
 import { Request, Response } from 'express';
 import { Public } from './metadata';
@@ -35,36 +33,12 @@ import {
   verifyPasswordResetOTPApiResponse,
   VerifySignInOTP,
   verifySignInOTPApiResponse,
-  verifyTOTP,
-  VerifyTOTP,
 } from './auth.dto';
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
-
-  @Public()
-  @ApiExcludeEndpoint()
-  @UseGuards(LocalAuthGuard) // Local auth guard authenticates the user and passes it to the req.user object
-  @Post('/signin')
-  @ApiBody({ description: '', type: SignIn })
-  @ApiResponse({ example: signInExample })
-  async signIn(@Req() req: Request, @Res() res: Response) {
-    const accessToken = await this.authService.signIn(req.user);
-    res.json(accessToken);
-  }
-
-  @Post('verifyTOTP')
-  @ApiExcludeEndpoint()
-  @ApiResponse({ example: verifyTOTP })
-  @ApiBody({ type: VerifyTOTP })
-  async verifyTOTP(@Req() req: Request, @Res() res: Response) {
-    const token = req.headers.authorization.slice(7);
-    const otp = req.body && ((req.body['otp'] ?? '') as string);
-    const data = await this.authService.verifyTOTP(otp, token, req.ip);
-    res.json(data);
-  }
 
   @Public()
   @UseGuards(LocalAuthGuard) // Local auth guard authenticates the user and passes it to the req.user object
