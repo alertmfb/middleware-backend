@@ -20,12 +20,7 @@ import {
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { ROLES } from 'src/common/roles.enum';
-import {
-  SuspendUser,
-  suspendUserResponse,
-  userByIdResponse,
-  usersApiResponse,
-} from './dto/users.dto';
+import { userByIdResponse, usersApiResponse } from './dto/users.dto';
 @Controller('users')
 // @ApiExcludeController()
 @ApiBearerAuth()
@@ -62,15 +57,6 @@ export class UsersController {
       token,
     );
     res.json(user);
-  }
-
-  @Public()
-  @Post('/suspend')
-  @UseGuards(RolesGuard)
-  @Roles([ROLES.SUPER_ADMIN])
-  @ApiResponse({ example: suspendUserResponse })
-  async suspendUserById(@Body() payload: SuspendUser) {
-    return await this.userService.suspendUserById(payload.id);
   }
 
   @Post('backend/create')

@@ -1,6 +1,6 @@
-export class SuspendUser {
-  id: number = 9181;
-}
+// export class SuspendUser {
+//   id: number = 9181;
+// }
 
 export const usersApiResponse = [
   {
@@ -33,7 +33,7 @@ export const userByIdResponse = {
   },
 };
 
-export const suspendUserResponse = {
-  success: true,
-  message: 'This user has been suspended',
-};
+// export const suspendUserResponse = {
+//   success: true,
+//   message: 'This user has been suspended',
+// };

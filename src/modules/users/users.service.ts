@@ -3,7 +3,6 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -150,15 +149,6 @@ export class UsersService {
           userEmail: 'oluwatobi.oseni@alertgroup.com.ng',
         },
       });
-
-      // await this.prisma.user.update({
-      //   where: {
-      //     id: 2,
-      //   },
-      //   data: {
-      //     email: 'ot.alertgroup.com.ng',
-      //   },
-      // });
 
       const two = this.prisma.user.delete({
         where: {
