@@ -11,8 +11,12 @@ import { TZDate } from '@date-fns/tz';
 
 @Injectable()
 export class EmailServce {
-  inviteUrl: string = 'https://middleware.alertmfb.com.ng/register-account';
-  resetURL: string = 'https://middleware.alertmfb.com.ng/forgot-password';
+  // inviteUrl: string = 'https://middleware.alertmfb.com.ng/register-account';
+  // resetURL: string = 'https://middleware.alertmfb.com.ng/forgot-password';
+  inviteUrl: string =
+    'https://middleware.staging.alertmfb.com.ng/register-account';
+  resetURL: string =
+    'https://middleware.staging.alertmfb.com.ng/forgot-password';
 
   async inviteUser({ email, token }: { email: string; token: string }) {
     const completeOnboardingUrl = this.inviteUrl + '?token=' + token;

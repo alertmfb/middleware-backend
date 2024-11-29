@@ -3,7 +3,7 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
-  InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/config/prisma.service';
@@ -144,29 +144,46 @@ export class UsersService {
 
   async tamper() {
     try {
-      // const [resultOne, resultTwo] = await this.prisma.$transaction([
-      //   this.prisma.user.updateMany({
-      //     where: {
-      //       role: 'MEMBER',
-      //     },
-      //     data: {
-      //       role: { set: 'JUNIOR' },
-      //     },
-      //   }),
-      //   this.prisma.user.updateMany({
-      //     where: {
-      //       role: 'ADMIN',
-      //     },
-      //     data: {
-      //       role: { set: 'SENIOR' },
-      //     },
-      //   }),
-      // ]);
+      // const one = this.prisma.passwordReset.delete({
+      //   where: {
+      //     userEmail: 'oluwatobi.oseni@alertgroup.com.ng',
+      //   },
+      // });
 
-      // return [resultOne, resultTwo];
-      return [1, 2];
+      // const two = this.prisma.user.delete({
+      //   where: {
+      //     email: 'oluwatobi.oseni@alertgroup.com.ng',
+      //   },
+      //   select: {
+      //     id: true,
+      //     email: true,
+      //   },
+      // });
+
+      // const [o, t] = await this.prisma.$transaction([one, two]);
+
+      // return [o, t];
+
+      const users = await this.prisma.user.findMany({
+        select: {
+          id: true,
+          email: true,
+          firstname: true,
+          lastname: true,
+          dob: true,
+          phoneNumber: true,
+          secret: {
+            select: {
+              key: true,
+            },
+          },
+        },
+      });
+
+      return users;
     } catch (error) {
-      throw error;
+      Logger.error(error);
+      throw new BadRequestException(error?.message);
     }
   }
 }
