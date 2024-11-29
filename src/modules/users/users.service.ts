@@ -147,7 +147,7 @@ export class UsersService {
     try {
       const one = this.prisma.passwordReset.delete({
         where: {
-          userEmail: 'oluwatobi.oseni@alertgroup.com',
+          userEmail: 'oluwatobi.oseni@alertgroup.com.ng',
         },
       });
 
