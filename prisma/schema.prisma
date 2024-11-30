@@ -121,6 +121,14 @@ model PromoCode {
   updatedAt      DateTime  @default(now())
 }
 
+model Products {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  isEnabled Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
 enum ROLE {
   SUPER_ADMIN
   SENIOR
