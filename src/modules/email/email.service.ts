@@ -36,7 +36,7 @@ export class EmailServce {
             <td style="background-color: #f9f9f9; padding: 20px;">
               <p style="font-size: 16px; color: #555;">
                 Hello, <br/><br/>
-                We're excited to have you on board! You've been successfully onboarded to Alert MFB Middleware. To finalize your setup and get started, please complete the onboarding process by clicking the button below:
+                We're excited to have you on board! You've been successfully onboarded to Alert MFB Middleware${this.inviteUrl.includes('staging') ? '--------SANDBOX ENVIRONMENT' : ''}. To finalize your setup and get started, please complete the onboarding process by clicking the button below:
               </p>
               <div style="text-align: center; margin: 20px 0;">
                 <a href="${completeOnboardingUrl}" style="background-color: #0073e6; color: #ffffff; padding: 12px 24px; font-size: 16px; text-decoration: none; border-radius: 5px;">
