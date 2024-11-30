@@ -57,7 +57,7 @@ model Permission {
 
 model UserPermission {
   id        Int              @id @default(autoincrement())
-  user      User             @relation(fields: [userId], references: [id])
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   action    ACTION
   status    PermissionStatus @default(ACTIVE)
@@ -71,7 +71,7 @@ model UserPermission {
 model Invite {
   id           String       @id @default(uuid())
   email        String       @unique
-  invitedBy    User         @relation(fields: [inviterEmail], references: [email])
+  invitedBy    User         @relation(fields: [inviterEmail], references: [email], onDelete: Cascade)
   inviterEmail String
   status       InviteStatus @default(PENDING)
   role         ROLE         @default(JUNIOR)
@@ -84,7 +84,7 @@ model Invite {
 
 model TwoFASecret {
   id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int      @unique
   key       String
   createdAt DateTime @default(now())

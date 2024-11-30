@@ -89,7 +89,7 @@ export class UsersService {
 
       return user;
     } catch (error) {
-      throw new NotFoundException(error);
+      throw new NotFoundException();
     }
   }
 
