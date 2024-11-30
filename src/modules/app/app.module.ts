@@ -8,6 +8,7 @@ import { EmailModule } from '../email/email.module';
 import { MessagesModule } from '../messages/messages.module';
 import { CodesModule } from '../codes/codes.module';
 import { AdminModule } from '../admin/admin.module';
+import { ProductsModule } from '../products/products.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AdminModule } from '../admin/admin.module';
     EmailModule,
     MessagesModule,
     CodesModule,
+    ProductsModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

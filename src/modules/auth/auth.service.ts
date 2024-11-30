@@ -51,6 +51,7 @@ export class AuthService {
     return result;
   }
 
+  /** This method is not used */
   async signIn(user: any) {
     const payload = { email: user.email, sub: user.id, role: user.role };
 
@@ -132,48 +133,48 @@ export class AuthService {
     }
   }
 
-  async verifyTOTP(otp: string, accessToken: string, ip: string) {
-    const allowedEmails = ['bar@gmail.com', 'oluwatobi.oseni@gmail.com'];
+  // async verifyTOTP(otp: string, accessToken: string, ip: string) {
+  //   const allowedEmails = ['bar@gmail.com', 'oluwatobi.oseni@gmail.com'];
 
-    const { email } = this.jwtService.verify(accessToken);
+  //   const { email } = this.jwtService.verify(accessToken);
 
-    const { secret } = await this.prisma.user.findUnique({
-      where: {
-        email: email,
-      },
-      select: {
-        secret: {
-          select: {
-            key: true,
-          },
-        },
-      },
-    });
+  //   const { secret } = await this.prisma.user.findUnique({
+  //     where: {
+  //       email: email,
+  //     },
+  //     select: {
+  //       secret: {
+  //         select: {
+  //           key: true,
+  //         },
+  //       },
+  //     },
+  //   });
 
-    authenticator.options = { window: 1, step: 30 };
+  //   authenticator.options = { window: 1, step: 30 };
 
-    if (allowedEmails.includes(email)) {
-      const isValid = authenticator.check(otp, this.config.get('TOTP_SECRET'));
+  //   if (allowedEmails.includes(email)) {
+  //     const isValid = authenticator.check(otp, this.config.get('TOTP_SECRET'));
 
-      if (!isValid) {
-        return { isAuthenticated: false, access_token: null };
-      }
+  //     if (!isValid) {
+  //       return { isAuthenticated: false, access_token: null };
+  //     }
 
-      return { isAuthenticated: isValid, access_token: accessToken };
-    }
+  //     return { isAuthenticated: isValid, access_token: accessToken };
+  //   }
 
-    const isValid = authenticator.check(otp, secret.key);
+  //   const isValid = authenticator.check(otp, secret.key);
 
-    if (!isValid) {
-      return { isAuthenticated: false, access_token: null };
-    }
+  //   if (!isValid) {
+  //     return { isAuthenticated: false, access_token: null };
+  //   }
 
-    this.client
-      .send('email.notifySignIn', { email: email, ip: ip })
-      .subscribe();
+  //   this.client
+  //     .send('email.notifySignIn', { email: email, ip: ip })
+  //     .subscribe();
 
-    return { isAuthenticated: isValid, access_token: accessToken };
-  }
+  //   return { isAuthenticated: isValid, access_token: accessToken };
+  // }
 
   async requestPasswordReset(email: string) {
     try {

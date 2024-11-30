@@ -75,9 +75,21 @@ export class UsersService {
         },
       });
 
+      if (!user) {
+        return {
+          dob: null,
+          email: '',
+          firstname: null,
+          lastname: null,
+          phoneNumber: null,
+          role: 'JUNIOR',
+          Designation: null,
+        };
+      }
+
       return user;
     } catch (error) {
-      throw new NotFoundException(error);
+      throw new NotFoundException();
     }
   }
 

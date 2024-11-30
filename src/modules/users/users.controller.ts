@@ -38,12 +38,9 @@ export class UsersController {
 
   @Public()
   @Get(':id')
-  @UseGuards(RolesGuard)
-  @Roles([ROLES.SUPER_ADMIN, ROLES.SENIOR, ROLES.JUNIOR])
   @ApiResponse({ example: userByIdResponse })
   async userById(@Param() params: { id: string }) {
     return await this.userService.getUserById(params.id);
-    // return params;
   }
 
   @Post('create')
