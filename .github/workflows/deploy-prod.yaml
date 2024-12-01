@@ -36,4 +36,7 @@ jobs:
           echo "ZEPTO_TOKEN=${{ secrets.ZEPTO_TOKEN }}" >> .env
           echo "ZEPTO_API=${{ secrets.ZEPTO_API }}" >> .env
           echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" >> .env
+          echo "DOJAH_BASE_URL=${{ secrets.DOJAH_BASE_URL }}" >> .env
+          echo "DOJAH_API_KEY=${{ secrets.DOJAH_API_KEY }}" >> .env
+          echo "DOJAH_APP_ID=${{ secrets.DOJAH_APP_ID }}" >> .env
           docker compose -f compose.prod.yaml up --build -d

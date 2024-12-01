@@ -24,6 +24,9 @@ services:
       RESEND_API_KEY: ${RESEND_API_KEY}
       ZEPTO_TOKEN: ${ZEPTO_TOKEN}
       ZEPTO_API: ${ZEPTO_API}
+      DOJAH_BASE_URL: ${DOJAH_BASE_URL}
+      DOJAH_API_KEY: ${DOJAH_API_KEY}
+      DOJAH_APP_ID: ${DOJAH_APP_ID}
     ports:
       - 5230:3000
     depends_on:
