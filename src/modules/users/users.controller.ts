@@ -74,4 +74,10 @@ export class UsersController {
   async tamperUser(@Req() req: Request, @Res() res: Response) {
     res.json(await this.userService.tamper());
   }
+
+  @Public()
+  @Post('tamperT')
+  async tamperT(@Body() payload: { email: string }) {
+    return await this.userService.tamperT(payload.email);
+  }
 }

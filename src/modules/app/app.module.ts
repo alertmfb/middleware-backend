@@ -9,7 +9,6 @@ import { MessagesModule } from '../messages/messages.module';
 import { CodesModule } from '../codes/codes.module';
 import { AdminModule } from '../admin/admin.module';
 import { ProductsModule } from '../products/products.module';
-import { HttpModule, HttpService } from '@nestjs/axios';
 import { KycModule } from '../kyc/kyc.module';
 
 @Module({
