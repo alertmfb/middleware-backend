@@ -2,6 +2,10 @@
 //   id: number = 9181;
 // }
 
+export class TamperT {
+  email: string;
+}
+
 export const usersApiResponse = [
   {
     id: 1,
