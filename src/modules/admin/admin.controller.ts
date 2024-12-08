@@ -51,6 +51,7 @@ export class AdminController {
     return await this.adminService.getDesignations();
   }
 
+  @Public()
   @Post('/designations/create')
   @ApiBody({ type: CreateDesignation })
   @ApiResponse({ example: createDesignationResponse })
