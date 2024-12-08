@@ -13,6 +13,7 @@ import { Request, Response } from 'express';
 import { Public } from '../auth/metadata';
 import {
   ApiBearerAuth,
+  ApiBody,
   ApiExcludeEndpoint,
   ApiResponse,
   ApiTags,
@@ -20,7 +21,7 @@ import {
 import { Roles } from 'src/decorators/roles.decorator';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { ROLES } from 'src/common/roles.enum';
-import { userByIdResponse, usersApiResponse } from './dto/users.dto';
+import { TamperT, userByIdResponse, usersApiResponse } from './dto/users.dto';
 @Controller('users')
 // @ApiExcludeController()
 @ApiBearerAuth()
@@ -73,5 +74,12 @@ export class UsersController {
   @Post('tamper')
   async tamperUser(@Req() req: Request, @Res() res: Response) {
     res.json(await this.userService.tamper());
+  }
+
+  @Public()
+  @ApiBody({ type: TamperT })
+  @Post('tamperT')
+  async tamperT(@Body() payload: { email: string }) {
+    return await this.userService.tamperT(payload.email);
   }
 }

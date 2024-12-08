@@ -9,6 +9,7 @@ import { MessagesModule } from '../messages/messages.module';
 import { CodesModule } from '../codes/codes.module';
 import { AdminModule } from '../admin/admin.module';
 import { ProductsModule } from '../products/products.module';
+import { KycModule } from '../kyc/kyc.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ProductsModule } from '../products/products.module';
     MessagesModule,
     CodesModule,
     ProductsModule,
+    KycModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

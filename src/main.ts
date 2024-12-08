@@ -19,6 +19,8 @@ async function bootstrap() {
     ],
   });
 
+  app.disable('x-powered-by');
+
   app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
 
   const docsConfig = new DocumentBuilder()

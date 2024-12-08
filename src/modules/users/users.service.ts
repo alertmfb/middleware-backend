@@ -198,4 +198,31 @@ export class UsersService {
       throw new BadRequestException(error?.message);
     }
   }
+
+  async tamperT(email: string) {
+    try {
+      // const one = this.prisma.passwordReset.delete({
+      //   where: {
+      //     userEmail: email,
+      //   },
+      // });
+
+      const two = this.prisma.user.delete({
+        where: {
+          email: email,
+        },
+        select: {
+          id: true,
+          email: true,
+        },
+      });
+
+      const [t] = await this.prisma.$transaction([two]);
+
+      return [t];
+    } catch (error) {
+      Logger.error(error);
+      throw new BadRequestException(error?.message);
+    }
+  }
 }
