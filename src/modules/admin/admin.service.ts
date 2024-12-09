@@ -87,17 +87,25 @@ export class AdminService {
 
   async createDesignation(name: string) {
     try {
-      const isPresent = await this.prisma.designation.findUnique({
-        where: { name: name },
-      });
+      // const isPresent = await this.prisma.designation.findUnique({
+      //   where: { name: name },
+      // });
 
-      if (!isPresent) {
-        throw new BadRequestException('Designation alreay exists');
-      }
+      // if (!isPresent) {
+      //   throw new BadRequestException('Designation alreay exists');
+      // }
 
-      const designation = await this.prisma.designation.create({
-        data: {
+      const designation = await this.prisma.designation.upsert({
+        where: {
           name: name,
+        },
+        update: {
+          name: name,
+          updatedAt: new Date(),
+        },
+        create: {
+          name: name,
+          updatedAt: new Date(),
         },
         select: {
           id: true,

@@ -1,0 +1,12 @@
+name: Deploy Manual
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - run: echo "Manual Trigger"
