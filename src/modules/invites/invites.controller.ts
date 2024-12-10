@@ -21,6 +21,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiParam,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -55,7 +56,7 @@ export class InvitesController {
   @Post('/createPassword')
   @Public()
   @ApiBody({ type: CreateProfile })
-  @ApiParam({ name: 'token' })
+  @ApiQuery({ name: 'token' })
   @ApiResponse({ example: createPasswordExample })
   async createProfile(@Req() req: Request, @Res() res: Response) {
     new ZodValidationPipe(tokenQuerySchema).transform(req.query, {

@@ -13,7 +13,7 @@ export class InviteUser {
 }
 
 export const inviteUserExample = {
-  inviteToken:
+  token:
     'eyJhbGciOiPoZzI1NiIsInR5aAI6IkpXVCJ9.eyJlbWFpbCI6InZpM4BnbWFpbC5jb20iLCJpYXQiOjE3MzAwNTAQspIsImV4cCI6MTczMDY1NTa6Tho0.i3AuY8TceOXGbUPGfm25S79T7W4k12MNJjM6k2bYJsU',
 };
 
