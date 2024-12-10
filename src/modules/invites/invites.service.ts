@@ -23,6 +23,7 @@ import { CreateProfile } from './dto/invites.dto';
 type Payload = {
   email: string;
   role: ROLE;
+  designationId: number;
 };
 
 @Injectable()
@@ -61,7 +62,7 @@ export class InvitesService {
       }
 
       const token = this.jwtServie.sign(
-        { email: payload.email },
+        { email: payload.email, designationId: payload.designationId },
         { expiresIn: '7d' },
       );
 

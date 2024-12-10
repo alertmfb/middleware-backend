@@ -9,6 +9,7 @@ export class InviteUser {
     example: 'JUNIOR',
   })
   role: string;
+  designationId: number = 1;
 }
 
 export const inviteUserExample = {
