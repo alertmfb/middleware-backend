@@ -27,7 +27,7 @@ model User {
   mfaMethod     MFAMethod        @default(AUTHENTICATOR_APP)
   secret        TwoFASecret?
   passwordReset PasswordReset?
-  Designation   Designation?     @relation(fields: [designationId], references: [id])
+  Designation   Designation?     @relation(fields: [designationId], references: [id], onDelete: Cascade)
   designationId Int?
   permissions   UserPermission[]
   isSuspended   Boolean?
@@ -69,17 +69,18 @@ model UserPermission {
 }
 
 model Invite {
-  id           String       @id @default(uuid())
-  email        String       @unique
-  invitedBy    User         @relation(fields: [inviterEmail], references: [email], onDelete: Cascade)
-  inviterEmail String
-  status       InviteStatus @default(PENDING)
-  role         ROLE         @default(JUNIOR)
-  inviteToken  String
-  invitedAt    DateTime     @default(now())
-  acceptedAt   DateTime?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @default(now())
+  id            String       @id @default(uuid())
+  email         String       @unique
+  invitedBy     User         @relation(fields: [inviterEmail], references: [email], onDelete: Cascade)
+  inviterEmail  String
+  status        InviteStatus @default(PENDING)
+  role          ROLE         @default(JUNIOR)
+  designationId Int?
+  inviteToken   String
+  invitedAt     DateTime     @default(now())
+  acceptedAt    DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
 }
 
 model TwoFASecret {

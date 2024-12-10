@@ -44,6 +44,11 @@ export class UsersService {
           email: true,
           firstname: true,
           lastname: true,
+          Designation: {
+            select: {
+              name: true,
+            },
+          },
           role: true,
           createdAt: true,
         },
@@ -220,6 +225,26 @@ export class UsersService {
       const [t] = await this.prisma.$transaction([two]);
 
       return [t];
+    } catch (error) {
+      Logger.error(error);
+      throw new BadRequestException(error?.message);
+    }
+  }
+
+  async tamperUpdate() {
+    try {
+      const updated = await this.prisma.user.updateMany({
+        where: {
+          id: {
+            lt: 41,
+          },
+        },
+        data: {
+          designationId: 7,
+        },
+      });
+
+      return { success: true, count: updated.count };
     } catch (error) {
       Logger.error(error);
       throw new BadRequestException(error?.message);

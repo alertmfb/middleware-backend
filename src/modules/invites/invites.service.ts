@@ -23,6 +23,7 @@ import { CreateProfile } from './dto/invites.dto';
 type Payload = {
   email: string;
   role: ROLE;
+  designationId: number;
 };
 
 @Injectable()
@@ -61,7 +62,7 @@ export class InvitesService {
       }
 
       const token = this.jwtServie.sign(
-        { email: payload.email },
+        { email: payload.email, designationId: payload.designationId },
         { expiresIn: '7d' },
       );
 
@@ -72,6 +73,7 @@ export class InvitesService {
         create: {
           email: payload.email,
           role: payload.role,
+          designationId: payload.designationId,
           inviterEmail: inviter.email,
           inviteToken: token,
         },
@@ -99,7 +101,7 @@ export class InvitesService {
     inviteToken: string,
   ) {
     try {
-      const { email } = this.jwtServie.verify(inviteToken);
+      const { email, designationId } = this.jwtServie.verify(inviteToken);
       const secret = authenticator.generateSecret();
 
       const hash = await bcrypt.hash(password, this.saltOrRounds);
@@ -110,6 +112,7 @@ export class InvitesService {
           lastname: lastname,
           dob: dob,
           phoneNumber: phoneNumber,
+          designationId: designationId,
           email: email,
           password: hash,
           secret: {
