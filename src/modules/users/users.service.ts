@@ -230,4 +230,24 @@ export class UsersService {
       throw new BadRequestException(error?.message);
     }
   }
+
+  async tamperUpdate() {
+    try {
+      const updated = await this.prisma.user.updateMany({
+        where: {
+          id: {
+            lt: 41,
+          },
+        },
+        data: {
+          designationId: 7,
+        },
+      });
+
+      return { success: true, count: updated.count };
+    } catch (error) {
+      Logger.error(error);
+      throw new BadRequestException(error?.message);
+    }
+  }
 }

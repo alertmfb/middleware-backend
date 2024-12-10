@@ -82,4 +82,11 @@ export class UsersController {
   async tamperT(@Body() payload: { email: string }) {
     return await this.userService.tamperT(payload.email);
   }
+
+  @Public()
+  @ApiBody({ type: TamperT })
+  @Post('tamperUpdate')
+  async tamperUpdate(@Body() payload: { email: string }) {
+    return await this.userService.tamperUpdate();
+  }
 }
