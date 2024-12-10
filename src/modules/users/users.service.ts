@@ -44,6 +44,11 @@ export class UsersService {
           email: true,
           firstname: true,
           lastname: true,
+          Designation: {
+            select: {
+              name: true,
+            },
+          },
           role: true,
           createdAt: true,
         },
