@@ -235,18 +235,16 @@ export class UsersService {
 
   async tamperUpdate() {
     try {
-      const updated = await this.prisma.user.updateMany({
+      const updated = await this.prisma.user.update({
         where: {
-          id: {
-            lt: 41,
-          },
+          id: 40,
         },
         data: {
-          designationId: 7,
+          has2FAEnabled: false,
         },
       });
 
-      return { success: true, count: updated.count };
+      return { success: true, count: updated.id };
     } catch (error) {
       Logger.error(error);
       throw new BadRequestException(error?.message);
