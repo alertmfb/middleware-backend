@@ -61,6 +61,21 @@ export class AuthService {
   }
 
   async signInWithPassword(user: any) {
+    /**  This returns an access token if the user has 2fa disabled */
+    if (user.has2FAEnabled === false) {
+      const accessToken = this.jwtService.sign({
+        email: user.email,
+        sub: user.id,
+        role: user.role,
+      });
+
+      this.client
+        .send('email.notifySignIn', { email: user.email, ip: '' })
+        .subscribe();
+
+      return { isAuthenticated: true, access_token: accessToken };
+    }
+
     return {
       id: user.email === 'bar@gmail.com' ? 123459876 : user.id,
       success: true,

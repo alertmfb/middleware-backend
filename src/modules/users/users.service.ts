@@ -29,6 +29,7 @@ export class UsersService {
           email: true,
           password: true,
           role: true,
+          has2FAEnabled: true,
         },
       });
       return user;
