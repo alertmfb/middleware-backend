@@ -29,6 +29,7 @@ export class UsersService {
           email: true,
           password: true,
           role: true,
+          has2FAEnabled: true,
         },
       });
       return user;
@@ -44,6 +45,7 @@ export class UsersService {
           email: true,
           firstname: true,
           lastname: true,
+          has2FAEnabled: true,
           Designation: {
             select: {
               name: true,
@@ -233,18 +235,16 @@ export class UsersService {
 
   async tamperUpdate() {
     try {
-      const updated = await this.prisma.user.updateMany({
+      const updated = await this.prisma.user.update({
         where: {
-          id: {
-            lt: 41,
-          },
+          id: 40,
         },
         data: {
-          designationId: 7,
+          has2FAEnabled: false,
         },
       });
 
-      return { success: true, count: updated.count };
+      return { success: true, count: updated.id };
     } catch (error) {
       Logger.error(error);
       throw new BadRequestException(error?.message);
