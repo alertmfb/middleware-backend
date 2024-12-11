@@ -44,6 +44,7 @@ export class UsersService {
           email: true,
           firstname: true,
           lastname: true,
+          has2FAEnabled: true,
           Designation: {
             select: {
               name: true,

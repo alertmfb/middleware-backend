@@ -12,7 +12,11 @@ export const usersApiResponse = [
     email: 'user1@alertgroup.com.ng',
     firstname: null,
     lastname: null,
-    role: 'SUPER_ADMIN',
+    has2FAEnabled: true,
+    Designation: {
+      name: 'IT_OFFICE',
+    },
+    role: 'SENIOR',
     createdAt: '2024-11-02T08:08:02.879Z',
   },
   {
@@ -20,7 +24,11 @@ export const usersApiResponse = [
     email: 'user2@alertmfb.com.ng',
     firstname: null,
     lastname: null,
-    role: 'MEMBER',
+    has2FAEnabled: false,
+    Designation: {
+      name: 'HUMAN_RESOURCES',
+    },
+    role: 'JUNIOR',
     createdAt: '2024-11-02T08:08:09.704Z',
   },
 ];
