@@ -1,11 +1,13 @@
 import { ROLES } from 'src/common/roles.enum';
 
-export class DisableUserMFA {
+export class ToggleUserMFA {
   id: number = 9182;
+  status: boolean = true;
 }
 
 export class SuspendUser {
   id: number = 9181;
+  status: boolean = true;
 }
 
 export class CreateDesignation {

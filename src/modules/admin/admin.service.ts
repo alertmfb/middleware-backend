@@ -5,20 +5,20 @@ import {
 } from '@nestjs/common';
 import { ROLES } from 'src/common/roles.enum';
 import { PrismaService } from 'src/config/prisma.service';
-import { ModifyUserRole } from './dto/admin.dto';
+import { ModifyUserRole, SuspendUser, ToggleUserMFA } from './dto/admin.dto';
 
 @Injectable()
 export class AdminService {
   constructor(private prisma: PrismaService) {}
 
-  async disableUserMFA(userId: number) {
+  async toggleUserMFA(payload: ToggleUserMFA) {
     try {
       await this.prisma.user.update({
         where: {
-          id: userId,
+          id: payload.id,
         },
         data: {
-          has2FAEnabled: false,
+          has2FAEnabled: payload.status,
         },
         select: {
           id: true,
@@ -31,14 +31,14 @@ export class AdminService {
     }
   }
 
-  async suspendUserById(id: number) {
+  async suspendUserById(payload: SuspendUser) {
     try {
       await this.prisma.user.update({
         where: {
-          id: id,
+          id: payload.id,
         },
         data: {
-          isSuspended: true,
+          isSuspended: payload.status,
         },
         select: {
           isSuspended: true,

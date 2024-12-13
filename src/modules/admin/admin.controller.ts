@@ -4,7 +4,7 @@ import {
   CreateDesignation,
   createDesignationResponse,
   designationsResponse,
-  DisableUserMFA,
+  ToggleUserMFA,
   ModifyUserRole,
   modifyUserRoleResponse,
   SuspendUser,
@@ -24,17 +24,17 @@ import { Public } from '../auth/metadata';
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
-  @Post('/mfa/disable')
-  @ApiBody({ type: DisableUserMFA })
-  async disableUserMFA(@Body() payload: DisableUserMFA) {
-    return this.adminService.disableUserMFA(payload.id);
+  @Post('/mfa/toggle')
+  @ApiBody({ type: ToggleUserMFA })
+  async disableUserMFA(@Body() payload: ToggleUserMFA) {
+    return this.adminService.toggleUserMFA(payload);
   }
 
   @Post('/suspendUser')
   @ApiBody({ type: SuspendUser })
   @ApiResponse({ example: suspendUserResponse })
   async suspendUserById(@Body() payload: SuspendUser) {
-    return await this.adminService.suspendUserById(payload.id);
+    return await this.adminService.suspendUserById(payload);
   }
 
   @Post('/modifyRole')
