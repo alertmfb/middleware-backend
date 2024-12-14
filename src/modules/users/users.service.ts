@@ -46,6 +46,7 @@ export class UsersService {
           firstname: true,
           lastname: true,
           has2FAEnabled: true,
+          isSuspended: true,
           Designation: {
             select: {
               name: true,

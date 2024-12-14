@@ -1,11 +1,13 @@
 import { ROLES } from 'src/common/roles.enum';
 
-export class DisableUserMFA {
+export class ToggleUserMFA {
   id: number = 9182;
+  status: boolean = true;
 }
 
 export class SuspendUser {
   id: number = 9181;
+  status: boolean = true;
 }
 
 export class CreateDesignation {
@@ -30,9 +32,15 @@ export const designationsResponse = [
   },
 ];
 
+export const toggleMFAResponse = {
+  success: true,
+  message:
+    '2FA has been disabled for the user | 2FA has been enabled for the user',
+};
+
 export const suspendUserResponse = {
   success: true,
-  message: 'This user has been suspended',
+  message: 'This user has been suspended | This user has been un-suspended',
 };
 
 export const modifyUserRoleResponse = {

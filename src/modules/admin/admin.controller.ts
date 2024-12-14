@@ -4,11 +4,12 @@ import {
   CreateDesignation,
   createDesignationResponse,
   designationsResponse,
-  DisableUserMFA,
+  ToggleUserMFA,
   ModifyUserRole,
   modifyUserRoleResponse,
   SuspendUser,
   suspendUserResponse,
+  toggleMFAResponse,
 } from './dto/admin.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -24,17 +25,18 @@ import { Public } from '../auth/metadata';
 export class AdminController {
   constructor(private adminService: AdminService) {}
 
-  @Post('/mfa/disable')
-  @ApiBody({ type: DisableUserMFA })
-  async disableUserMFA(@Body() payload: DisableUserMFA) {
-    return this.adminService.disableUserMFA(payload.id);
+  @Post('/mfa/toggle')
+  @ApiBody({ type: ToggleUserMFA })
+  @ApiResponse({ example: toggleMFAResponse })
+  async disableUserMFA(@Body() payload: ToggleUserMFA) {
+    return this.adminService.toggleUserMFA(payload);
   }
 
   @Post('/suspendUser')
   @ApiBody({ type: SuspendUser })
   @ApiResponse({ example: suspendUserResponse })
   async suspendUserById(@Body() payload: SuspendUser) {
-    return await this.adminService.suspendUserById(payload.id);
+    return await this.adminService.suspendUserById(payload);
   }
 
   @Post('/modifyRole')
