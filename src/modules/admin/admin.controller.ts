@@ -9,6 +9,7 @@ import {
   modifyUserRoleResponse,
   SuspendUser,
   suspendUserResponse,
+  toggleMFAResponse,
 } from './dto/admin.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -26,6 +27,7 @@ export class AdminController {
 
   @Post('/mfa/toggle')
   @ApiBody({ type: ToggleUserMFA })
+  @ApiResponse({ example: toggleMFAResponse })
   async disableUserMFA(@Body() payload: ToggleUserMFA) {
     return this.adminService.toggleUserMFA(payload);
   }

@@ -15,6 +15,7 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiExcludeEndpoint,
+  ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -39,6 +40,7 @@ export class UsersController {
 
   @Public()
   @Get(':id')
+  @ApiParam({ name: 'id' })
   @ApiResponse({ example: userByIdResponse })
   async userById(@Param() params: { id: string }) {
     return await this.userService.getUserById(params.id);

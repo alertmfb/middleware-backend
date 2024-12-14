@@ -32,9 +32,15 @@ export const designationsResponse = [
   },
 ];
 
+export const toggleMFAResponse = {
+  success: true,
+  message:
+    '2FA has been disabled for the user | 2FA has been enabled for the user',
+};
+
 export const suspendUserResponse = {
   success: true,
-  message: 'This user has been suspended',
+  message: 'This user has been suspended | This user has been un-suspended',
 };
 
 export const modifyUserRoleResponse = {
