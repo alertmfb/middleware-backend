@@ -10,6 +10,9 @@ import { CodesModule } from '../codes/codes.module';
 import { AdminModule } from '../admin/admin.module';
 import { ProductsModule } from '../products/products.module';
 import { KycModule } from '../kyc/kyc.module';
+import { VerificationModule } from '../verification/verification.module';
+import { RouterModule } from '@nestjs/core';
+import { AddressModule } from '../verification/address/address.module';
 
 @Module({
   imports: [
@@ -21,6 +24,13 @@ import { KycModule } from '../kyc/kyc.module';
     CodesModule,
     ProductsModule,
     KycModule,
+    VerificationModule,
+    RouterModule.register([
+      {
+        path: 'verification',
+        module: AddressModule,
+      },
+    ]),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
