@@ -13,6 +13,7 @@ import { KycModule } from '../kyc/kyc.module';
 import { VerificationModule } from '../verification/verification.module';
 import { RouterModule } from '@nestjs/core';
 import { AddressModule } from '../verification/address/address.module';
+import { IdentityModule } from '../verification/identity/identity.module';
 
 @Module({
   imports: [
@@ -29,6 +30,10 @@ import { AddressModule } from '../verification/address/address.module';
       {
         path: 'verification',
         module: AddressModule,
+      },
+      {
+        path: 'verification',
+        module: IdentityModule,
       },
     ]),
     ConfigModule.forRoot({

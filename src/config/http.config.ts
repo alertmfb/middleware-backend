@@ -21,8 +21,7 @@ export class RegylHttpConfigService implements HttpModuleOptionsFactory {
     return {
       baseURL: '',
       headers: {
-        Authorization: process.env.DOJAH_API_KEY,
-        AppId: process.env.DOJAH_APP_ID,
+        Authorization: '',
       },
       withCredentials: true,
     };

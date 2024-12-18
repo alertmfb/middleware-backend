@@ -13,7 +13,7 @@ import { Public } from 'src/modules/auth/metadata';
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
-  @Post('individual/verify')
+  @Post('individual')
   // @ApiResponse({ example: individualAddressVerificationResponse })
   async verifyIndividualAddress(
     @Body() payload: IndividualAddressVerification,
@@ -21,7 +21,7 @@ export class AddressController {
     return await this.addressService.verifyIndividualAddress(payload);
   }
 
-  @Post('business/verify')
+  @Post('business')
   async verifyBusinessAddress(@Body() payload: BusinessAddressVerification) {
     return await this.addressService.verifyBusinessAddress(payload);
   }
