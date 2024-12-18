@@ -9,11 +9,12 @@ import { MessagesModule } from '../messages/messages.module';
 import { CodesModule } from '../codes/codes.module';
 import { AdminModule } from '../admin/admin.module';
 import { ProductsModule } from '../products/products.module';
-import { KycModule } from '../kyc/kyc.module';
 import { VerificationModule } from '../verification/verification.module';
 import { RouterModule } from '@nestjs/core';
 import { AddressModule } from '../verification/address/address.module';
 import { IdentityModule } from '../verification/identity/identity.module';
+import { KybModule } from '../verification/kyb/kyb.module';
+import { KycModule } from '../verification/kyc/kyc.module';
 
 @Module({
   imports: [
@@ -24,7 +25,6 @@ import { IdentityModule } from '../verification/identity/identity.module';
     MessagesModule,
     CodesModule,
     ProductsModule,
-    KycModule,
     VerificationModule,
     RouterModule.register([
       {
@@ -34,6 +34,14 @@ import { IdentityModule } from '../verification/identity/identity.module';
       {
         path: 'verification',
         module: IdentityModule,
+      },
+      {
+        path: 'verification',
+        module: KycModule,
+      },
+      {
+        path: 'verification',
+        module: KybModule,
       },
     ]),
     ConfigModule.forRoot({
