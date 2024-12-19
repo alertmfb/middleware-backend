@@ -40,7 +40,7 @@ export class BroadcastService {
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new HttpException(error.message, error.status, {
+        throw new HttpException(error?.response?.data, error.status, {
           cause: error.cause,
         });
       }
@@ -63,7 +63,7 @@ export class BroadcastService {
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new HttpException(error.message, error.status, {
+        throw new HttpException(error?.response?.data, error.status, {
           cause: error.cause,
         });
       }
@@ -86,7 +86,7 @@ export class BroadcastService {
       return data;
     } catch (error) {
       if (error instanceof AxiosError) {
-        throw new HttpException(error.message, error.status, {
+        throw new HttpException(error?.response?.data, error.status, {
           cause: error.cause,
         });
       }

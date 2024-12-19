@@ -17,6 +17,7 @@ import { KybModule } from '../verification/kyb/kyb.module';
 import { KycModule } from '../verification/kyc/kyc.module';
 import { MessagingModule } from '../messaging/messaging.module';
 import { BroadcastModule } from '../messaging/broadcast/broadcast.module';
+import { TokenModule } from '../messaging/token/token.module';
 
 const verificationChildren = [
   {
@@ -37,7 +38,10 @@ const verificationChildren = [
   },
 ];
 
-const messagingChildren = [{ path: 'messaging', module: BroadcastModule }];
+const messagingChildren = [
+  { path: 'messaging', module: BroadcastModule },
+  { path: 'messaging', module: TokenModule },
+];
 
 @Module({
   imports: [

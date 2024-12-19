@@ -6,7 +6,9 @@ import {
   SendMessageSMS,
   SendMessageWhatsapp,
 } from './dto/broadcast.dto';
+import { Public } from 'src/modules/auth/metadata';
 
+@Public()
 @ApiTags('messaging')
 @Controller('broadcast')
 export class BroadcastController {
