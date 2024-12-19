@@ -1,5 +1,5 @@
 import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
-import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { KycService } from './kyc.service';
 import { Public } from '../auth/metadata';
 import {
@@ -19,6 +19,7 @@ import {
 
 @Controller('kyc')
 @ApiTags('kyc')
+@ApiExcludeController()
 export class KycController {
   constructor(private kycService: KycService) {}
 

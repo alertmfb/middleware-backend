@@ -27,3 +27,13 @@ export class RegylHttpConfigService implements HttpModuleOptionsFactory {
     };
   }
 }
+
+@Injectable()
+export class TermiiHttpConfigService implements HttpModuleOptionsFactory {
+  createHttpOptions(): HttpModuleOptions {
+    return {
+      baseURL: process.env.TERMII_BASE_URL,
+      withCredentials: true,
+    };
+  }
+}

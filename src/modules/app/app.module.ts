@@ -15,6 +15,29 @@ import { AddressModule } from '../verification/address/address.module';
 import { IdentityModule } from '../verification/identity/identity.module';
 import { KybModule } from '../verification/kyb/kyb.module';
 import { KycModule } from '../verification/kyc/kyc.module';
+import { MessagingModule } from '../messaging/messaging.module';
+import { BroadcastModule } from '../messaging/broadcast/broadcast.module';
+
+const verificationChildren = [
+  {
+    path: 'verification',
+    module: AddressModule,
+  },
+  {
+    path: 'verification',
+    module: IdentityModule,
+  },
+  {
+    path: 'verification',
+    module: KycModule,
+  },
+  {
+    path: 'verification',
+    module: KybModule,
+  },
+];
+
+const messagingChildren = [{ path: 'messaging', module: BroadcastModule }];
 
 @Module({
   imports: [
@@ -26,24 +49,8 @@ import { KycModule } from '../verification/kyc/kyc.module';
     CodesModule,
     ProductsModule,
     VerificationModule,
-    RouterModule.register([
-      {
-        path: 'verification',
-        module: AddressModule,
-      },
-      {
-        path: 'verification',
-        module: IdentityModule,
-      },
-      {
-        path: 'verification',
-        module: KycModule,
-      },
-      {
-        path: 'verification',
-        module: KybModule,
-      },
-    ]),
+    MessagingModule,
+    RouterModule.register([...verificationChildren, ...messagingChildren]),
     ConfigModule.forRoot({
       isGlobal: true,
     }),
