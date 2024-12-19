@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { BroadcastService } from './broadcast.service';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import {
   SendBulkMessageSMS,
   SendMessageSMS,
