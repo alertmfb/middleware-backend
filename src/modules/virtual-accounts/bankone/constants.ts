@@ -1,0 +1,1 @@
+export const BANKONE_SERVICE = 'BANKONE_HTTP_SERVICE';

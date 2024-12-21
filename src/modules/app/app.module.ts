@@ -18,6 +18,8 @@ import { KycModule } from '../verification/kyc/kyc.module';
 import { MessagingModule } from '../messaging/messaging.module';
 import { BroadcastModule } from '../messaging/broadcast/broadcast.module';
 import { TokenModule } from '../messaging/token/token.module';
+import { VirtualModule } from '../virtual-accounts/virtual.module';
+import { AccountsModule } from '../virtual-accounts/accounts/accounts.module';
 
 const verificationChildren = [
   {
@@ -43,6 +45,10 @@ const messagingChildren = [
   { path: 'messaging', module: TokenModule },
 ];
 
+const virtualChildren = [
+  {path: 'virtual', module: AccountsModule}
+]
+
 @Module({
   imports: [
     AdminModule,
@@ -54,7 +60,8 @@ const messagingChildren = [
     ProductsModule,
     VerificationModule,
     MessagingModule,
-    RouterModule.register([...verificationChildren, ...messagingChildren]),
+    VirtualModule,
+    RouterModule.register([...verificationChildren, ...messagingChildren, ...virtualChildren]),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

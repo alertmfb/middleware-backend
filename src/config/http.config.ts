@@ -37,3 +37,13 @@ export class TermiiHttpConfigService implements HttpModuleOptionsFactory {
     };
   }
 }
+
+@Injectable()
+export class BankoneHttpConfigService implements HttpModuleOptionsFactory {
+  createHttpOptions(): HttpModuleOptions {
+    return {
+      baseURL: process.env.BANKONE_BASE_URL,
+      withCredentials: true,
+    };
+  }
+}
