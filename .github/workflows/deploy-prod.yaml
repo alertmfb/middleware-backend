@@ -11,32 +11,35 @@ jobs:
     environment: production
 
     steps:
-      - name: Deploy to production on VPS via SSH using .pem file
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > /tmp/vps-key.pem
-          chmod 600 /tmp/vps-key.pem
-          ssh -i /tmp/vps-key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_ed25519_middleware-backend
-          cd /var/www/hosts/alert-middleware-api/prod
-          git pull origin main
-          touch .env
-          echo "NODE_ENV=production" >> .env
-          echo "PORT=${{ secrets.PORT }}" >> .env
-          echo "GLOBAL_PREFIX=${{ secrets.GLOBAL_PREFIX }}" >> .env
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-          echo "INVITE_SECRET=${{ secrets.INVITE_SECRET }}" >> .env
-          echo "TOTP_SECRET=${{ secrets.TOTP_SECRET }}" >> .env
-          echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
-          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
-          echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
-          echo "REDIS_HOST=middleware-redis" >> .env
-          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
-          echo "ZEPTO_TOKEN=${{ secrets.ZEPTO_TOKEN }}" >> .env
-          echo "ZEPTO_API=${{ secrets.ZEPTO_API }}" >> .env
-          echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" >> .env
-          echo "DOJAH_BASE_URL=${{ secrets.DOJAH_BASE_URL }}" >> .env
-          echo "DOJAH_API_KEY=${{ secrets.DOJAH_API_KEY }}" >> .env
-          echo "DOJAH_APP_ID=${{ secrets.DOJAH_APP_ID }}" >> .env
-          docker compose -f compose.prod.yaml up --build -d
+      - name: Echo
+        run: echo "Hello!"
+
+      # - name: Deploy to production on VPS via SSH using .pem file
+      #   run: |
+      #     echo "${{ secrets.SSH_PRIVATE_KEY_BASE64 }}" | base64 -d > /tmp/vps-key.pem
+      #     chmod 600 /tmp/vps-key.pem
+      #     ssh -i /tmp/vps-key.pem -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+      #     eval "$(ssh-agent -s)"
+      #     ssh-add ~/.ssh/id_ed25519_middleware-backend
+      #     cd /var/www/hosts/alert-middleware-api/prod
+      #     git pull origin main
+      #     touch .env
+      #     echo "NODE_ENV=production" >> .env
+      #     echo "PORT=${{ secrets.PORT }}" >> .env
+      #     echo "GLOBAL_PREFIX=${{ secrets.GLOBAL_PREFIX }}" >> .env
+      #     echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+      #     echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+      #     echo "INVITE_SECRET=${{ secrets.INVITE_SECRET }}" >> .env
+      #     echo "TOTP_SECRET=${{ secrets.TOTP_SECRET }}" >> .env
+      #     echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .env
+      #     echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+      #     echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .env
+      #     echo "REDIS_HOST=middleware-redis" >> .env
+      #     echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
+      #     echo "ZEPTO_TOKEN=${{ secrets.ZEPTO_TOKEN }}" >> .env
+      #     echo "ZEPTO_API=${{ secrets.ZEPTO_API }}" >> .env
+      #     echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" >> .env
+      #     echo "DOJAH_BASE_URL=${{ secrets.DOJAH_BASE_URL }}" >> .env
+      #     echo "DOJAH_API_KEY=${{ secrets.DOJAH_API_KEY }}" >> .env
+      #     echo "DOJAH_APP_ID=${{ secrets.DOJAH_APP_ID }}" >> .env
+      #     docker compose -f compose.prod.yaml up --build -d
