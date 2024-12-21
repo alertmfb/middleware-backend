@@ -7,7 +7,6 @@ export class NameEnquiry {
 
 export class InterBankTransfer {
   Amount: string;
-  AppzoneAccount: string;
   PayerAccountNumber: string;
   Payer: string;
   ReceiverBankCode: string;
