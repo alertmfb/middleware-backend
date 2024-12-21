@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Inject,
+  Ip,
   Logger,
   OnApplicationBootstrap,
 } from '@nestjs/common';
@@ -42,8 +43,8 @@ export class EmailController implements OnApplicationBootstrap {
   }
 
   @MessagePattern('email.notifySignIn')
-  async NotifySignIn(@Payload() payload: NotifySignIn) {
-    await this.emailServie.notifySignIn(payload);
+  async NotifySignIn(@Payload() payload: NotifySignIn, @Ip() ip: string) {
+    await this.emailServie.notifySignIn(payload, ip);
   }
 
   @MessagePattern('email.resetPassword')

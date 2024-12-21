@@ -8,6 +8,7 @@ import {
   Notify2faEnabled,
 } from './dto/email.dto';
 import { TZDate } from '@date-fns/tz';
+import { loginNotification } from './templates/user-activity/login-notification';
 
 @Injectable()
 export class EmailServce {
@@ -106,51 +107,16 @@ export class EmailServce {
     Logger.log(data);
   }
 
-  async notifySignIn({ email, ipAddress }: NotifySignIn) {
+  async notifySignIn({ email }: NotifySignIn, ip: string) {
+    const name = email.split('.')[0];
+    const firstLetter = name[0].toUpperCase();
+
+    const firstName = firstLetter + name.slice(1, name.length);
     const { data, error } = await resend.emails.send({
       from: 'Middleware - Alert MFB <noreply@ecam.alertmfb.com.ng>',
       to: email,
-      subject: 'New Sign-In to Your Middleware Account',
-      html: `
-      <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto;">
-          <tr>
-            <td style="background-color: #d9534f; padding: 20px; text-align: center;">
-              <h1 style="color: #ffffff; font-size: 24px; margin: 0;">New Sign-In Detected</h1>
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color: #f9f9f9; padding: 20px;">
-              <p style="font-size: 16px; color: #555;">
-                Hello,<br/><br/>
-                We noticed a new sign-in to your Middleware account. Here are the details of this activity:
-              </p>
-              <table style="font-size: 14px; color: #555; width: 100%; margin: 20px 0;">
-                <tr>
-                  <td><strong>Date and Time:</strong></td>
-                  <td>${new TZDate()}</td>
-                </tr>
-                <tr>
-                  <td><strong>IP Address:</strong></td>
-                  <td>${ipAddress}</td>
-                </tr>
-
-              </table>
-              <p style="font-size: 14px; color: #777;">
-                If this was you, no further action is needed.<br/><br/>
-                If you don’t recognize this activity, we recommend resetting your password immediately and reviewing your account's activity.
-              </p>
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color: #f1f1f1; padding: 10px; text-align: center; font-size: 12px; color: #aaa;">
-              <p style="margin: 0;">Thank you,<br/>The Digital Hub.</p>
-              <p style="margin: 0; font-size: 11px;">This is an automated notification; please do not reply directly to this email.</p>
-            </td>
-          </tr>
-        </table>
-      </div>
-    `,
+      subject: 'Login Notification',
+      html: loginNotification(firstName, ip),
     });
 
     if (error) {
