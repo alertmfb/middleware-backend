@@ -1,0 +1,1 @@
+export const TERMII_SERVICE = 'TERMII_HTTP_SERVICE';

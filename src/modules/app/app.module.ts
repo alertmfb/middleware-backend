@@ -9,7 +9,47 @@ import { MessagesModule } from '../messages/messages.module';
 import { CodesModule } from '../codes/codes.module';
 import { AdminModule } from '../admin/admin.module';
 import { ProductsModule } from '../products/products.module';
-import { KycModule } from '../kyc/kyc.module';
+import { VerificationModule } from '../verification/verification.module';
+import { RouterModule } from '@nestjs/core';
+import { AddressModule } from '../verification/address/address.module';
+import { IdentityModule } from '../verification/identity/identity.module';
+import { KybModule } from '../verification/kyb/kyb.module';
+import { KycModule } from '../verification/kyc/kyc.module';
+import { MessagingModule } from '../messaging/messaging.module';
+import { BroadcastModule } from '../messaging/broadcast/broadcast.module';
+import { TokenModule } from '../messaging/token/token.module';
+import { VirtualModule } from '../virtual-accounts/virtual.module';
+import { AccountsModule } from '../virtual-accounts/accounts/accounts.module';
+import { TransactionsModule } from '../virtual-accounts/transactions/transactions.module';
+
+const verificationChildren = [
+  {
+    path: 'verification',
+    module: AddressModule,
+  },
+  {
+    path: 'verification',
+    module: IdentityModule,
+  },
+  {
+    path: 'verification',
+    module: KycModule,
+  },
+  {
+    path: 'verification',
+    module: KybModule,
+  },
+];
+
+const messagingChildren = [
+  { path: 'messaging', module: BroadcastModule },
+  { path: 'messaging', module: TokenModule },
+];
+
+const virtualChildren = [
+  { path: 'virtual', module: AccountsModule },
+  { path: 'virtual', module: TransactionsModule },
+];
 
 @Module({
   imports: [
@@ -20,7 +60,14 @@ import { KycModule } from '../kyc/kyc.module';
     MessagesModule,
     CodesModule,
     ProductsModule,
-    KycModule,
+    VerificationModule,
+    MessagingModule,
+    VirtualModule,
+    RouterModule.register([
+      ...verificationChildren,
+      ...messagingChildren,
+      ...virtualChildren,
+    ]),
     ConfigModule.forRoot({
       isGlobal: true,
     }),

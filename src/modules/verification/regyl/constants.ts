@@ -1,0 +1,1 @@
+export const REGYL_SERVICE = 'REGYL_HTTP_SERVICE';
