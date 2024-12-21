@@ -46,7 +46,10 @@ const messagingChildren = [
   { path: 'messaging', module: TokenModule },
 ];
 
-const virtualChildren = [{ path: 'virtual', module: AccountsModule }];
+const virtualChildren = [
+  { path: 'virtual', module: AccountsModule },
+  { path: 'virtual', module: TransactionsModule },
+];
 
 @Module({
   imports: [

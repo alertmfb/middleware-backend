@@ -1,7 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BANKONE_SERVICE, BANKONE_TSQ_SERVICE } from '../bankone/constants';
 import { HttpService } from '@nestjs/axios';
+import { AxiosError } from 'axios';
 
 @Injectable()
 export class TransactionsSerice {
@@ -31,4 +38,21 @@ export class TransactionsSerice {
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
     @Inject(BANKONE_TSQ_SERVICE) private bankoneTsqClient: HttpService,
   ) {}
+
+  async getBanks() {
+    try {
+      const response = await this.bankoneClient.axiosRef.get(
+        this.endpoints.GET_COMMERCIAL_BANK + `/${this.AUTH_TOKEN}`,
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new HttpException(error?.response?.data, error.status, {
+          cause: error.cause,
+        });
+      }
+
+      throw new BadRequestException();
+    }
+  }
 }
