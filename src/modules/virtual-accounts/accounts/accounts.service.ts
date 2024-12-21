@@ -47,7 +47,7 @@ export class AccountsService {
     CHECK_LIEN_STATUS:
       '/thirdpartyapiservice/apiservice/Account/CheckLienStatus',
     ACTIVATE_PND: '/thirdpartyapiservice/apiservice/Account/ActivatePND',
-    DEACTIVATE_PND: '/thirdpartyapiservice/apiservice/Account/DectivatePND',
+    DEACTIVATE_PND: '/thirdpartyapiservice/apiservice/Account/DeactivatePND',
     CHECK_PND_STATUS: '/thirdpartyapiservice/apiservice/Account/CheckPNDStatus',
     CLOSE_ACCOUNT: '/BankOneWebAPI/api/Account/CloseAccount/2',
   };

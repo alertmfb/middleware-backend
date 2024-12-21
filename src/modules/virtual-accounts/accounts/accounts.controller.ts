@@ -79,7 +79,7 @@ export class AccountsController {
 
   @Post('lien-account')
   async LienAccount(@Body() payload: AccountLien) {
-    return this.accountsService.unlienAccount(payload);
+    return this.accountsService.lienAccount(payload);
   }
 
   @Post('unlien-account')
