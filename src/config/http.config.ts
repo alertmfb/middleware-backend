@@ -47,3 +47,13 @@ export class BankoneHttpConfigService implements HttpModuleOptionsFactory {
     };
   }
 }
+
+@Injectable()
+export class BankoneHttpTsqConfigService implements HttpModuleOptionsFactory {
+  createHttpOptions(): HttpModuleOptions {
+    return {
+      baseURL: 'http://52.168.85.231',
+      withCredentials: true,
+    };
+  }
+}
