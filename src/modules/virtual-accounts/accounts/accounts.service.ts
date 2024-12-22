@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { BANKONE_SERVICE } from '../bankone/constants';
+import { BANKONE_SERVICE } from '../../bankone/constants';
 import { HttpService } from '@nestjs/axios';
 import {
   AccountEnquiry,
