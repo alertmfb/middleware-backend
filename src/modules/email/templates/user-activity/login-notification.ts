@@ -469,9 +469,13 @@ export const loginNotification = (
                                   <tr>
                                     <td class="pad">
                                       <div class="alignment" align="left">
+                                      <a >
+
+                                      </a>
                                         <div
                                           class="button"
                                           style="
+                                            cursor: pointer;
                                             background-color: #111111;
                                             border-bottom: 0px solid transparent;
                                             border-left: 0px solid transparent;
