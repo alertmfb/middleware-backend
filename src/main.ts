@@ -36,7 +36,6 @@ async function bootstrap() {
 
   SwaggerModule.setup('reference', app, document, {
     jsonDocumentUrl: 'reference/json',
-    explorer: true,
     swaggerUiEnabled: true,
   });
 

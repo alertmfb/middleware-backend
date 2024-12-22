@@ -19,8 +19,11 @@ import { MessagingModule } from '../messaging/messaging.module';
 import { BroadcastModule } from '../messaging/broadcast/broadcast.module';
 import { TokenModule } from '../messaging/token/token.module';
 import { VirtualModule } from '../virtual-accounts/virtual.module';
-import { AccountsModule } from '../virtual-accounts/accounts/accounts.module';
-import { TransactionsModule } from '../virtual-accounts/transactions/transactions.module';
+import { AccountsModule as VirtualAccountsModule } from '../virtual-accounts/accounts/accounts.module';
+import { TransactionsModule as VirtualTransactionsModule } from '../virtual-accounts/transactions/transactions.module';
+import { CoreModule } from '../core-banking/core.module';
+import { TransactionsModule as CoreTransactionsModule } from '../core-banking/transactions/transactions.module';
+import { AccountsModule as CoreAccountsModule } from '../core-banking/accounts/accounts.module';
 
 const verificationChildren = [
   {
@@ -47,8 +50,13 @@ const messagingChildren = [
 ];
 
 const virtualChildren = [
-  { path: 'virtual', module: AccountsModule },
-  { path: 'virtual', module: TransactionsModule },
+  { path: 'virtual', module: VirtualAccountsModule },
+  { path: 'virtual', module: VirtualTransactionsModule },
+];
+
+const coreChildren = [
+  { path: 'core', module: CoreAccountsModule },
+  { path: 'core', module: CoreTransactionsModule },
 ];
 
 @Module({
@@ -63,10 +71,12 @@ const virtualChildren = [
     VerificationModule,
     MessagingModule,
     VirtualModule,
+    CoreModule,
     RouterModule.register([
       ...verificationChildren,
       ...messagingChildren,
       ...virtualChildren,
+      ...coreChildren,
     ]),
     ConfigModule.forRoot({
       isGlobal: true,
