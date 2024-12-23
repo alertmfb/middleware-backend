@@ -105,7 +105,7 @@ export class AccountsService {
     }
   }
 
-  async createAccount({ ProductId, ...payload }: CreateAccount) {
+  async createAccount(payload: CreateAccount) {
     try {
       const response = await this.bankoneClient.axiosRef.post(
         this.endpoints.CREATE_ACCOUNT_QUICK + `?authToken=${this.AUTH_TOKEN}`,
@@ -114,6 +114,8 @@ export class AccountsService {
           AccountTier: '1',
           NotificationPreference: '0',
           // AccountInformationSource: 0,
+          OtherNames: payload.FirstName,
+          FirstName: payload.OtherNames,
           TransactionPermission: '0',
           AccountOfficerCode: '122',
           AccountOpeningTrackingRef: this.generateRef(),
@@ -138,7 +140,7 @@ export class AccountsService {
     }
   }
 
-  async createSubAccount({ ProductId, ...payload }: CreateSubAccount) {
+  async createSubAccount(payload: CreateSubAccount) {
     try {
       if (!payload?.CustomerId) {
         throw new BadRequestException('Customer Id not found');

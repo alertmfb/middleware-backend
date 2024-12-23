@@ -18,7 +18,6 @@ export class CreateAccount {
   PhoneNo: string = '';
   Address: string = '';
   Email: string = '';
-  ProductId: string = '0193d868-2a38-76c6-925b-3cc3004e940d';
 }
 
 export class CreateSubAccount extends CreateAccount {

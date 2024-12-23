@@ -33,7 +33,7 @@ export class AccountsController {
     return this.accountsService.balanceEnquiry(accountNumber);
   }
 
-  @Post('create-virtual-account')
+  @Post('create-account')
   @ApiBody({ type: CreateAccount })
   async createVirtualAccount(@Body() payload: CreateAccount) {
     return this.accountsService.createAccount(payload);
