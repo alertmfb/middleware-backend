@@ -27,6 +27,7 @@ async function bootstrap() {
     .setTitle('Middleware')
     .setDescription('Middleware api reference')
     .addBearerAuth()
+    .addServer('http://localhost:3000', 'local')
     .addServer('https://api-middleware-staging.alertmfb.com.ng', 'sandbox')
     .build();
 
