@@ -32,6 +32,18 @@ export class UpdateAccountTier {
   FullName: string;
 }
 
+export class GenerateStatement {
+  accountNumber: string;
+  fromDate: Date = new Date('2024-01-05');
+  toDate: Date = new Date('2040-01-10');
+  isPdf: boolean;
+  arrangeAsc: boolean;
+  showSerialNumber: boolean;
+  showTransactionDate: boolean;
+  showReversedTransactions: boolean;
+  showInstrumentNumber: boolean;
+}
+
 export class GetAccountTransactions {
   accountNumber: string;
   fromDate: string = 'yyyy-MM-dd';

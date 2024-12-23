@@ -12,6 +12,7 @@ import {
   CreateAccount,
   GetAccountTransactions,
   UpdateAccountTier,
+  GenerateStatement,
 } from './dto/accounts.dto';
 import { Public } from 'src/modules/auth/metadata';
 import { createAccountResponse } from './dto/account.responses';
@@ -57,6 +58,11 @@ export class AccountsController {
   @ApiQuery({ name: 'customerId' })
   async getSubAccounts(@Query('customerId') customerId: string) {
     return this.accountsService.getSubAccounts(customerId);
+  }
+
+  @Get('generate-statement')
+  async generateStatement(@Query() payload: GenerateStatement) {
+    return this.accountsService.generateStatement(payload);
   }
 
   @Get('get-account-transactions')

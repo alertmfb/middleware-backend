@@ -19,6 +19,7 @@ import {
   CreateAccount,
   GetAccountTransactions,
   UpdateAccountTier,
+  GenerateStatement,
 } from './dto/accounts.dto';
 import { AxiosError } from 'axios';
 import { faker } from '@faker-js/faker';
@@ -26,6 +27,7 @@ import { faker } from '@faker-js/faker';
 @Injectable()
 export class AccountsService {
   protected AUTH_TOKEN = this.config.get('BANKONE_AUTH_TOKEN');
+  protected INSTITUTION_CODE = '100626';
 
   private endpoints = {
     ACCOUNT_ENQUIRY: '/thirdpartyapiservice/apiservice/Account/AccountEnquiry',
@@ -36,6 +38,8 @@ export class AccountsService {
     UPDATE_ACCOUNT_TIER: '/BankOneWebAPI/api/Account/UpdateAccountTier2/2',
     GET_ACCOUNTS_BY_CUSTOMER_ID:
       '/BankOneWebAPI/api/Account/GetAccountsByCustomerId/2',
+    GENERATE_STATEMENT:
+      '/BankOneWebAPI/api/Account/GenerateAccountStatement2/2',
     GET_TRANSACTIONS: '/BankOneWebAPI/api/Account/GetTransactions/2',
     FREEZE_ACCOUNT: '/thirdpartyapiservice/apiservice/Account/FreezeAccount',
     UNFREEZE_ACCOUNT:
@@ -213,6 +217,48 @@ export class AccountsService {
           delete account?.accountNumber;
         });
 
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new HttpException(error.response?.data, error.status, {
+          cause: error.cause,
+        });
+      }
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async generateStatement({
+    fromDate,
+    accountNumber,
+    arrangeAsc,
+    isPdf,
+    showInstrumentNumber,
+    showReversedTransactions,
+    showSerialNumber,
+    showTransactionDate,
+    toDate,
+  }: GenerateStatement) {
+    try {
+      const payload: Record<keyof GenerateStatement, Date | boolean | string> =
+        {
+          fromDate: new Date(fromDate).toISOString(),
+          toDate: new Date(toDate).toISOString(),
+          accountNumber: accountNumber,
+          arrangeAsc: arrangeAsc === true ? true : false,
+          isPdf: isPdf === true ? true : false,
+          showInstrumentNumber: showInstrumentNumber === true ? true : false,
+          showReversedTransactions:
+            showReversedTransactions === true ? true : false,
+          showSerialNumber: showSerialNumber === true ? true : false,
+          showTransactionDate: showTransactionDate === true ? true : false,
+        };
+
+      const response = await this.bankoneClient.axiosRef.get(
+        `${this.endpoints.GENERATE_STATEMENT}?authToken=${this.config.get('AUTH_TOKEN')}&accountNumber=${payload.accountNumber}&fromDate=${payload.fromDate}&toDate=${payload.toDate}&isPdf=${payload.isPdf}&arrangeAsc=${payload.arrangeAsc}&showSerialNumber=${payload.showSerialNumber}&showTransactionDate=${payload.showTransactionDate}&showReversedTransactions=${payload.showReversedTransactions}&showInstrumentNumber=${payload.showInstrumentNumber}&institutionCode=${this.config.get('INSTITUTION_CODE')}
+        `,
+      );
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
