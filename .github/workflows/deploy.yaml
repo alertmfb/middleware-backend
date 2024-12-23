@@ -39,5 +39,10 @@ jobs:
           echo "DOJAH_BASE_URL=${{ secrets.DOJAH_BASE_URL }}" >> .env
           echo "DOJAH_API_KEY=${{ secrets.DOJAH_API_KEY }}" >> .env
           echo "DOJAH_APP_ID=${{ secrets.DOJAH_APP_ID }}" >> .env
+          echo "TERMII_BASE_URL=${{ secrets.TERMII_BASE_URL }}" >> .env
+          echo "TERMII_API_KEY=${{ secrets.TERMII_API_KEY }}" >> .env
+          echo "TERMII_SENDER_ID=${{ secrets.TERMII_SENDER_ID }}" >> .env
+          echo "TERMII_DEVICE_NAME=${{ secrets.TERMII_DEVICE_NAME }}" >> .env
+          echo "TERMII_EMAIL_CONFIGURATION_ID=${{ secrets.TERMII_EMAIL_CONFIGURATION_ID }}" >> .env
 
           docker compose up --build -d
