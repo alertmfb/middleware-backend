@@ -81,7 +81,7 @@ export class AccountsService {
         this.endpoints.ACCOUNT_ENQUIRY,
         {
           AccountNo: payload.AccountNo,
-          AuthenticationCode: this.config.get('AUTH_TOKEN'),
+          AuthenticationCode: this.AUTH_TOKEN,
         },
       );
 
