@@ -2,7 +2,9 @@ import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
 import { KycService } from './kyc.service';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ValidateBvn } from './dto/kyc.dto';
+import { Public } from 'src/modules/auth/metadata';
 
+@Public()
 @ApiTags('verification')
 @Controller('kyc')
 export class KycController {

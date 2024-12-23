@@ -6,7 +6,9 @@ import {
   VerifyBvnSelfie,
   VerifyNinSelfie,
 } from './dto/identity.dto';
+import { Public } from 'src/modules/auth/metadata';
 
+@Public()
 @ApiTags('verification')
 @Controller('identity')
 export class IdentityController {

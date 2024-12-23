@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
-import { ApiBody, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   AccountEnquiry,
   AccountFreeze,
@@ -14,6 +14,7 @@ import {
   UpdateAccountTier,
 } from './dto/accounts.dto';
 import { Public } from 'src/modules/auth/metadata';
+import { createAccountResponse } from './dto/account.responses';
 
 @Public()
 @ApiTags('core')
@@ -23,6 +24,7 @@ export class AccountsController {
 
   @Post('account-enquiry')
   @ApiBody({ type: AccountEnquiry })
+  @ApiResponse({ example: createAccountResponse })
   async accountEnquiry(@Body() payload: AccountEnquiry) {
     return this.accountsService.accountEnquiry(payload);
   }
