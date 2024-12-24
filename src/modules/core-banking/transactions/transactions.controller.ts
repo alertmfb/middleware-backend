@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TransactionsSerice } from './transactions.service';
 import { Public } from 'src/modules/auth/metadata';
 import {
@@ -10,6 +10,10 @@ import {
   Reversal,
   TSQ,
 } from './dto/transactions.dto';
+import {
+  interBankTransferResponse,
+  nameEnquiry,
+} from './dto/transactions.response';
 
 @Public()
 @ApiTags('core')
@@ -23,6 +27,7 @@ export class TransactionController {
   }
 
   @Post('name-enquiry')
+  @ApiResponse({ example: nameEnquiry })
   async nameEnquiry(@Body() payload: NameEnquiry) {
     return await this.transactionsService.nameEnqiry(payload);
   }
@@ -33,6 +38,7 @@ export class TransactionController {
   }
 
   @Post('inter-bank-tsq')
+  @ApiResponse({ example: interBankTransferResponse })
   async interBankTsq(@Body() payload: TSQ) {
     return await this.transactionsService.interBankTsq(payload);
   }
