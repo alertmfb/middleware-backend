@@ -1,8 +1,4 @@
-export const loginNotification = (
-  firstName: string,
-  location?: string,
-  href?: string,
-): string => {
+export const signUpInvitation = (firstname: string, href?: string): string => {
   return `<!DOCTYPE html>
   <html
     xmlns:v="urn:schemas-microsoft-com:vml"
@@ -224,7 +220,7 @@ export const loginNotification = (
                                       "
                                     >
                                       <img
-                                        src="https://530e3fbcaf.imgdist.com/pub/bfra/bimp28ad/d9d/k6s/xsw/image%20196.jpg"
+                                      src="https://530e3fbcaf.imgdist.com/pub/bfra/bimp28ad/d9d/k6s/xsw/image%20196.jpg"
                                         alt="Alert MFB Logo"
                                         title="Alert MFB Logo"
                                         style="
@@ -264,7 +260,7 @@ export const loginNotification = (
                   width: 544px;
                   margin: auto;
                   margin-bottom: 40px;
-                  padding: 20px 0 0;                                       
+                  padding: 20px 0 0;
                   border-top: 1px solid #CBD5E1;
                   position: relative;
                   box-sizing: border-box;
@@ -342,15 +338,14 @@ export const loginNotification = (
                                           font-family: 'Bricolage Grotesque',
                                             Arial, Helvetica, sans-serif;
                                           font-size: 24px;
-                                          font-weight: 600;
+                                          font-weight: 500;
                                           letter-spacing: normal;
                                           line-height: 120%;
                                           text-align: left;
-          
                                           mso-line-height-alt: 24px;
                                         "
                                       >
-                                      Login Notification
+                                        Join Alert Middleware Today!
                                       </h1>
                                     </td>
                                   </tr>
@@ -445,11 +440,15 @@ export const loginNotification = (
                                         "
                                       >
                                         <p style="margin: 0;">
-                                          <p style="margin-bottom: 24px;">Hi ${firstName},</p>
-                                          <p style="margin-bottom: 24px;">A new login was detected from ${location}. If this wasn’t you, secure your account immediately.</p>
-                                          <p style="margin-bottom: 24px;">Click the button below to Secure Account.</p>
+                                          <p style="margin-bottom: 24px;">Hi ${firstname},</p>
+                                          <p style="margin-bottom: 24px;">We’re thrilled to
+                                          invite you to join Alert Middleware! Sign
+                                          up today and unlock [key benefits of the
+                                          platform].</p>
+                                          <p style="margin-bottom: 24px;">Click the button
+                                          below to Join Now.</p>
                                           <p style="margin-bottom: 8px;">Thanks,</p>Alert
-                                          Middleware.                                
+                                          Middleware.
                                         </p>
                                       </div>
                                     </td>
@@ -516,11 +515,11 @@ export const loginNotification = (
                                                 word-break: break-word;
                                                 line-height: 28px;
                                               "
-                                              >View</span
+                                              >Join Now</span
                                             ></span
                                           >
                                         </div>
-                                        </a>            
+                                        </a>
                                       </div>
                                     </td>
                                   </tr>

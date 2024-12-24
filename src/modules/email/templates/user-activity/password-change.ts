@@ -1,6 +1,5 @@
-export const loginNotification = (
-  firstName: string,
-  location?: string,
+export const passwordChangeNotification = (
+  firstname: string,
   href?: string,
 ): string => {
   return `<!DOCTYPE html>
@@ -350,7 +349,7 @@ export const loginNotification = (
                                           mso-line-height-alt: 24px;
                                         "
                                       >
-                                      Login Notification
+                                      Password Change Confirmation
                                       </h1>
                                     </td>
                                   </tr>
@@ -445,9 +444,9 @@ export const loginNotification = (
                                         "
                                       >
                                         <p style="margin: 0;">
-                                          <p style="margin-bottom: 24px;">Hi ${firstName},</p>
-                                          <p style="margin-bottom: 24px;">A new login was detected from ${location}. If this wasn’t you, secure your account immediately.</p>
-                                          <p style="margin-bottom: 24px;">Click the button below to Secure Account.</p>
+                                          <p style="margin-bottom: 24px;">Hi ${firstname},</p>
+                                          <p style="margin-bottom: 24px;">You’ve successfully updated your password. If this wasn’t you, please contact support.</p>
+                                          <p style="margin-bottom: 24px;">Click the button below to Contact Support.</p>
                                           <p style="margin-bottom: 8px;">Thanks,</p>Alert
                                           Middleware.                                
                                         </p>
@@ -516,11 +515,11 @@ export const loginNotification = (
                                                 word-break: break-word;
                                                 line-height: 28px;
                                               "
-                                              >View</span
+                                              >Contact</span
                                             ></span
                                           >
                                         </div>
-                                        </a>            
+                                        </a>
                                       </div>
                                     </td>
                                   </tr>

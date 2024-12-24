@@ -1,6 +1,6 @@
-export const loginNotification = (
-  firstName: string,
-  location?: string,
+export const passwordReset = (
+  firstname: string,
+  otp: string,
   href?: string,
 ): string => {
   return `<!DOCTYPE html>
@@ -350,7 +350,7 @@ export const loginNotification = (
                                           mso-line-height-alt: 24px;
                                         "
                                       >
-                                      Login Notification
+                                      Reset Password
                                       </h1>
                                     </td>
                                   </tr>
@@ -445,9 +445,14 @@ export const loginNotification = (
                                         "
                                       >
                                         <p style="margin: 0;">
-                                          <p style="margin-bottom: 24px;">Hi ${firstName},</p>
-                                          <p style="margin-bottom: 24px;">A new login was detected from ${location}. If this wasn’t you, secure your account immediately.</p>
-                                          <p style="margin-bottom: 24px;">Click the button below to Secure Account.</p>
+                                          <p style="margin-bottom: 24px;">Hi ${firstname},</p>
+                                          <p style="margin-bottom: 24px;">We received a request to reset the password for your Middleware account. Please use the OTP below to complete the process:</p>
+
+                                          <h1>${otp}</h1>
+
+                                          <p style="margin-bottom: 24px;">If you didn’t request this password reset, please ignore this email. The OTP will expire in 10 minutes.</p>
+
+                                          <p style="margin-bottom: 24px;">Click the button below to Contact Support.</p>
                                           <p style="margin-bottom: 8px;">Thanks,</p>Alert
                                           Middleware.                                
                                         </p>
@@ -516,11 +521,11 @@ export const loginNotification = (
                                                 word-break: break-word;
                                                 line-height: 28px;
                                               "
-                                              >View</span
+                                              >Contact</span
                                             ></span
                                           >
                                         </div>
-                                        </a>            
+                                        </a>
                                       </div>
                                     </td>
                                   </tr>
