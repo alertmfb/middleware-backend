@@ -3,13 +3,11 @@ import {
   HttpException,
   Inject,
   Injectable,
-  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BANKONE_SERVICE, BANKONE_TSQ_SERVICE } from '../../bankone/constants';
 import { HttpService } from '@nestjs/axios';
 import { AxiosError } from 'axios';
-import { response } from 'express';
 import {
   AccountTransaction,
   InterBankTransfer,

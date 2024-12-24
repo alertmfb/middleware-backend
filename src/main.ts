@@ -24,9 +24,11 @@ async function bootstrap() {
   app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
 
   const docsConfig = new DocumentBuilder()
-    .setTitle('MIDDLEWARE API REFERENCE')
-    .setVersion('1.0')
+    .setTitle('Middleware')
+    .setDescription('Middleware api reference')
     .addBearerAuth()
+    .addServer('http://localhost:3000', 'local')
+    .addServer('https://api-middleware-staging.alertmfb.com.ng', 'sandbox')
     .build();
 
   const document = SwaggerModule.createDocument(app, docsConfig, {
@@ -35,6 +37,7 @@ async function bootstrap() {
 
   SwaggerModule.setup('reference', app, document, {
     jsonDocumentUrl: 'reference/json',
+    swaggerUiEnabled: true,
   });
 
   const redisMicroservice =

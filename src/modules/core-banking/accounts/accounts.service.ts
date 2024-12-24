@@ -16,9 +16,10 @@ import {
   AccountStatus,
   CloseAccount,
   CreateSubAccount,
-  CreateVirtualAccount,
+  CreateAccount,
   GetAccountTransactions,
   UpdateAccountTier,
+  GenerateStatement,
 } from './dto/accounts.dto';
 import { AxiosError } from 'axios';
 import { faker } from '@faker-js/faker';
@@ -26,6 +27,7 @@ import { faker } from '@faker-js/faker';
 @Injectable()
 export class AccountsService {
   protected AUTH_TOKEN = this.config.get('BANKONE_AUTH_TOKEN');
+  protected INSTITUTION_CODE = '100626';
 
   private endpoints = {
     ACCOUNT_ENQUIRY: '/thirdpartyapiservice/apiservice/Account/AccountEnquiry',
@@ -36,6 +38,8 @@ export class AccountsService {
     UPDATE_ACCOUNT_TIER: '/BankOneWebAPI/api/Account/UpdateAccountTier2/2',
     GET_ACCOUNTS_BY_CUSTOMER_ID:
       '/BankOneWebAPI/api/Account/GetAccountsByCustomerId/2',
+    GENERATE_STATEMENT:
+      '/BankOneWebAPI/api/Account/GenerateAccountStatement2/2',
     GET_TRANSACTIONS: '/BankOneWebAPI/api/Account/GetTransactions/2',
     FREEZE_ACCOUNT: '/thirdpartyapiservice/apiservice/Account/FreezeAccount',
     UNFREEZE_ACCOUNT:
@@ -56,19 +60,6 @@ export class AccountsService {
     SANDBOX: 112,
     POS: 113,
   };
-
-  private products = [
-    {
-      id: '0193d868-2a38-76c6-925b-3cc3004e940d',
-      slug: 'Sandbox /',
-      bankoneCode: 112,
-    },
-    {
-      id: '0193d86f-0a7b-722f-8af7-18cf7d268bd5',
-      slug: 'ALERT-PosG /',
-      bankoneCode: 113,
-    },
-  ];
 
   constructor(
     private config: ConfigService,
@@ -118,8 +109,7 @@ export class AccountsService {
     }
   }
 
-  async createVirtualAccount({ ProductId, ...payload }: CreateVirtualAccount) {
-    // TODO: Fetch slugs from the database
+  async createAccount(payload: CreateAccount) {
     try {
       const response = await this.bankoneClient.axiosRef.post(
         this.endpoints.CREATE_ACCOUNT_QUICK + `?authToken=${this.AUTH_TOKEN}`,
@@ -128,14 +118,13 @@ export class AccountsService {
           AccountTier: '1',
           NotificationPreference: '0',
           // AccountInformationSource: 0,
+          OtherNames: payload.FirstName,
+          FirstName: payload.OtherNames,
           TransactionPermission: '0',
           AccountOfficerCode: '122',
           AccountOpeningTrackingRef: this.generateRef(),
           TransactionTrackingRef: this.generateRef(),
           ProductCode: this.productCodes.SANDBOX,
-          name: '',
-          LastName: this.getProductSlug(ProductId),
-          OtherNames: payload.FirstName + ' ' + payload.LastName,
         },
       );
 
@@ -155,10 +144,8 @@ export class AccountsService {
     }
   }
 
-  async createSubAccount({ ProductId, ...payload }: CreateSubAccount) {
-    //TODO: fetch slug from database
+  async createSubAccount(payload: CreateSubAccount) {
     try {
-      //FIXME: create a pipe for this
       if (!payload?.CustomerId) {
         throw new BadRequestException('Customer Id not found');
       }
@@ -174,9 +161,6 @@ export class AccountsService {
           AccountOpeningTrackingRef: this.generateRef(),
           TransactionTrackingRef: this.generateRef(),
           ProductCode: this.productCodes.SANDBOX,
-          name: '',
-          LastName: this.getProductSlug(ProductId),
-          OtherNames: payload.FirstName + ' ' + payload.LastName,
           AuthenticationCode: this.config.get('AUTH_TOKEN'),
         },
       );
@@ -233,6 +217,48 @@ export class AccountsService {
           delete account?.accountNumber;
         });
 
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new HttpException(error.response?.data, error.status, {
+          cause: error.cause,
+        });
+      }
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async generateStatement({
+    fromDate,
+    accountNumber,
+    arrangeAsc,
+    isPdf,
+    showInstrumentNumber,
+    showReversedTransactions,
+    showSerialNumber,
+    showTransactionDate,
+    toDate,
+  }: GenerateStatement) {
+    try {
+      const payload: Record<keyof GenerateStatement, Date | boolean | string> =
+        {
+          fromDate: new Date(fromDate).toISOString(),
+          toDate: new Date(toDate).toISOString(),
+          accountNumber: accountNumber,
+          arrangeAsc: arrangeAsc === true ? true : false,
+          isPdf: isPdf === true ? true : false,
+          showInstrumentNumber: showInstrumentNumber === true ? true : false,
+          showReversedTransactions:
+            showReversedTransactions === true ? true : false,
+          showSerialNumber: showSerialNumber === true ? true : false,
+          showTransactionDate: showTransactionDate === true ? true : false,
+        };
+
+      const response = await this.bankoneClient.axiosRef.get(
+        `${this.endpoints.GENERATE_STATEMENT}?authToken=${this.config.get('AUTH_TOKEN')}&accountNumber=${payload.accountNumber}&fromDate=${payload.fromDate}&toDate=${payload.toDate}&isPdf=${payload.isPdf}&arrangeAsc=${payload.arrangeAsc}&showSerialNumber=${payload.showSerialNumber}&showTransactionDate=${payload.showTransactionDate}&showReversedTransactions=${payload.showReversedTransactions}&showInstrumentNumber=${payload.showInstrumentNumber}&institutionCode=${this.config.get('INSTITUTION_CODE')}
+        `,
+      );
       return response.data;
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -486,15 +512,5 @@ export class AccountsService {
 
   private generateRef(): string {
     return faker.string.alphanumeric({ length: 13 });
-  }
-
-  private getProductSlug(id: string): string {
-    const product = this.products.filter((product, idx) => product.id === id);
-
-    if (product.length < 1) {
-      return 'Sandbox /';
-    }
-
-    return product[0].slug;
   }
 }

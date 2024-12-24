@@ -9,9 +9,10 @@ import {
   AccountStatus,
   CloseAccount,
   CreateSubAccount,
-  CreateVirtualAccount,
+  CreateAccount,
   GetAccountTransactions,
   UpdateAccountTier,
+  GenerateStatement,
 } from './dto/accounts.dto';
 import { Public } from 'src/modules/auth/metadata';
 import {
@@ -31,10 +32,10 @@ import {
   pndStatusResponse,
   removeLienResponse,
   unfreezeAccountResponse,
-} from './dto/accounts.response';
+} from './dto/account.responses';
 
 @Public()
-@ApiTags('virtual')
+@ApiTags('core')
 @Controller('accounts')
 export class AccountsController {
   constructor(private readonly accountsService: AccountsService) {}
@@ -47,16 +48,17 @@ export class AccountsController {
   }
 
   @Get('balance-enquiry')
+  // @ApiQuery({ name: 'accountNumber' })
   @ApiResponse({ example: balanceEnquiryResponse })
   async balanceEnquiry(@Query('accountNumber') accountNumber: string) {
     return this.accountsService.balanceEnquiry(accountNumber);
   }
 
-  @Post('create-virtual-account')
-  @ApiBody({ type: CreateVirtualAccount })
+  @Post('create-account')
+  @ApiBody({ type: CreateAccount })
   @ApiResponse({ example: createAccountResponse })
-  async createVirtualAccount(@Body() payload: CreateVirtualAccount) {
-    return this.accountsService.createVirtualAccount(payload);
+  async createVirtualAccount(@Body() payload: CreateAccount) {
+    return this.accountsService.createAccount(payload);
   }
 
   @Post('create-sub-account')
@@ -77,6 +79,12 @@ export class AccountsController {
   @ApiResponse({ example: getSubAccountsResponse })
   async getSubAccounts(@Query('customerId') customerId: string) {
     return this.accountsService.getSubAccounts(customerId);
+  }
+
+  @Get('generate-statement')
+  @ApiResponse({ example: generateStatementResponse })
+  async generateStatement(@Query() payload: GenerateStatement) {
+    return this.accountsService.generateStatement(payload);
   }
 
   @Get('get-account-transactions')

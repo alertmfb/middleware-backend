@@ -35,7 +35,7 @@ export class BroadcastService {
 
       const data = response.data;
 
-      response.data?.balance && delete data.balance;
+      data?.balance && delete data.balance;
 
       return data;
     } catch (error) {
@@ -58,7 +58,7 @@ export class BroadcastService {
 
       const data = response.data;
 
-      response.data?.balance && delete data.balance;
+      data?.balance && delete data.balance;
 
       return data;
     } catch (error) {
@@ -81,7 +81,7 @@ export class BroadcastService {
 
       const data = response.data;
 
-      response.data?.balance && delete data.balance;
+      data?.balance && delete data.balance;
 
       return data;
     } catch (error) {

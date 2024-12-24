@@ -2,8 +2,10 @@ import {
   Controller,
   Get,
   Inject,
+  Ip,
   Logger,
   OnApplicationBootstrap,
+  Req,
 } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
 import { Public } from '../auth/metadata';
@@ -42,8 +44,13 @@ export class EmailController implements OnApplicationBootstrap {
   }
 
   @MessagePattern('email.notifySignIn')
-  async NotifySignIn(@Payload() payload: NotifySignIn) {
-    await this.emailServie.notifySignIn(payload);
+  async NotifySignIn(
+    @Payload() payload: NotifySignIn,
+    @Ip() ip: string,
+    @Req() req: Request,
+  ) {
+    const ipAddress = req.headers.get('x-forwarded-for') ?? '';
+    await this.emailServie.notifySignIn(payload, ipAddress);
   }
 
   @MessagePattern('email.resetPassword')
