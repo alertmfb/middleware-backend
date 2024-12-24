@@ -132,3 +132,65 @@ export const getSubAccountsResponse = {
   CustomerMembers: null,
   TheDirectors: null,
 };
+
+export const getAccountTransactionsResponse = {
+  IsSuccessful: true,
+  CustomerIDInString: null,
+  Message: [],
+  TransactionTrackingRef: null,
+  Page: null,
+};
+
+export const freezeAccountResponse = {
+  RequestStatus: true,
+  ResponseDescription: 'Account frozen - 1100001561',
+  ResponseStatus: 'Successful',
+};
+
+export const unfreezeAccountResponse = {
+  RequestStatus: true,
+  ResponseDescription: 'Account successfully unfrozen.',
+  ResponseStatus: 'Successful',
+};
+
+export const freezeAccountStatusResponse = {
+  RequestStatus: true,
+  ResponseDescription: 'Account is not frozen.',
+  ResponseStatus: 'InActive',
+};
+
+export const placeLienResponse = {
+  RequestStatus: true,
+  ResponseDescription: 'Lien sucessfully placed on account.',
+  ResponseStatus: 'Successful',
+};
+
+export const removeLienResponse = {
+  RequestStatus: true,
+  ResponseDescription: 'Lien sucessfully deactivated on account.',
+  ResponseStatus: 'Successful',
+};
+
+export const lienStatusResponse = {
+  RequestStatus: true,
+  ResponseDescription: 'There is no lien on this account.',
+  ResponseStatus: 'InActive',
+};
+
+export const activatePndResponse = {
+  RequestStatus: true,
+  ResponseDescription: 'PND successfully activated on account.',
+  ResponseStatus: 'Successful',
+};
+
+export const deactivatePndResponse = {
+  RequestStatus: true,
+  ResponseDescription: 'PND successfully deactivated on account.',
+  ResponseStatus: 'Successful',
+};
+
+export const pndStatusResponse = {
+  RequestStatus: true,
+  ResponseDescription: 'There is no PND restriction on this account.',
+  ResponseStatus: 'InActive',
+};
