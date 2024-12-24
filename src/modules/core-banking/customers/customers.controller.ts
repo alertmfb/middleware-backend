@@ -1,8 +1,9 @@
 import { Controller, Get, Post, Query } from '@nestjs/common';
 import { CustomersService } from './customers.service';
 import { Public } from 'src/modules/auth/metadata';
-import { ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateCustomer, UpdateCustomer } from './dto/customers.dto';
+import { createCustomerResponse } from './dto/customers.response';
 
 @Public()
 @ApiTags('core')
@@ -12,6 +13,7 @@ export class CustomersController {
 
   @Post('create')
   @ApiBody({ type: CreateCustomer })
+  @ApiResponse({ example: createCustomerResponse })
   async createCustomer(payload: CreateCustomer) {
     return await this.customersService.createCustomer(payload);
   }
