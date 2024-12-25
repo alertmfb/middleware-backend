@@ -46,4 +46,4 @@ jobs:
           echo "TERMII_EMAIL_CONFIGURATION_ID=${{ secrets.TERMII_EMAIL_CONFIGURATION_ID }}" >> .env
           echo "BANKONE_BASE_URL=${{ secrets.BANKONE_BASE_URL }}" >> .env
           echo "BANKONE_AUTH_TOKEN=${{ secrets.BANKONE_AUTH_TOKEN }}" >> .env
-          docker compose up --build
+          docker compose up --build -d

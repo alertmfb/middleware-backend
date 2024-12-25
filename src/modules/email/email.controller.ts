@@ -47,10 +47,8 @@ export class EmailController implements OnApplicationBootstrap {
   async NotifySignIn(
     @Payload() payload: NotifySignIn,
     @Ip() ip: string,
-    @Req() req: Request,
   ) {
-    const ipAddress = req.headers.get('x-forwarded-for') ?? '';
-    await this.emailServie.notifySignIn(payload, ipAddress);
+    await this.emailServie.notifySignIn(payload, ip);
   }
 
   @MessagePattern('email.resetPassword')
