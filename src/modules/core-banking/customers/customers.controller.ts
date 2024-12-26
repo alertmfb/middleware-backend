@@ -33,4 +33,24 @@ export class CustomersController {
   async getByAccountNo(@Query('accountNo') accountNo: string) {
     return await this.customersService.getCustomerByAccountNumber(accountNo);
   }
+
+  @Get('get-by-phoneNo')
+  async getByPhoneNo(@Query('phoneNumber') phoneNumber: string) {
+    return this.customersService.getCustomerByPhoneNumber(phoneNumber);
+  }
+
+  @Get('get-by-bvn')
+  async getByBVN(@Query('bvn') bvn: string) {
+    return this.customersService.getCustomerByBvn(bvn);
+  }
+
+  @Get('phone-number-exists')
+  async phoneNoExist(@Query('phoneNumber') phoneNumber: string) {
+    return this.customersService.phoneNumberExists(phoneNumber);
+  }
+
+  @Get('email-exists')
+  async emailExist(@Query('email') email: string) {
+    return this.customersService.emailExists(email);
+  }
 }

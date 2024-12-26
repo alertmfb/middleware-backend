@@ -21,10 +21,11 @@ export class CustomersService {
       '/BankOneWebAPI/api/Customer/GetByCustomerID/2',
     GET_CUSTOMER_BY_ACCOUNT_NUMBER:
       '/BankOneWebAPI/api/Customer/GetByAccountNo2/2',
-    GET_CUSTOMER_BY_PHONE_NUMBER: "/BankOneWebAPI/api/Customer/GetByCustomerPhoneNumber/2",
-    PHONE_NUMBER_EXIST: "/BankOneWebAPI/api/Customer/PhoneNumberExist/2",
-    GET_CUSTOMER_BY_BVN: "/BankOneWebAPI/api/Customer/GetCustomerByBVN/2",
-    EMAIL_EXIST: "/BankOneWebAPI/api/Customer/EmailExist/2",
+    GET_CUSTOMER_BY_PHONE_NUMBER:
+      '/BankOneWebAPI/api/Customer/GetByCustomerPhoneNumber/2',
+    PHONE_NUMBER_EXIST: '/BankOneWebAPI/api/Customer/PhoneNumberExist/2',
+    GET_CUSTOMER_BY_BVN: '/BankOneWebAPI/api/Customer/GetCustomerByBVN/2',
+    EMAIL_EXIST: '/BankOneWebAPI/api/Customer/EmailExist/2',
   };
 
   constructor(
@@ -110,7 +111,7 @@ export class CustomersService {
     }
   }
 
-  async getCustomerByPhoneNumner(phoneNumber: string) {
+  async getCustomerByPhoneNumber(phoneNumber: string) {
     try {
       const response = await this.bankoneClient.axiosRef.get(
         this.endpoints.GET_CUSTOMER_BY_PHONE_NUMBER +
@@ -146,7 +147,7 @@ export class CustomersService {
     }
   }
 
-  async phoneNumnerExists(phoneNumber: string) {
+  async phoneNumberExists(phoneNumber: string) {
     try {
       const response = await this.bankoneClient.axiosRef.get(
         this.endpoints.PHONE_NUMBER_EXIST +
