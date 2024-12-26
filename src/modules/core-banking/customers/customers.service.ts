@@ -91,7 +91,7 @@ export class CustomersService {
   async getCustomerByCustomerID(customerId: string) {
     try {
       const response = await this.bankoneClient.axiosRef.get(
-        this.endpoints.GET_CUSTOMER_BY_ACCOUNT_NUMBER +
+        this.endpoints.GET_CUSTOMER_BY_CUSTOMER_ID +
           `?authToken=${this.AUTH_TOKEN}&CustomerID=${customerId}`,
       );
       return response.data;
