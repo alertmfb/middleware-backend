@@ -21,6 +21,11 @@ export class CustomersService {
       '/BankOneWebAPI/api/Customer/GetByCustomerID/2',
     GET_CUSTOMER_BY_ACCOUNT_NUMBER:
       '/BankOneWebAPI/api/Customer/GetByAccountNo2/2',
+    GET_CUSTOMER_BY_PHONE_NUMBER:
+      '/BankOneWebAPI/api/Customer/GetByCustomerPhoneNumber/2',
+    PHONE_NUMBER_EXIST: '/BankOneWebAPI/api/Customer/PhoneNumberExist/2',
+    GET_CUSTOMER_BY_BVN: '/BankOneWebAPI/api/Customer/GetCustomerByBVN/2',
+    EMAIL_EXIST: '/BankOneWebAPI/api/Customer/EmailExist/2',
   };
 
   constructor(
@@ -91,8 +96,80 @@ export class CustomersService {
   async getCustomerByCustomerID(customerId: string) {
     try {
       const response = await this.bankoneClient.axiosRef.get(
-        this.endpoints.GET_CUSTOMER_BY_ACCOUNT_NUMBER +
+        this.endpoints.GET_CUSTOMER_BY_CUSTOMER_ID +
           `?authToken=${this.AUTH_TOKEN}&CustomerID=${customerId}`,
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new HttpException(error?.response?.data, error.status, {
+          cause: error.cause,
+        });
+      }
+
+      throw new BadRequestException();
+    }
+  }
+
+  async getCustomerByPhoneNumber(phoneNumber: string) {
+    try {
+      const response = await this.bankoneClient.axiosRef.get(
+        this.endpoints.GET_CUSTOMER_BY_PHONE_NUMBER +
+          `?authToken=${this.AUTH_TOKEN}&phoneNumber=${phoneNumber}`,
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new HttpException(error?.response?.data, error.status, {
+          cause: error.cause,
+        });
+      }
+
+      throw new BadRequestException();
+    }
+  }
+
+  async getCustomerByBvn(bvn: string) {
+    try {
+      const response = await this.bankoneClient.axiosRef.get(
+        this.endpoints.GET_CUSTOMER_BY_BVN +
+          `?authToken=${this.AUTH_TOKEN}&BVN=${bvn}`,
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new HttpException(error?.response?.data, error.status, {
+          cause: error.cause,
+        });
+      }
+
+      throw new BadRequestException();
+    }
+  }
+
+  async phoneNumberExists(phoneNumber: string) {
+    try {
+      const response = await this.bankoneClient.axiosRef.get(
+        this.endpoints.PHONE_NUMBER_EXIST +
+          `?authToken=${this.AUTH_TOKEN}&phoneNumber=${phoneNumber}`,
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new HttpException(error?.response?.data, error.status, {
+          cause: error.cause,
+        });
+      }
+
+      throw new BadRequestException();
+    }
+  }
+
+  async emailExists(email: string) {
+    try {
+      const response = await this.bankoneClient.axiosRef.get(
+        this.endpoints.EMAIL_EXIST +
+          `?authToken=${this.AUTH_TOKEN}&email=${email}`,
       );
       return response.data;
     } catch (error) {
