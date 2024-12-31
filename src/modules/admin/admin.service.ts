@@ -113,7 +113,6 @@ export class AdminService {
         },
       });
 
-      // Work--?
       return { success: true, message: designation.name };
     } catch (error) {
       throw new BadRequestException();
