@@ -17,6 +17,8 @@ import { passwordReset } from './templates/user-activity/password-reset';
 export class EmailServce {
   // inviteUrl: string = 'https://middleware.alertmfb.com.ng/register-account';
   // resetURL: string = 'https://middleware.alertmfb.com.ng/forgot-password';
+
+  // TODO: Make these urls dynamic depending on thr environment
   private STAGING_URL = 'https://middleware.staging.alertmfb.com.ng';
   inviteUrl: string =
     'https://middleware.staging.alertmfb.com.ng/register-account';
