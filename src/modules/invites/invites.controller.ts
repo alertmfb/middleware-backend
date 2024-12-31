@@ -1,8 +1,10 @@
 import {
+  Body,
   Controller,
   ForbiddenException,
   Get,
   Post,
+  Query,
   Req,
   Res,
   UseGuards,
@@ -58,32 +60,17 @@ export class InvitesController {
   @ApiBody({ type: CreateProfile })
   @ApiQuery({ name: 'token' })
   @ApiResponse({ example: createPasswordExample })
-  async createProfile(@Req() req: Request, @Res() res: Response) {
-    new ZodValidationPipe(tokenQuerySchema).transform(req.query, {
-      type: 'query',
-    });
-
-    const user = await this.invitesService.createProfile(
-      req.body,
-      req.query['token'] as string,
-    );
-
-    res.json(user);
+  async createProfile(
+    @Body() payload: CreateProfile,
+    @Query('token') token: string,
+  ) {
+    return await this.invitesService.createProfile(payload, token);
   }
 
   @Get('/otpauth')
   @Public()
-  @ApiParam({ name: 'token' })
   @ApiResponse({ example: otpauthExample })
-  async getOTPString(@Req() req: Request, @Res() res: Response) {
-    new ZodValidationPipe(tokenQuerySchema).transform(req.query, {
-      type: 'query',
-    });
-
-    const otpauth = await this.invitesService.generateQRCodeString(
-      req.query['token'] as string,
-    );
-
-    res.json(otpauth);
+  async getOTPString(@Query('token') token: string) {
+    return await this.invitesService.generateQRCodeString(token);
   }
 }

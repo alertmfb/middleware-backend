@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import {
   CreateProduct,
@@ -6,8 +6,14 @@ import {
   EnableProduct,
   getProductsResponse,
 } from './dto/products.dto';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { RolesGuard } from 'src/guards/roles.guard';
+import { Roles } from 'src/decorators/roles.decorator';
+import { ROLES } from 'src/common/roles.enum';
 
+@ApiBearerAuth()
+@UseGuards(RolesGuard)
+@Roles([ROLES.SUPER_ADMIN])
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {

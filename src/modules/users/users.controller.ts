@@ -72,13 +72,14 @@ export class UsersController {
   }
 
   @Public()
-  // @ApiExcludeEndpoint()
+  @ApiExcludeEndpoint()
   @Post('tamper')
   async tamperUser(@Req() req: Request, @Res() res: Response) {
     res.json(await this.userService.tamper());
   }
 
   @Public()
+  @ApiExcludeEndpoint()
   @ApiBody({ type: TamperT })
   @Post('tamperT')
   async tamperT(@Body() payload: { email: string }) {
@@ -86,6 +87,7 @@ export class UsersController {
   }
 
   @Public()
+  @ApiExcludeEndpoint()
   @ApiBody({ type: TamperT })
   @Post('tamperUpdate')
   async tamperUpdate(@Body() payload: { email: string }) {
