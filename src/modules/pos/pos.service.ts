@@ -6,7 +6,7 @@ export class PosService {
 
   async generateAccountNumber() {}
 
-  async assignAccountNUmberToTerminal() {}
+  async assignAccountNumberToTerminal() {}
 
   async assignTerminalToBusiness() {}
 }
