@@ -14,7 +14,6 @@ export class AddressController {
   constructor(private readonly addressService: AddressService) {}
 
   @Post('individual')
-  // @ApiResponse({ example: individualAddressVerificationResponse })
   async verifyIndividualAddress(
     @Body() payload: IndividualAddressVerification,
   ) {

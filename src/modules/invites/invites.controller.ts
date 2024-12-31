@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  ForbiddenException,
   Get,
   Post,
   Query,
@@ -11,18 +10,11 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Public } from '../auth/metadata';
-import { ZodValidationPipe } from 'src/pipes/validation.pipe';
-import {
-  createPasswordSchema,
-  Iniviter,
-  inviteUserSchema,
-  tokenQuerySchema,
-} from './schema';
+import { Iniviter } from './schema';
 import { InvitesService } from './invites.service';
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,

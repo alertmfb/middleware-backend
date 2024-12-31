@@ -1,20 +1,16 @@
 import {
   BadRequestException,
-  HttpException,
-  HttpStatus,
   Inject,
   Injectable,
   InternalServerErrorException,
   Logger,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ROLE } from '../../common/prismaTypes';
 import { PrismaService } from 'src/config/prisma.service';
 import { Iniviter } from './schema';
 import * as bcrypt from 'bcrypt';
-import { AuthService } from '../auth/auth.service';
 import { authenticator } from 'otplib';
 import { ClientProxy } from '@nestjs/microservices';
 import { EMAIL_SERVICE } from '../email/constant';

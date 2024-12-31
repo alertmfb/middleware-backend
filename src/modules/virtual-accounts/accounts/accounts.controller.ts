@@ -23,7 +23,6 @@ import {
   deactivatePndResponse,
   freezeAccountResponse,
   freezeAccountStatusResponse,
-  generateStatementResponse,
   getAccountTransactionsResponse,
   getSubAccountsResponse,
   lienStatusResponse,

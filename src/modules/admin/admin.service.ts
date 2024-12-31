@@ -3,7 +3,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ROLES } from 'src/common/roles.enum';
 import { PrismaService } from 'src/config/prisma.service';
 import { ModifyUserRole, SuspendUser, ToggleUserMFA } from './dto/admin.dto';
 
@@ -113,7 +112,6 @@ export class AdminService {
         },
       });
 
-      // Work--?
       return { success: true, message: designation.name };
     } catch (error) {
       throw new BadRequestException();
