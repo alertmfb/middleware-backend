@@ -189,12 +189,6 @@ export class UsersService {
 
   async tamperT(email: string) {
     try {
-      // const one = this.prisma.passwordReset.delete({
-      //   where: {
-      //     userEmail: email,
-      //   },
-      // });
-
       const two = this.prisma.user.delete({
         where: {
           email: email,
