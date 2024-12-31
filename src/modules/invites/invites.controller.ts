@@ -15,7 +15,6 @@ import { InvitesService } from './invites.service';
 import {
   ApiBearerAuth,
   ApiBody,
-  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
