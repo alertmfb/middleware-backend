@@ -508,7 +508,9 @@ export class AccountsService {
     }
   }
 
-  /** */
+  /**
+   * Utility Methods
+   */
 
   private generateRef(): string {
     return faker.string.alphanumeric({ length: 13 });
