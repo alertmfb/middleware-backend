@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Public } from '../auth/metadata';
-import { Iniviter, inviteUserSchema, tokenQuerySchema } from './schema';
+import { Iniviter, tokenQuerySchema } from './schema';
 import { InvitesService } from './invites.service';
 import {
   ApiBearerAuth,
