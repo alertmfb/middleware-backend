@@ -6,8 +6,9 @@ import {
   EnableProduct,
   getProductsResponse,
 } from './dto/products.dto';
-import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
