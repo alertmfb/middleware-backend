@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { Public } from '../auth/metadata';
-import { ZodValidationPipe } from 'src/pipes/validation.pipe';
 import {
   createPasswordSchema,
   Iniviter,
