@@ -80,7 +80,7 @@ const coreChildren = [
       isGlobal: true,
     }),
   ],
-  controllers: [AppController],
-  providers: [AppService, ConfigService],
+  controllers: [],
+  providers: [ConfigService],
 })
 export class AppModule {}
