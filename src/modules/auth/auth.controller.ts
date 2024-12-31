@@ -23,8 +23,6 @@ import {
   requestPasswordResetApiResponse,
   ResetPassword,
   resetPasswordApiResponse,
-  SignIn,
-  signInExample,
   SignInWithPassword,
   signInWithPasswordApiResponse,
   UpdatePassword,
