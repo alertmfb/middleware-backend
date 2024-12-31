@@ -15,7 +15,6 @@ async function bootstrap() {
     origin: [
       'http://localhost:5173',
       'https://middleware.staging.alertmfb.com.ng',
-      'https://middleware.alertmfb.com.ng',
     ],
   });
 
