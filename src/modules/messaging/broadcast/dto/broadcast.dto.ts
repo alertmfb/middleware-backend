@@ -18,5 +18,7 @@ export class SendBulkMessageSMS implements Message {
 
 export class SendMessageWhatsapp implements Message {
   to: string = '2349182991002';
-  sms: string = 'Hello, welcome to Alert Microfinance Bank!';
+
+  @ApiProperty({maxLength: 12, description: 'Place Token in here'})
+  sms: string = '123456';
 }
