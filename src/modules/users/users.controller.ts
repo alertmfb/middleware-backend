@@ -24,7 +24,6 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { ROLES } from 'src/common/roles.enum';
 import { TamperT, userByIdResponse, usersApiResponse } from './dto/users.dto';
 @Controller('users')
-// @ApiExcludeController()
 @ApiBearerAuth()
 @ApiTags('users')
 export class UsersController {
