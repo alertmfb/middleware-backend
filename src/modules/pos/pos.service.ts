@@ -9,4 +9,12 @@ export class PosService {
   async assignAccountNumberToTerminal() {}
 
   async assignTerminalToBusiness() {}
+
+  async deactivateTerminal() {}
+
+  async getBusinessTerminals() {}
+
+  async getBusinessTransactions() {}
+
+  async getTerminalTransactions() {}
 }
