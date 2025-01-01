@@ -4,17 +4,19 @@ import { Injectable } from '@nestjs/common';
 export class PosService {
   async getBusinesses() {}
 
-  async generateAccountNumber() {}
+  async getBusinessTerminals() {}
 
-  async assignAccountNumberToTerminal() {}
+  async getBusinessAccountNumbers() {}
+
+  async getBusinessTransactions() {}
+
+  async generateBusinessAccountNumber() {}
 
   async assignTerminalToBusiness() {}
 
+  async assignBusinessAccountNumberToTerminal() {}
+
   async deactivateTerminal() {}
-
-  async getBusinessTerminals() {}
-
-  async getBusinessTransactions() {}
 
   async getTerminalTransactions() {}
 }
