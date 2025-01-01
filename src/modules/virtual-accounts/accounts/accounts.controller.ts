@@ -75,7 +75,7 @@ export class AccountsController {
   @ApiQuery({ name: 'customerId' })
   @ApiResponse({ example: getSubAccountsResponse })
   async getSubAccounts(@Query('customerId') customerId: string) {
-    return this.accountsService.getSubAccounts(customerId);
+    return this.accountsService.getVirtualSubAccounts(customerId);
   }
 
   @Get('get-account-transactions')

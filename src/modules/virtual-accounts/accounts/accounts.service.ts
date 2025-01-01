@@ -218,7 +218,7 @@ export class AccountsService {
     }
   }
 
-  async getSubAccounts(customerId: string) {
+  async getVirtualSubAccounts(customerId: string) {
     try {
       const response = await this.bankoneClient.axiosRef.get(
         this.endpoints.GET_ACCOUNTS_BY_CUSTOMER_ID +
