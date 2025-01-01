@@ -40,6 +40,8 @@ export class PosService {
       kybStatus: true,
       CustomerId: faker.string.alphanumeric(8),
       BVN: faker.string.numeric(11),
+
+      // TODO: Tell frontend to map gender to enum of 1 and 0
       Gender: faker.person.sex(),
       FirstName: faker.person.firstName(),
       LastName: faker.person.lastName(),
