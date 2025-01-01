@@ -56,9 +56,9 @@ export class PosService {
     return business;
   }
 
-  async getBusinessTerminals() {}
-
   async getBusinessAccountNumbers(customerId: string) {}
+
+  async getBusinessTerminals() {}
 
   async getBusinessTransactions(customerId: string) {}
 
@@ -83,6 +83,4 @@ export class PosService {
   async assignBusinessAccountNumberToTerminal() {}
 
   async deactivateTerminal() {}
-
-  async getTerminalTransactions() {}
 }
