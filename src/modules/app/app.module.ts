@@ -22,6 +22,7 @@ import { TransactionsModule as VirtualTransactionsModule } from '../virtual-acco
 import { CoreModule } from '../core-banking/core.module';
 import { TransactionsModule as CoreTransactionsModule } from '../core-banking/transactions/transactions.module';
 import { AccountsModule as CoreAccountsModule } from '../core-banking/accounts/accounts.module';
+import { PosModule } from '../pos/pos.module';
 
 const verificationChildren = [
   {
@@ -68,6 +69,7 @@ const coreChildren = [
     ProductsModule,
     VerificationModule,
     MessagingModule,
+    PosModule,
     VirtualModule,
     CoreModule,
     RouterModule.register([
