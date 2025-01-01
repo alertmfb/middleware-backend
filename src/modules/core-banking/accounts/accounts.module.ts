@@ -7,5 +7,6 @@ import { BankoneHttpModule } from '../../bankone/bankone.module';
   imports: [BankoneHttpModule],
   controllers: [AccountsController],
   providers: [AccountsService],
+  exports: [AccountsService],
 })
 export class AccountsModule {}
