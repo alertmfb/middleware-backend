@@ -38,7 +38,7 @@ export class PosService {
       dateRegistered: faker.date.anytime(),
       terminals: faker.number.int({ min: 1, max: 30 }),
       kybStatus: true,
-      CustomerId: faker.string.alphanumeric(8),
+      CustomerId: faker.string.numeric(6),
       BVN: faker.string.numeric(11),
 
       // TODO: Tell frontend to map gender to enum of 1 and 0
