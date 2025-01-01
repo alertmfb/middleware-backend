@@ -15,7 +15,7 @@ import {
   AccountPnd,
   AccountStatus,
   CloseAccount,
-  CreateSubAccount,
+  CreateVirtualSubAccount,
   CreateVirtualAccount,
   GetAccountTransactions,
   UpdateAccountTier,
@@ -155,7 +155,7 @@ export class AccountsService {
     }
   }
 
-  async createSubAccount({ ProductId, ...payload }: CreateSubAccount) {
+  async createSubAccount({ ProductId, ...payload }: CreateVirtualSubAccount) {
     //TODO: fetch slug from database
     try {
       //FIXME: create a pipe for this
