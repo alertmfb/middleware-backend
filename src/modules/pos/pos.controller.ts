@@ -1,9 +1,38 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { PosService } from './pos.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Public } from '../auth/metadata';
+import { CreateVirtualSubAccount } from '../virtual-accounts/accounts/dto/accounts.dto';
+import { AccountsService } from '../virtual-accounts/accounts/accounts.service';
 
 @ApiTags('pos')
+@Public()
+@ApiBearerAuth()
 @Controller('pos')
 export class PosController {
-  constructor(private readonly posService: PosService) {}
+  constructor(
+    private readonly posService: PosService,
+    private readonly accountsService: AccountsService,
+  ) {}
+
+  @Get('businesses')
+  async getBusinesses() {
+    return this.posService.getBusinesses();
+  }
+
+  @Get('businesses/:id')
+  async getBusinessById(@Param('id') id: string) {
+    return this.posService.getBusinessById(id);
+  }
+
+  @Get('businesses/:id/accounts')
+  @ApiParam({ name: 'id' })
+  async getBusinessAccountNumbers(@Query('customerId') customerId: string) {
+    return this.accountsService.getVirtualSubAccounts(customerId);
+  }
+
+  @Post('create-business-account')
+  async createBusinessAccount(@Body() payload: CreateVirtualSubAccount) {
+    return this.accountsService.createSubAccount(payload);
+  }
 }

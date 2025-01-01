@@ -20,7 +20,7 @@ export class CreateVirtualAccount {
   ProductId: string = '0193d868-2a38-76c6-925b-3cc3004e940d';
 }
 
-export class CreateSubAccount extends CreateVirtualAccount {
+export class CreateVirtualSubAccount extends CreateVirtualAccount {
   CustomerId: string = '67hajl01';
 }
 

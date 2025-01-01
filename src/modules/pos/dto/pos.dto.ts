@@ -1,1 +1,3 @@
-export class AssignAccountNumber {}
+export class GenerateAccountNumber {
+  customerId: string;
+}

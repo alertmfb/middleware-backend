@@ -8,7 +8,7 @@ import {
   AccountPnd,
   AccountStatus,
   CloseAccount,
-  CreateSubAccount,
+  CreateVirtualSubAccount,
   CreateVirtualAccount,
   GetAccountTransactions,
   UpdateAccountTier,
@@ -59,9 +59,9 @@ export class AccountsController {
   }
 
   @Post('create-sub-account')
-  @ApiBody({ type: CreateSubAccount })
+  @ApiBody({ type: CreateVirtualSubAccount })
   @ApiResponse({ example: createSubAccountResponse })
-  async createSubAccount(@Body() payload: CreateSubAccount) {
+  async createSubAccount(@Body() payload: CreateVirtualSubAccount) {
     return this.accountsService.createSubAccount(payload);
   }
 
@@ -75,7 +75,7 @@ export class AccountsController {
   @ApiQuery({ name: 'customerId' })
   @ApiResponse({ example: getSubAccountsResponse })
   async getSubAccounts(@Query('customerId') customerId: string) {
-    return this.accountsService.getSubAccounts(customerId);
+    return this.accountsService.getVirtualSubAccounts(customerId);
   }
 
   @Get('get-account-transactions')
