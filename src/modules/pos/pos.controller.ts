@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { PosService } from './pos.service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -6,4 +6,7 @@ import { ApiTags } from '@nestjs/swagger';
 @Controller('pos')
 export class PosController {
   constructor(private readonly posService: PosService) {}
+
+  @Get('businesses')
+  async getBusinesses() {}
 }
