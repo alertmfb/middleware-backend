@@ -1,10 +1,24 @@
 import { Injectable } from '@nestjs/common';
-
+import { faker } from '@faker-js/faker';
 @Injectable()
 export class PosService {
   constructor() {}
 
-  async getBusinesses() {}
+  async getBusinesses() {
+    let businesses = [];
+
+    for (let i = 0; i < 20; i++) {
+      businesses.push({
+        name: faker.company.name(),
+        ownersName: faker.person.fullName(),
+        dateRegistered: faker.date.anytime(),
+        terminals: faker.number.int({ min: 1, max: 30 }),
+        kybStatus: true,
+      });
+    }
+
+    return businesses;
+  }
 
   async getBusinessTerminals() {}
 
