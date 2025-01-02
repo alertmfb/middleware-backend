@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { ConsumerService } from './consumer.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/metadata';
@@ -17,5 +17,15 @@ export class ConsumerController {
   @Get('customers')
   async getCustomers() {
     return this.consumerService.getCustomers();
+  }
+
+  @Get('customers/:id')
+  async getCustomerById(@Param('id') id: string) {
+    return this.consumerService.getCustomerById(id);
+  }
+
+  @Get('customers/get-customer-accounts')
+  async getCustomerAccounts(@Query('customerId') customerId: string) {
+    return this.accountsService.getSubAccounts(customerId);
   }
 }
