@@ -4,7 +4,6 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
-  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BANKONE_SERVICE, BANKONE_TSQ_SERVICE } from '../../bankone/constants';
@@ -21,6 +20,11 @@ import {
 } from './dto/transactions.dto';
 import { PosVendorSlug, RecepientInfo, vendorSlugs } from './constants';
 import { serviceLogger } from 'src/config/logger.config';
+import {
+  TRANSACTION_NOTIFICATION,
+  TRANSACTION_RESPONSE,
+} from '../notification/constants';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class TransactionsService {
@@ -59,6 +63,7 @@ export class TransactionsService {
     private config: ConfigService,
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
     @Inject(BANKONE_TSQ_SERVICE) private bankoneTsqClient: HttpService,
+    @Inject(TRANSACTION_NOTIFICATION) private notificationClient: ClientProxy,
     private readonly httpClient: HttpService,
   ) {}
 
@@ -256,34 +261,23 @@ export class TransactionsService {
 
   async forwardNotification(payload: NotificationPayload) {
     try {
-      const recepient = this.getNotificationRecepient(
+      const vendor = this.getNotificationRecepient(
         payload.AccountName,
         vendorSlugs,
       );
 
-      if (!recepient) {
+      if (!vendor) {
         throw new BadRequestException('Invalid virtual account transaction');
       }
 
-      // TODO: Treat this properly
-      const request = await this.httpClient.axiosRef.post(
-        recepient.url,
-        {
-          AccountNo: payload.AccountNumber,
-        },
-        { withCredentials: true, headers: { 'Auth-Key': recepient.authKey } },
-      );
+      this.notificationClient
+        .send(TRANSACTION_RESPONSE, { ...payload, Vendor: vendor })
+        .subscribe();
 
-      return request.data;
+      return 'sent';
     } catch (error) {
       if (error instanceof BadRequestException) {
         throw error;
-      }
-
-      if (error instanceof AxiosError) {
-        throw new HttpException(error.response.data, error.status, {
-          cause: error.cause,
-        });
       }
 
       serviceLogger.error(error, {
