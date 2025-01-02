@@ -35,8 +35,15 @@ export class PosController {
 
   @Get('businesses/accounts/:accountNumber')
   async businessAccountEnquiry(@Param('accountNumber') accountNumber: string) {
-    return this.accountsService.accountEnquiry({ AccountNo: accountNumber });
+    return this.accountsService.virtualAccountEnquiry({
+      AccountNo: accountNumber,
+    });
   }
+
+  @Get('businesses/accounts/:accountNumber/transactions')
+  async getBusinessAccountTransactions(
+    @Param('accountNumber') accountNumber: string,
+  ) {}
 
   @Post('create-business-account')
   async createBusinessAccount(@Body() payload: CreateVirtualSubAccount) {
