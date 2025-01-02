@@ -10,8 +10,8 @@ import {
   CloseAccount,
   CreateVirtualSubAccount,
   CreateVirtualAccount,
-  GetAccountTransactions,
   UpdateAccountTier,
+  GetVirtualAccountTransactions,
 } from './dto/accounts.dto';
 import { Public } from 'src/modules/auth/metadata';
 import {
@@ -80,7 +80,7 @@ export class AccountsController {
 
   @Get('get-account-transactions')
   @ApiResponse({ example: getAccountTransactionsResponse })
-  async getAccountTransactions(@Query() params: GetAccountTransactions) {
+  async getAccountTransactions(@Query() params: GetVirtualAccountTransactions) {
     return this.accountsService.getVirtualAccountTransactions(params);
   }
 
