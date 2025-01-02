@@ -42,7 +42,7 @@ export class AccountsController {
   @ApiBody({ type: AccountEnquiry })
   @ApiResponse({ example: accountEnquiryResponse })
   async accountEnquiry(@Body() payload: AccountEnquiry) {
-    return this.accountsService.accountEnquiry(payload);
+    return this.accountsService.virtualAccountEnquiry(payload);
   }
 
   @Get('balance-enquiry')

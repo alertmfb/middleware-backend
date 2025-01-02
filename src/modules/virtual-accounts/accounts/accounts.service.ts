@@ -75,7 +75,7 @@ export class AccountsService {
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
   ) {}
 
-  async accountEnquiry(payload: AccountEnquiry) {
+  async virtualAccountEnquiry(payload: AccountEnquiry) {
     try {
       const response = await this.bankoneClient.axiosRef.post(
         this.endpoints.ACCOUNT_ENQUIRY,
