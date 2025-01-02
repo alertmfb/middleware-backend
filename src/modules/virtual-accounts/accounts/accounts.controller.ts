@@ -81,7 +81,7 @@ export class AccountsController {
   @Get('get-account-transactions')
   @ApiResponse({ example: getAccountTransactionsResponse })
   async getAccountTransactions(@Query() params: GetAccountTransactions) {
-    return this.accountsService.getAccountTransactions(params);
+    return this.accountsService.getVirtualAccountTransactions(params);
   }
 
   @Post('freeze-account')

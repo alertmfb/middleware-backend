@@ -248,7 +248,7 @@ export class AccountsService {
     }
   }
 
-  async getAccountTransactions(params: GetAccountTransactions) {
+  async getVirtualAccountTransactions(params: GetAccountTransactions) {
     try {
       const response = await this.bankoneClient.axiosRef.get(
         this.endpoints.GET_TRANSACTIONS +
