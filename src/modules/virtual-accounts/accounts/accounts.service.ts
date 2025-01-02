@@ -70,6 +70,8 @@ export class AccountsService {
     },
   ];
 
+  private vendors = [];
+
   constructor(
     private config: ConfigService,
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
@@ -484,6 +486,8 @@ export class AccountsService {
       throw new InternalServerErrorException();
     }
   }
+
+  async forwardNotification(payload: Notification) {}
 
   /** */
 

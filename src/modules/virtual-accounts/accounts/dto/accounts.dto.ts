@@ -59,3 +59,19 @@ export class CloseAccount {
   accountNumber: string;
   narration: string;
 }
+
+export class Notification {
+  Amount: string;
+  AccountNumber: string;
+  AccountName: string;
+  AvailableBalance: string;
+  LedgerBalance: string;
+  Narration: string;
+  Channel: number;
+  Charge: number;
+  DateTime: Date;
+  RecipientAccountNumber: string;
+  RecipientAccountName: string;
+  TransactionReference: string;
+  TransType: string;
+}
