@@ -20,6 +20,7 @@ import {
   TSQ,
 } from './dto/transactions.dto';
 import { PosVendorSlug, RecepientInfo, vendorSlugs } from './constants';
+import { serviceLogger } from 'src/config/logger.config';
 
 @Injectable()
 export class TransactionsService {
@@ -264,6 +265,7 @@ export class TransactionsService {
         throw new BadRequestException('Invalid virtual account transaction');
       }
 
+      // TODO: Treat this properly
       const request = await this.httpClient.axiosRef.post(
         recepient.url,
         {
@@ -284,7 +286,10 @@ export class TransactionsService {
         });
       }
 
-      Logger.error(error);
+      serviceLogger.error(error, {
+        class: TransactionsService.name,
+        method: this.forwardNotification.name,
+      });
       throw new InternalServerErrorException();
     }
   }
