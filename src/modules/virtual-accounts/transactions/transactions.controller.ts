@@ -1,12 +1,13 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { TransactionsSerice } from './transactions.service';
+import { TransactionsService } from './transactions.service';
 import { Public } from 'src/modules/auth/metadata';
 import {
   AccountTransaction,
   InterBankTransfer,
   IntraBankTransfer,
   NameEnquiry,
+  NotificationPayload,
   Reversal,
   TSQ,
 } from './dto/transactions.dto';
@@ -15,7 +16,7 @@ import {
 @ApiTags('virtual')
 @Controller('transactions')
 export class TransactionController {
-  constructor(private readonly transactionsService: TransactionsSerice) {}
+  constructor(private readonly transactionsService: TransactionsService) {}
 
   @Get('fetch-banks')
   async getBanks() {
@@ -59,5 +60,10 @@ export class TransactionController {
   @Post('reversal')
   async reversal(@Body() payload: Reversal) {
     return await this.transactionsService.reversal(payload);
+  }
+
+  @Post('notification')
+  async notification(@Body() payload: NotificationPayload) {
+    return this.transactionsService.forwardNotification(payload);
   }
 }

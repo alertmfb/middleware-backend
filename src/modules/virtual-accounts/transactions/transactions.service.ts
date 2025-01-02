@@ -3,6 +3,7 @@ import {
   HttpException,
   Inject,
   Injectable,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BANKONE_SERVICE, BANKONE_TSQ_SERVICE } from '../../bankone/constants';
@@ -13,12 +14,20 @@ import {
   InterBankTransfer,
   IntraBankTransfer,
   NameEnquiry,
+  NotificationPayload,
   Reversal,
   TSQ,
 } from './dto/transactions.dto';
+import { PosVendorSlug, RecepientInfo, vendorSlugs } from './constants';
+import { serviceLogger } from 'src/config/logger.config';
+import {
+  TRANSACTION_NOTIFICATION,
+  TRANSACTION_RESPONSE,
+} from '../notification/constants';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
-export class TransactionsSerice {
+export class TransactionsService {
   protected AUTH_TOKEN = this.config.get('BANKONE_AUTH_TOKEN');
   protected APPZONE_ACCOUNT_NUMBER = '1100063610';
 
@@ -41,10 +50,21 @@ export class TransactionsSerice {
     REVERSAL: '/thirdpartyapiservice/apiservice/CoreTransactions/Reversal',
   };
 
+  private slugData: Record<PosVendorSlug, RecepientInfo> = {
+    'ALERT-POS-E /': {
+      url: 'https://api-middleware-staging.alertmfb.com.ng/api/sharedServices/v1/virtual/accounts/account-enquiry',
+      authKey: '12345',
+    },
+    'ALERT-POS-G /': { url: '', authKey: '' },
+    'ALERT-POS-P /': { url: '', authKey: '' },
+  };
+
   constructor(
     private config: ConfigService,
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
     @Inject(BANKONE_TSQ_SERVICE) private bankoneTsqClient: HttpService,
+    @Inject(TRANSACTION_NOTIFICATION) private notificationClient: ClientProxy,
+    private readonly httpClient: HttpService,
   ) {}
 
   async getBanks() {
@@ -136,7 +156,7 @@ export class TransactionsSerice {
         this.endpoints.INTRA_BANK_TRANSFER,
         {
           ...payload,
-          Token: this.AUTH_TOKEN,
+          AuthenticationKey: this.AUTH_TOKEN,
         },
       );
       return response.data;
@@ -237,5 +257,44 @@ export class TransactionsSerice {
 
       throw new BadRequestException();
     }
+  }
+
+  async forwardNotification(payload: NotificationPayload) {
+    try {
+      const vendor = this.getNotificationRecepient(
+        payload.AccountName,
+        vendorSlugs,
+      );
+
+      if (!vendor) {
+        throw new BadRequestException('Invalid virtual account transaction');
+      }
+
+      this.notificationClient
+        .send(TRANSACTION_RESPONSE, { ...payload, Vendor: vendor })
+        .subscribe();
+
+      return 'sent';
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      serviceLogger.error(error, {
+        class: TransactionsService.name,
+        method: this.forwardNotification.name,
+      });
+      throw new InternalServerErrorException();
+    }
+  }
+
+  /** */
+  private getNotificationRecepient(
+    accountName: string,
+    vendorSlugs: PosVendorSlug[],
+  ) {
+    const slug = vendorSlugs.find((slug, index) => accountName.includes(slug));
+
+    return this.slugData[slug];
   }
 }

@@ -1,9 +1,5 @@
 import { IncomingMessage, Server, ServerResponse } from 'http';
-import {
-  SwaggerModule,
-  DocumentBuilder,
-  SwaggerDocumentOptions,
-} from '@nestjs/swagger';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 export function useSwaggerConfig(
