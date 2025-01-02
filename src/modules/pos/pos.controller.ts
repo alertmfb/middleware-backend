@@ -40,6 +40,6 @@ export class PosController {
 
   @Post('create-business-account')
   async createBusinessAccount(@Body() payload: CreateVirtualSubAccount) {
-    return this.accountsService.createSubAccount(payload);
+    return this.accountsService.createVirtualSubAccount(payload);
   }
 }
