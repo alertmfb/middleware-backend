@@ -56,7 +56,10 @@ export class PosService {
     return business;
   }
 
-  async getBusinessTerminals() {}
+  async getBusinessTerminals() {
+    // TODO: Create a terminals table that should only
+    // keep record of assigned terminals
+  }
 
   async getBusinessTransactions(customerId: string) {
     // TODO: Get business account numbers,
