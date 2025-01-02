@@ -23,6 +23,7 @@ import { CoreModule } from '../core-banking/core.module';
 import { TransactionsModule as CoreTransactionsModule } from '../core-banking/transactions/transactions.module';
 import { AccountsModule as CoreAccountsModule } from '../core-banking/accounts/accounts.module';
 import { PosModule } from '../pos/pos.module';
+import { ConsumerModule } from '../consumer/consumer.module';
 
 const verificationChildren = [
   {
@@ -69,6 +70,7 @@ const coreChildren = [
     ProductsModule,
     VerificationModule,
     MessagingModule,
+    ConsumerModule,
     PosModule,
     VirtualModule,
     CoreModule,
