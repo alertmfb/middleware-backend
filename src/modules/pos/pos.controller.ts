@@ -3,8 +3,8 @@ import { PosService } from './pos.service';
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/metadata';
 import {
-  AccountEnquiry,
   CreateVirtualSubAccount,
+  GetVirtualAccountTransactions,
 } from '../virtual-accounts/accounts/dto/accounts.dto';
 import { AccountsService } from '../virtual-accounts/accounts/accounts.service';
 
@@ -40,10 +40,12 @@ export class PosController {
     });
   }
 
-  @Get('businesses/accounts/:accountNumber/transactions')
+  @Get('businesses/get-account-transactions')
   async getBusinessAccountTransactions(
-    @Param('accountNumber') accountNumber: string,
-  ) {}
+    @Query() options: GetVirtualAccountTransactions,
+  ) {
+    return this.accountsService.getVirtualAccountTransactions(options);
+  }
 
   @Post('create-business-account')
   async createBusinessAccount(@Body() payload: CreateVirtualSubAccount) {
