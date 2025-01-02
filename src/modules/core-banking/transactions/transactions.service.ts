@@ -18,7 +18,7 @@ import {
 } from './dto/transactions.dto';
 
 @Injectable()
-export class TransactionsSerice {
+export class TransactionsService {
   protected AUTH_TOKEN = this.config.get('BANKONE_AUTH_TOKEN');
   protected APPZONE_ACCOUNT_NUMBER = '1100063610';
 
