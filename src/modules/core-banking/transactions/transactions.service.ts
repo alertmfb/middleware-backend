@@ -136,7 +136,7 @@ export class TransactionsService {
         this.endpoints.INTRA_BANK_TRANSFER,
         {
           ...payload,
-          Token: this.AUTH_TOKEN,
+          AuthenticationKey: this.AUTH_TOKEN,
         },
       );
       return response.data;
