@@ -3,6 +3,7 @@ import { ConsumerService } from './consumer.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Public } from '../auth/metadata';
 import { AccountsService } from '../core-banking/accounts/accounts.service';
+import { GetAccountTransactions } from '../core-banking/accounts/dto/accounts.dto';
 
 @ApiTags('consumer-banking')
 @ApiBearerAuth()
@@ -27,5 +28,10 @@ export class ConsumerController {
   @Get('customers/get-customer-accounts')
   async getCustomerAccounts(@Query('customerId') customerId: string) {
     return this.accountsService.getSubAccounts(customerId);
+  }
+
+  @Get('customers/get-customer-transactions')
+  async getCustomerTransactions(@Query() options: GetAccountTransactions) {
+    return this.accountsService.getAccountTransactions(options);
   }
 }
