@@ -155,7 +155,10 @@ export class AccountsService {
     }
   }
 
-  async createSubAccount({ ProductId, ...payload }: CreateVirtualSubAccount) {
+  async createVirtualSubAccount({
+    ProductId,
+    ...payload
+  }: CreateVirtualSubAccount) {
     //TODO: fetch slug from database
     try {
       //FIXME: create a pipe for this

@@ -62,7 +62,7 @@ export class AccountsController {
   @ApiBody({ type: CreateVirtualSubAccount })
   @ApiResponse({ example: createSubAccountResponse })
   async createSubAccount(@Body() payload: CreateVirtualSubAccount) {
-    return this.accountsService.createSubAccount(payload);
+    return this.accountsService.createVirtualSubAccount(payload);
   }
 
   @Post('update-account-tier')
