@@ -142,9 +142,4 @@ export class AccountsController {
   async closeAccount(@Body() payload: CloseAccount) {
     return this.accountsService.closeAccount(payload);
   }
-
-  @Post('notification')
-  async notification(@Body() payload: Notification) {
-    return this.accountsService.forwardNotification(payload);
-  }
 }
