@@ -32,7 +32,7 @@ export class UpdateAccountTier {
   FullName: string;
 }
 
-export class GetAccountTransactions {
+export class GetVirtualAccountTransactions {
   accountNumber: string;
   fromDate: string = 'yyyy-MM-dd';
   toDate: string = 'yyyy-MM-dd';

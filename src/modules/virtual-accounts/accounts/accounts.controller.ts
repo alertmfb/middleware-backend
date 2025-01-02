@@ -10,8 +10,8 @@ import {
   CloseAccount,
   CreateVirtualSubAccount,
   CreateVirtualAccount,
-  GetAccountTransactions,
   UpdateAccountTier,
+  GetVirtualAccountTransactions,
 } from './dto/accounts.dto';
 import { Public } from 'src/modules/auth/metadata';
 import {
@@ -42,7 +42,7 @@ export class AccountsController {
   @ApiBody({ type: AccountEnquiry })
   @ApiResponse({ example: accountEnquiryResponse })
   async accountEnquiry(@Body() payload: AccountEnquiry) {
-    return this.accountsService.accountEnquiry(payload);
+    return this.accountsService.virtualAccountEnquiry(payload);
   }
 
   @Get('balance-enquiry')
@@ -62,7 +62,7 @@ export class AccountsController {
   @ApiBody({ type: CreateVirtualSubAccount })
   @ApiResponse({ example: createSubAccountResponse })
   async createSubAccount(@Body() payload: CreateVirtualSubAccount) {
-    return this.accountsService.createSubAccount(payload);
+    return this.accountsService.createVirtualSubAccount(payload);
   }
 
   @Post('update-account-tier')
@@ -80,8 +80,8 @@ export class AccountsController {
 
   @Get('get-account-transactions')
   @ApiResponse({ example: getAccountTransactionsResponse })
-  async getAccountTransactions(@Query() params: GetAccountTransactions) {
-    return this.accountsService.getAccountTransactions(params);
+  async getAccountTransactions(@Query() params: GetVirtualAccountTransactions) {
+    return this.accountsService.getVirtualAccountTransactions(params);
   }
 
   @Post('freeze-account')

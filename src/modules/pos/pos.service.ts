@@ -56,11 +56,15 @@ export class PosService {
     return business;
   }
 
-  async getBusinessAccountNumbers(customerId: string) {}
+  async getBusinessTerminals() {
+    // TODO: Create a terminals table that should only
+    // keep record of assigned terminals
+  }
 
-  async getBusinessTerminals() {}
-
-  async getBusinessTransactions(customerId: string) {}
+  async getBusinessTransactions(customerId: string) {
+    // TODO: Get business account numbers,
+    // then get the top 20 transactions for all accounts
+  }
 
   async getBusinessTransactionsByAccount(accountNumber: string) {}
 

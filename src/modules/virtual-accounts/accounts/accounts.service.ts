@@ -17,7 +17,7 @@ import {
   CloseAccount,
   CreateVirtualSubAccount,
   CreateVirtualAccount,
-  GetAccountTransactions,
+  GetVirtualAccountTransactions,
   UpdateAccountTier,
 } from './dto/accounts.dto';
 import { AxiosError } from 'axios';
@@ -75,7 +75,7 @@ export class AccountsService {
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
   ) {}
 
-  async accountEnquiry(payload: AccountEnquiry) {
+  async virtualAccountEnquiry(payload: AccountEnquiry) {
     try {
       const response = await this.bankoneClient.axiosRef.post(
         this.endpoints.ACCOUNT_ENQUIRY,
@@ -155,7 +155,10 @@ export class AccountsService {
     }
   }
 
-  async createSubAccount({ ProductId, ...payload }: CreateVirtualSubAccount) {
+  async createVirtualSubAccount({
+    ProductId,
+    ...payload
+  }: CreateVirtualSubAccount) {
     //TODO: fetch slug from database
     try {
       //FIXME: create a pipe for this
@@ -245,7 +248,7 @@ export class AccountsService {
     }
   }
 
-  async getAccountTransactions(params: GetAccountTransactions) {
+  async getVirtualAccountTransactions(params: GetVirtualAccountTransactions) {
     try {
       const response = await this.bankoneClient.axiosRef.get(
         this.endpoints.GET_TRANSACTIONS +
