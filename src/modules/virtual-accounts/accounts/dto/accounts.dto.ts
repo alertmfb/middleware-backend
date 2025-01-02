@@ -74,4 +74,11 @@ export class Notification {
   RecipientAccountName: string;
   TransactionReference: string;
   TransType: string;
+  ResponseCode: string;
+  GlCode: string;
+  Description: string;
+  AcconuntProductCode: string;
+  NUBAN: string;
+  Merchant: string;
+  SecondaryAccount: string;
 }
