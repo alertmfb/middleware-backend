@@ -17,7 +17,7 @@ import {
   CloseAccount,
   CreateVirtualSubAccount,
   CreateVirtualAccount,
-  GetAccountTransactions,
+  GetVirtualAccountTransactions,
   UpdateAccountTier,
 } from './dto/accounts.dto';
 import { AxiosError } from 'axios';
@@ -248,7 +248,7 @@ export class AccountsService {
     }
   }
 
-  async getVirtualAccountTransactions(params: GetAccountTransactions) {
+  async getVirtualAccountTransactions(params: GetVirtualAccountTransactions) {
     try {
       const response = await this.bankoneClient.axiosRef.get(
         this.endpoints.GET_TRANSACTIONS +
