@@ -3,6 +3,8 @@ import {
   HttpException,
   Inject,
   Injectable,
+  InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { BANKONE_SERVICE, BANKONE_TSQ_SERVICE } from '../../bankone/constants';
@@ -13,12 +15,14 @@ import {
   InterBankTransfer,
   IntraBankTransfer,
   NameEnquiry,
+  NotificationPayload,
   Reversal,
   TSQ,
 } from './dto/transactions.dto';
+import { PosVendorSlug, RecepientInfo, vendorSlugs } from './constants';
 
 @Injectable()
-export class TransactionsSerice {
+export class TransactionsService {
   protected AUTH_TOKEN = this.config.get('BANKONE_AUTH_TOKEN');
   protected APPZONE_ACCOUNT_NUMBER = '1100063610';
 
@@ -41,10 +45,20 @@ export class TransactionsSerice {
     REVERSAL: '/thirdpartyapiservice/apiservice/CoreTransactions/Reversal',
   };
 
+  private slugData: Record<PosVendorSlug, RecepientInfo> = {
+    'ALERT-POS-E /': {
+      url: 'https://api-middleware-staging.alertmfb.com.ng/api/sharedServices/v1/virtual/accounts/account-enquiry',
+      authKey: '12345',
+    },
+    'ALERT-POS-G /': { url: '', authKey: '' },
+    'ALERT-POS-P /': { url: '', authKey: '' },
+  };
+
   constructor(
     private config: ConfigService,
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
     @Inject(BANKONE_TSQ_SERVICE) private bankoneTsqClient: HttpService,
+    private readonly httpClient: HttpService,
   ) {}
 
   async getBanks() {
@@ -237,5 +251,51 @@ export class TransactionsSerice {
 
       throw new BadRequestException();
     }
+  }
+
+  async forwardNotification(payload: NotificationPayload) {
+    try {
+      const recepient = this.getNotificationRecepient(
+        payload.AccountName,
+        vendorSlugs,
+      );
+
+      if (!recepient) {
+        throw new BadRequestException('Invalid virtual account transaction');
+      }
+
+      const request = await this.httpClient.axiosRef.post(
+        recepient.url,
+        {
+          AccountNo: payload.AccountNumber,
+        },
+        { withCredentials: true, headers: { 'Auth-Key': recepient.authKey } },
+      );
+
+      return request.data;
+    } catch (error) {
+      if (error instanceof BadRequestException) {
+        throw error;
+      }
+
+      if (error instanceof AxiosError) {
+        throw new HttpException(error.response.data, error.status, {
+          cause: error.cause,
+        });
+      }
+
+      Logger.error(error);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  /** */
+  private getNotificationRecepient(
+    accountName: string,
+    vendorSlugs: PosVendorSlug[],
+  ) {
+    const slug = vendorSlugs.find((slug, index) => accountName.includes(slug));
+
+    return this.slugData[slug];
   }
 }
