@@ -25,8 +25,7 @@ export class PosController {
     return this.posService.getBusinessById(id);
   }
 
-  @Get('businesses/:id/accounts')
-  @ApiParam({ name: 'id' })
+  @Get('businesses/accounts')
   async getBusinessAccountNumbers(@Query('customerId') customerId: string) {
     return this.accountsService.getVirtualSubAccounts(customerId);
   }
