@@ -134,7 +134,7 @@ model VirtualAccount {
   id          String   @id @default(uuid())
   accountNo   String   @unique
   productCode String   @unique
-  accountName String   @unique
+  accountName String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
 
