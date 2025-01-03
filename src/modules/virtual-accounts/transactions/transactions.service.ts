@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   HttpException,
   Inject,
   Injectable,
@@ -25,6 +26,7 @@ import {
   TRANSACTION_RESPONSE,
 } from '../notification/constants';
 import { ClientProxy } from '@nestjs/microservices';
+import { PrismaService } from 'src/config/prisma.service';
 
 @Injectable()
 export class TransactionsService {
@@ -59,11 +61,14 @@ export class TransactionsService {
     'ALERT-POS-P /': { url: '', authKey: '' },
   };
 
+  private forbiddenProductCodes = ['104', '105'];
+
   constructor(
     private config: ConfigService,
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
     @Inject(BANKONE_TSQ_SERVICE) private bankoneTsqClient: HttpService,
     @Inject(TRANSACTION_NOTIFICATION) private notificationClient: ClientProxy,
+    private prisma: PrismaService,
   ) {}
 
   async getBanks() {
@@ -151,6 +156,25 @@ export class TransactionsService {
 
   async intraBankTransfer(payload: IntraBankTransfer) {
     try {
+      const account = await this.prisma.virtualAccount.findFirst({
+        where: {
+          accountNo: payload.FromAccountNumber,
+        },
+        select: {
+          productCode: true,
+          accountNo: true,
+        },
+      });
+
+      /** This block checks if the accout number making the transaction belongs to a POS account */
+
+      if (
+        account.accountNo &&
+        this.forbiddenProductCodes.includes(account.productCode)
+      ) {
+        throw new ForbiddenException('you cannot perform this action');
+      }
+
       const response = await this.bankoneClient.axiosRef.post(
         this.endpoints.INTRA_BANK_TRANSFER,
         {
@@ -160,12 +184,20 @@ export class TransactionsService {
       );
       return response.data;
     } catch (error) {
+      if (error instanceof ForbiddenException) {
+        throw error;
+      }
+
       if (error instanceof AxiosError) {
         throw new HttpException(error?.response?.data, error.status, {
           cause: error.cause,
         });
       }
 
+      serviceLogger.error(error, {
+        class: TransactionsService.name,
+        method: this.interBankTransfer.name,
+      });
       throw new BadRequestException();
     }
   }
