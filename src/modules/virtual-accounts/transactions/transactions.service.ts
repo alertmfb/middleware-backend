@@ -64,7 +64,6 @@ export class TransactionsService {
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
     @Inject(BANKONE_TSQ_SERVICE) private bankoneTsqClient: HttpService,
     @Inject(TRANSACTION_NOTIFICATION) private notificationClient: ClientProxy,
-    private readonly httpClient: HttpService,
   ) {}
 
   async getBanks() {
