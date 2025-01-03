@@ -130,7 +130,6 @@ export class AccountsService {
   }
 
   async createVirtualAccount({ ProductId, ...payload }: CreateVirtualAccount) {
-    // TODO: Fetch slugs from the database
     try {
       const response = await this.bankoneClient.axiosRef.post(
         this.endpoints.CREATE_ACCOUNT_QUICK + `?authToken=${this.AUTH_TOKEN}`,
