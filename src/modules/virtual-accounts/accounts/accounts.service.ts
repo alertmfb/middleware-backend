@@ -25,6 +25,7 @@ import { faker } from '@faker-js/faker';
 import { ACCOUNT_EVENTS, SAVE_ACCOUNT } from '../events/constants';
 import { ClientProxy } from '@nestjs/microservices';
 import { SaveAccountEvent } from '../events/dto/events.dto';
+import { serviceLogger } from 'src/config/logger.config';
 
 @Injectable()
 export class AccountsService {
@@ -172,7 +173,7 @@ export class AccountsService {
           cause: error.cause,
         });
       }
-      // throw error
+
       throw new InternalServerErrorException();
     }
   }
@@ -206,7 +207,22 @@ export class AccountsService {
         },
       );
 
+      if (!response?.data?.Message) {
+        throw new BadRequestException('Account could not be created');
+      }
+
+      const accountInfo: SaveAccountEvent = {
+        Name: response.data?.Message?.FullName,
+        Nuban: response.data?.Message?.AccountNumber,
+        ProductCode: this.getProduct(ProductId).productCode,
+      };
+
+      response.data &&
+        this.accountEvents.send(SAVE_ACCOUNT, accountInfo).subscribe();
+
       response.data?.ProductCode && delete response.data.ProductCode;
+      response.data?.Message?.BankoneAccountNumber &&
+        delete response.data.Message.BankoneAccountNumber;
 
       return response.data;
     } catch (error) {
@@ -220,6 +236,10 @@ export class AccountsService {
         );
       }
 
+      serviceLogger.error(error, {
+        class: AccountsService.name,
+        method: this.createVirtualSubAccount.name,
+      });
       throw new InternalServerErrorException();
     }
   }
