@@ -297,4 +297,31 @@ export class TransactionsService {
 
     return this.slugData[slug];
   }
+
+  private getNotificationRecepientByProductCode(
+    productCode: string,
+  ): RecepientInfo {
+    switch (productCode) {
+      case '123':
+        return {
+          url: '',
+          authKey: '',
+        };
+      case '234':
+        return {
+          url: '',
+          authKey: '',
+        };
+      case '345':
+        return {
+          url: '',
+          authKey: '',
+        };
+      default:
+        return {
+          url: '',
+          authKey: '',
+        };
+    }
+  }
 }
