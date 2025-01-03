@@ -112,6 +112,24 @@ export class TransactionsService {
 
   async interBankTransfer(payload: InterBankTransfer) {
     try {
+      const account = await this.prisma.virtualAccount.findFirst({
+        where: {
+          accountNo: payload.PayerAccountNumber,
+        },
+        select: {
+          productCode: true,
+          accountNo: true,
+        },
+      });
+
+      /** This block checks if the accout number making the transaction belongs to a POS account */
+
+      if (
+        account.accountNo &&
+        this.forbiddenProductCodes.includes(account.productCode)
+      ) {
+        throw new ForbiddenException('you cannot perform this action');
+      }
       const response = await this.bankoneClient.axiosRef.post(
         this.endpoints.INTER_BANK_TRANSFER,
         {
@@ -123,6 +141,10 @@ export class TransactionsService {
 
       return response.data;
     } catch (error) {
+      if (error instanceof ForbiddenException) {
+        throw error;
+      }
+
       if (error instanceof AxiosError) {
         throw new HttpException(error?.response?.data, error.status, {
           cause: error.cause,
