@@ -22,6 +22,8 @@ import {
 } from './dto/accounts.dto';
 import { AxiosError } from 'axios';
 import { faker } from '@faker-js/faker';
+import { ACCOUNT_EVENTS, SAVE_ACCOUNT } from '../events/constants';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class AccountsService {
@@ -73,6 +75,7 @@ export class AccountsService {
   constructor(
     private config: ConfigService,
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
+    @Inject(ACCOUNT_EVENTS) private accountEvents: ClientProxy,
   ) {}
 
   async virtualAccountEnquiry(payload: AccountEnquiry) {
@@ -144,6 +147,9 @@ export class AccountsService {
         delete response.data.Message.BankoneAccountNumber;
 
       return response.data;
+
+      // this.accountEvents.send(SAVE_ACCOUNT, { foo: '123' }).subscribe();
+      return 'created';
     } catch (error) {
       if (error instanceof AxiosError) {
         throw new HttpException(error.response?.data, error.status, {
