@@ -261,7 +261,7 @@ export class TransactionsService {
 
   async forwardNotification(payload: NotificationPayload) {
     try {
-      const vendor = this.getNotificationRecepient(
+      const vendor = this.getNotificationRecepientBySlug(
         payload.AccountName,
         vendorSlugs,
       );
@@ -289,7 +289,7 @@ export class TransactionsService {
   }
 
   /** */
-  private getNotificationRecepient(
+  private getNotificationRecepientBySlug(
     accountName: string,
     vendorSlugs: PosVendorSlug[],
   ) {
