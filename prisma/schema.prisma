@@ -130,6 +130,17 @@ model Product {
   updatedAt DateTime @default(now())
 }
 
+model VirtualAccount {
+  id          String   @id @default(uuid())
+  accountNo   String   @unique
+  productCode String   @unique
+  accountName String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+
+  @@index([accountNo, productCode])
+}
+
 enum ROLE {
   SUPER_ADMIN
   SENIOR

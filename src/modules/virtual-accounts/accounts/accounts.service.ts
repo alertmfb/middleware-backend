@@ -22,6 +22,10 @@ import {
 } from './dto/accounts.dto';
 import { AxiosError } from 'axios';
 import { faker } from '@faker-js/faker';
+import { ACCOUNT_EVENTS, SAVE_ACCOUNT } from '../events/constants';
+import { ClientProxy } from '@nestjs/microservices';
+import { SaveAccountEvent } from '../events/dto/events.dto';
+import { serviceLogger } from 'src/config/logger.config';
 
 @Injectable()
 export class AccountsService {
@@ -52,27 +56,34 @@ export class AccountsService {
     CLOSE_ACCOUNT: '/BankOneWebAPI/api/Account/CloseAccount/2',
   };
 
-  private productCodes = {
-    SANDBOX: 112,
-    POS: 113,
-  };
-
-  private products = [
-    {
+  private products = {
+    // TODO: Fetch id's from config
+    SANDBOX: {
       id: '0193d868-2a38-76c6-925b-3cc3004e940d',
+      productCode: '112',
       slug: 'Sandbox /',
-      bankoneCode: 112,
     },
-    {
+    GRUPP_POS: {
       id: '0193d86f-0a7b-722f-8af7-18cf7d268bd5',
-      slug: 'ALERT-PosG /',
-      bankoneCode: 113,
+      productCode: '105',
+      slug: 'ALERT-POS-G /',
     },
-  ];
+    PAYCLIQ_POS: {
+      id: '0193a96f-0a7c-722f-8af7-18cf7s361re2',
+      productCode: '104',
+      slug: 'ALERT-POS-P /',
+    },
+    GOLDBUCKS: {
+      id: '01942bdd-426c-79f9-a490-0e9540b703b9',
+      productCode: '103',
+      slug: 'GOLDBUCKS /',
+    },
+  };
 
   constructor(
     private config: ConfigService,
     @Inject(BANKONE_SERVICE) private bankoneClient: HttpService,
+    @Inject(ACCOUNT_EVENTS) private accountEvents: ClientProxy,
   ) {}
 
   async virtualAccountEnquiry(payload: AccountEnquiry) {
@@ -119,7 +130,6 @@ export class AccountsService {
   }
 
   async createVirtualAccount({ ProductId, ...payload }: CreateVirtualAccount) {
-    // TODO: Fetch slugs from the database
     try {
       const response = await this.bankoneClient.axiosRef.post(
         this.endpoints.CREATE_ACCOUNT_QUICK + `?authToken=${this.AUTH_TOKEN}`,
@@ -127,17 +137,29 @@ export class AccountsService {
           ...payload,
           AccountTier: '1',
           NotificationPreference: '0',
-          // AccountInformationSource: 0,
           TransactionPermission: '0',
           AccountOfficerCode: '122',
           AccountOpeningTrackingRef: this.generateRef(),
           TransactionTrackingRef: this.generateRef(),
-          ProductCode: this.productCodes.SANDBOX,
+          ProductCode: this.getProduct(ProductId)?.productCode,
           name: '',
-          LastName: this.getProductSlug(ProductId),
+          LastName: this.getProduct(ProductId)?.slug,
           OtherNames: payload.FirstName + ' ' + payload.LastName,
         },
       );
+
+      if (!response.data?.Message) {
+        throw new BadRequestException('Account could not be created');
+      }
+
+      const accountInfo: SaveAccountEvent = {
+        Name: response.data?.Message?.FullName,
+        Nuban: response.data?.Message?.AccountNumber,
+        ProductCode: this.getProduct(ProductId).productCode,
+      };
+
+      response.data &&
+        this.accountEvents.send(SAVE_ACCOUNT, accountInfo).subscribe();
 
       response.data?.ProductCode && delete response.data.ProductCode;
       response.data?.Message?.BankoneAccountNumber &&
@@ -150,7 +172,7 @@ export class AccountsService {
           cause: error.cause,
         });
       }
-      // throw error
+
       throw new InternalServerErrorException();
     }
   }
@@ -176,15 +198,30 @@ export class AccountsService {
           AccountOfficerCode: '122',
           AccountOpeningTrackingRef: this.generateRef(),
           TransactionTrackingRef: this.generateRef(),
-          ProductCode: this.productCodes.SANDBOX,
+          ProductCode: this.getProduct(ProductId)?.productCode,
           name: '',
-          LastName: this.getProductSlug(ProductId),
+          LastName: this.getProduct(ProductId)?.slug,
           OtherNames: payload.FirstName + ' ' + payload.LastName,
           AuthenticationCode: this.config.get('AUTH_TOKEN'),
         },
       );
 
+      if (!response?.data?.Message) {
+        throw new BadRequestException('Account could not be created');
+      }
+
+      const accountInfo: SaveAccountEvent = {
+        Name: response.data?.Message?.FullName,
+        Nuban: response.data?.Message?.AccountNumber,
+        ProductCode: this.getProduct(ProductId).productCode,
+      };
+
+      response.data &&
+        this.accountEvents.send(SAVE_ACCOUNT, accountInfo).subscribe();
+
       response.data?.ProductCode && delete response.data.ProductCode;
+      response.data?.Message?.BankoneAccountNumber &&
+        delete response.data.Message.BankoneAccountNumber;
 
       return response.data;
     } catch (error) {
@@ -198,6 +235,10 @@ export class AccountsService {
         );
       }
 
+      serviceLogger.error(error, {
+        class: AccountsService.name,
+        method: this.createVirtualSubAccount.name,
+      });
       throw new InternalServerErrorException();
     }
   }
@@ -491,13 +532,15 @@ export class AccountsService {
     return faker.string.alphanumeric({ length: 13 });
   }
 
-  private getProductSlug(id: string): string {
-    const product = this.products.filter((product, idx) => product.id === id);
+  private getProduct(id: string) {
+    const product = Object.values(this.products).find(
+      (product) => product.id === id,
+    );
 
-    if (product.length < 1) {
-      return 'Sandbox /';
+    if (!product) {
+      return null;
     }
 
-    return product[0].slug;
+    return product;
   }
 }

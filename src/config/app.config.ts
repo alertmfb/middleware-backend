@@ -22,5 +22,7 @@ export function useAppConfig(
 
   app.setGlobalPrefix(config.get('GLOBAL_PREFIX'));
 
+  app.set('trust proxy', 'loopback');
+
   app.use(logger);
 }

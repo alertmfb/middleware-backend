@@ -8,6 +8,7 @@ import { NotificationModule } from '../notification/notification.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TRANSACTION_NOTIFICATION } from '../notification/constants';
+import { PrismaService } from 'src/config/prisma.service';
 
 @Module({
   imports: [
@@ -33,6 +34,6 @@ import { TRANSACTION_NOTIFICATION } from '../notification/constants';
     ]),
   ],
   controllers: [TransactionController],
-  providers: [TransactionsService],
+  providers: [TransactionsService, PrismaService],
 })
 export class TransactionsModule {}

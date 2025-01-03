@@ -56,6 +56,7 @@ export class AccountsService {
     CLOSE_ACCOUNT: '/BankOneWebAPI/api/Account/CloseAccount/2',
   };
 
+  //TODO: Define this in a config
   private productCodes = {
     SANDBOX: 112,
     POS: 113,
@@ -155,6 +156,9 @@ export class AccountsService {
         {
           ...payload,
           AccountTier: '1',
+          LastName: payload.FirstName,
+          OtherNames: payload.LastName,
+          FirstName: payload.OtherNames,
           NotificationPreference: '0',
           TransactionPermission: '0',
           AccountOfficerCode: '122',
