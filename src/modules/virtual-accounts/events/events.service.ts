@@ -18,7 +18,7 @@ export class EventsService {
       });
 
       if (account.id) {
-        serviceLogger.info(`Account Created: id: ${account.id}`);
+        serviceLogger.info(`account created:  ${account.id}`);
       }
     } catch (error) {
       serviceLogger.error(error, {
